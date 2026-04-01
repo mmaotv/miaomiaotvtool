@@ -1,12 +1,18 @@
 package com.miaomiao.tv;
 
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.MediaStore;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.Window;
@@ -22,6 +28,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
@@ -74,12 +82,25 @@ public class QrInputHelper {
         TextView tvWaitStatus = dialog.findViewById(R.id.tvWaitStatus);
         TextView tvQrHint    = dialog.findViewById(R.id.tvQrHint);
         LinearLayout btnCancel = dialog.findViewById(R.id.btnCancelQr);
-
-        btnCancel.setOnClickListener(v -> dismiss());
-        dialog.setOnDismissListener(d -> stopServer());
+        LinearLayout btnUploadFile = dialog.findViewById(R.id.btnUploadFile);
 
         // 先获取 IP
         String localIp = getLocalIpAddress();
+
+        btnCancel.setOnClickListener(v -> dismiss());
+        btnUploadFile.setOnClickListener(v -> {
+            // 打开上传页面（在系统浏览器中打开）
+            String uploadUrl = "http://" + localIp + ":" + SERVER_PORT + "/upload";
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uploadUrl));
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                context.startActivity(intent);
+            } catch (Exception e) {
+                Toast.makeText(context, "\u65e0\u6cd5\u6253\u5f00\u6d4f\u89c8\u5668", Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.setOnDismissListener(d -> stopServer());
+
         String serverUrl = "http://" + localIp + ":" + SERVER_PORT + "/";
 
         if (!localIp.isEmpty() && !localIp.equals("0.0.0.0")) {
@@ -199,6 +220,23 @@ public class QrInputHelper {
                     sendRedirect(ps, "/");
                 }
 
+            } else if ("GET".equals(method) && "/upload".equals(path)) {
+                // 返回文件上传页面
+                String html = buildUploadHtml();
+                byte[] body = html.getBytes("UTF-8");
+                ps.print("HTTP/1.1 200 OK\r\n");
+                ps.print("Content-Type: text/html; charset=UTF-8\r\n");
+                ps.print("Content-Length: " + body.length + "\r\n");
+                ps.print("Connection: close\r\n\r\n");
+                ps.flush();
+                out.write(body);
+                out.flush();
+
+            } else if ("POST".equals(method) && "/upload".equals(path)) {
+                // 处理文件上传
+                handleUpload(client, request, out, ps, tvWaitStatus);
+                return; // handleUpload 会自己关闭连接
+
             } else {
                 // 404
                 ps.print("HTTP/1.1 302 Found\r\nLocation: /\r\nConnection: close\r\n\r\n");
@@ -314,6 +352,338 @@ public class QrInputHelper {
 
     private String escapeHtml(String s) {
         return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
+    }
+
+    /**
+     * 构建手机端文件上传页面 HTML
+     */
+    private String buildUploadHtml() {
+        return "<!DOCTYPE html>\n" +
+            "<html lang='zh'>\n" +
+            "<head>\n" +
+            "<meta charset='UTF-8'>\n" +
+            "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>\n" +
+            "<title>\u55b5\u55b5\u5662\u5f71\u89c6 - \u4e0a\u4f20\u6587\u4ef6</title>\n" +
+            "<style>\n" +
+            "* { box-sizing: border-box; margin: 0; padding: 0; }\n" +
+            "body { background: #0d0d1a; color: #fff; font-family: -apple-system, sans-serif;\n" +
+            "       display: flex; align-items: center; justify-content: center;\n" +
+            "       min-height: 100vh; padding: 20px; }\n" +
+            ".card { background: #1a1a2e; border-radius: 20px; padding: 32px 24px;\n" +
+            "        width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }\n" +
+            ".logo { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 6px;\n" +
+            "        background: linear-gradient(135deg, #7B61FF, #FF6090); -webkit-background-clip: text;\n" +
+            "        -webkit-text-fill-color: transparent; }\n" +
+            ".sub { text-align: center; color: #778; font-size: 13px; margin-bottom: 28px; }\n" +
+            ".upload-area { border: 2px dashed #3a3a5a; border-radius: 16px; padding: 32px 16px;\n" +
+            "             text-align: center; cursor: pointer; transition: border-color 0.2s; }\n" +
+            ".upload-area:active, .upload-area.dragover { border-color: #7B61FF; }\n" +
+            ".upload-icon { font-size: 48px; margin-bottom: 8px; }\n" +
+            ".upload-text { color: #889; font-size: 14px; }\n" +
+            ".file-info { margin-top: 16px; padding: 12px; background: #0d1030; border-radius: 10px;\n" +
+            "             font-size: 13px; color: #aab; display: none; word-break: break-all; }\n" +
+            "#fileInput { display: none; }\n" +
+            ".btn { width: 100%; padding: 14px; margin-top: 16px; border: none;\n" +
+            "       border-radius: 12px; color: #fff; font-size: 18px; font-weight: bold;\n" +
+            "       cursor: pointer; letter-spacing: 2px; transition: opacity 0.2s; }\n" +
+            ".btn-upload { background: linear-gradient(135deg, #7B61FF, #FF6090); }\n" +
+            ".btn-back { background: #2a2a4a; }\n" +
+            ".btn:active { opacity: 0.8; }\n" +
+            ".btn:disabled { opacity: 0.4; cursor: not-allowed; }\n" +
+            ".progress { margin-top: 16px; display: none; }\n" +
+            ".progress-bar { height: 6px; background: #2a2a4a; border-radius: 3px; overflow: hidden; }\n" +
+            ".progress-fill { height: 100%; background: linear-gradient(90deg, #7B61FF, #FF6090);\n" +
+            "                border-radius: 3px; width: 0%; transition: width 0.3s; }\n" +
+            ".progress-text { text-align: center; font-size: 12px; color: #667; margin-top: 6px; }\n" +
+            ".hint { margin-top: 12px; font-size: 12px; color: #556; text-align: center; }\n" +
+            "</style>\n" +
+            "</head>\n" +
+            "<body>\n" +
+            "<div class='card'>\n" +
+            "  <div class='logo'>&#128049; \u55b5\u55b5\u5662\u5f71\u89c6</div>\n" +
+            "  <div class='sub'>\u4e0a\u4f20\u6587\u4ef6\u5230\u7535\u89c6</div>\n" +
+            "  <div class='upload-area' id='uploadArea' onclick='document.getElementById(\"fileInput\").click()'>\n" +
+            "    <div class='upload-icon'>&#128228;</div>\n" +
+            "    <div class='upload-text'>\u70b9\u51fb\u9009\u62e9\u6587\u4ef6</div>\n" +
+            "  </div>\n" +
+            "  <input type='file' id='fileInput' onchange='onFileSelected(this)'/>\n" +
+            "  <div class='file-info' id='fileInfo'></div>\n" +
+            "  <div class='progress' id='progress'>\n" +
+            "    <div class='progress-bar'><div class='progress-fill' id='progressFill'></div></div>\n" +
+            "    <div class='progress-text' id='progressText'>\u4e0a\u4f20\u4e2d...</div>\n" +
+            "  </div>\n" +
+            "  <button class='btn btn-upload' id='btnUpload' onclick='doUpload()' disabled>\u4e0a\u4f20\u5230\u7535\u89c6</button>\n" +
+            "  <a href='/' class='btn btn-back' style='display:block;text-align:center;text-decoration:none;'>\u8fd4\u56de\u8f93\u5165\u7f51\u5740</a>\n" +
+            "  <div class='hint'>\u6587\u4ef6\u5c06\u4fdd\u5b58\u5230\u7535\u89c6 Download/\u55b5\u55b5\u5662\u5f71\u89c6/ \u76ee\u5f55</div>\n" +
+            "</div>\n" +
+            "<script>\n" +
+            "var selectedFile = null;\n" +
+            "function onFileSelected(input) {\n" +
+            "  if (input.files && input.files[0]) {\n" +
+            "    selectedFile = input.files[0];\n" +
+            "    var sizeStr = selectedFile.size < 1024*1024\n" +
+            "      ? (selectedFile.size/1024).toFixed(1)+' KB'\n" +
+            "      : (selectedFile.size/1024/1024).toFixed(1)+' MB';\n" +
+            "    document.getElementById('fileInfo').style.display = 'block';\n" +
+            "    document.getElementById('fileInfo').textContent =\n" +
+            "      selectedFile.name + ' (' + sizeStr + ')';\n" +
+            "    document.getElementById('btnUpload').disabled = false;\n" +
+            "  }\n" +
+            "}\n" +
+            "function doUpload() {\n" +
+            "  if (!selectedFile) return;\n" +
+            "  var btn = document.getElementById('btnUpload');\n" +
+            "  var prog = document.getElementById('progress');\n" +
+            "  var fill = document.getElementById('progressFill');\n" +
+            "  var text = document.getElementById('progressText');\n" +
+            "  btn.disabled = true;\n" +
+            "  btn.textContent = '\u4e0a\u4f20\u4e2d...';\n" +
+            "  prog.style.display = 'block';\n" +
+            "  var xhr = new XMLHttpRequest();\n" +
+            "  var fd = new FormData();\n" +
+            "  fd.append('file', selectedFile);\n" +
+            "  xhr.upload.onprogress = function(e) {\n" +
+            "    if (e.lengthComputable) {\n" +
+            "      var pct = Math.round(e.loaded / e.total * 100);\n" +
+            "      fill.style.width = pct + '%';\n" +
+            "      text.textContent = pct + '%';\n" +
+            "    }\n" +
+            "  };\n" +
+            "  xhr.onload = function() {\n" +
+            "    if (xhr.status === 200) {\n" +
+            "      fill.style.width = '100%';\n" +
+            "      text.textContent = '\u2714 \u4e0a\u4f20\u6210\u529f\uff01';\n" +
+            "      btn.textContent = '\u2714 \u4e0a\u4f20\u6210\u529f';\n" +
+            "      btn.style.background = '#00C853';\n" +
+            "    } else {\n" +
+            "      text.textContent = '\u2716 \u4e0a\u4f20\u5931\u8d25\uff1a' + xhr.status;\n" +
+            "      btn.disabled = false;\n" +
+            "      btn.textContent = '\u91cd\u8bd5';\n" +
+            "    }\n" +
+            "  };\n" +
+            "  xhr.onerror = function() {\n" +
+            "    text.textContent = '\u2716 \u7f51\u7edc\u9519\u8bef';\n" +
+            "    btn.disabled = false;\n" +
+            "    btn.textContent = '\u91cd\u8bd5';\n" +
+            "  };\n" +
+            "  xhr.open('POST', '/upload', true);\n" +
+            "  xhr.send(fd);\n" +
+            "}\n" +
+            "</script>\n" +
+            "</body></html>";
+    }
+
+    /**
+     * 处理文件上传（multipart POST）
+     * 手机上传的文件保存到 Download/喵喵嗷影视/ 目录
+     */
+    private void handleUpload(Socket client, String request,
+            OutputStream out, PrintStream ps, TextView tvWaitStatus) {
+        try {
+            // 解析 Content-Length 和 boundary
+            long contentLength = 0;
+            String boundary = "";
+            for (String line : request.split("\r\n")) {
+                if (line.toLowerCase().startsWith("content-length:")) {
+                    contentLength = Long.parseLong(line.substring(15).trim());
+                }
+                if (line.toLowerCase().startsWith("content-type:") && line.contains("boundary=")) {
+                    boundary = "--" + line.substring(line.indexOf("boundary=") + 9).trim();
+                }
+            }
+
+            if (contentLength <= 0 || boundary.isEmpty()) {
+                sendUploadError(ps, out, "\u65e0\u6548\u7684\u4e0a\u4f20\u8bf7\u6c42");
+                client.close();
+                return;
+            }
+
+            // 读取已有的请求体部分
+            byte[] initialBuffer = request.getBytes("UTF-8");
+            int headerEndIdx = request.indexOf("\r\n\r\n");
+            int bodyBytesRead = initialBuffer.length - headerEndIdx - 4;
+            if (bodyBytesRead < 0) bodyBytesRead = 0;
+
+            // 读取剩余的请求体
+            long remaining = contentLength - bodyBytesRead;
+            byte[] bodyData = new byte[(int) contentLength];
+            if (bodyBytesRead > 0) {
+                System.arraycopy(initialBuffer, headerEndIdx + 4, bodyData, 0, bodyBytesRead);
+            }
+            int totalRead = bodyBytesRead;
+            while (totalRead < contentLength) {
+                int toRead = (int) Math.min(8192, contentLength - totalRead);
+                int r = client.getInputStream().read(bodyData, totalRead, toRead);
+                if (r <= 0) break;
+                totalRead += r;
+            }
+
+            // 解析 multipart 数据，提取文件名和文件内容
+            String bodyStr = new String(bodyData, 0, Math.min(totalRead, 4096), "UTF-8");
+            String fileName = "upload_" + System.currentTimeMillis();
+            // 尝试从 Content-Disposition 提取文件名
+            int nameIdx = bodyStr.indexOf("filename=\"");
+            if (nameIdx >= 0) {
+                int nameEnd = bodyStr.indexOf("\"", nameIdx + 10);
+                if (nameEnd > nameIdx) {
+                    fileName = bodyStr.substring(nameIdx + 10, nameEnd);
+                }
+            }
+
+            // 找到文件数据的起始位置（\r\n\r\n 在第一个 boundary 之后）
+            byte[] boundaryBytes = boundary.getBytes("UTF-8");
+            int headerEnd = findBytes(bodyData, totalRead, "\r\n\r\n".getBytes());
+            if (headerEnd < 0) {
+                sendUploadError(ps, out, "\u65e0\u6cd5\u89e3\u6790\u6587\u4ef6\u6570\u636e");
+                client.close();
+                return;
+            }
+            int fileDataStart = headerEnd + 4; // 跳过 \r\n\r\n
+            // 文件数据结束位置（倒数 boundary 之前的 \r\n）
+            byte[] endMarker = ("\r\n" + boundary).getBytes("UTF-8");
+            int fileDataEnd = findBytes(bodyData, totalRead, endMarker);
+            if (fileDataEnd < 0) fileDataEnd = totalRead;
+
+            int fileLength = fileDataEnd - fileDataStart;
+            if (fileLength <= 0) {
+                sendUploadError(ps, out, "\u6587\u4ef6\u4e3a\u7a7a");
+                client.close();
+                return;
+            }
+
+            // 保存文件到 Download/喵喵嗷影视/
+            final String finalFileName = fileName;
+            final int finalFileLength = fileLength;
+            final int finalFileStart = fileDataStart;
+            final byte[] finalBodyData = bodyData;
+
+            boolean[] success = {false};
+
+            // 在后台线程保存文件
+            executor.execute(() -> {
+                try {
+                    File downloadDir = new File(
+                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                        "\u55b5\u55b5\u5662\u5f71\u89c6"
+                    );
+                    if (!downloadDir.exists()) downloadDir.mkdirs();
+
+                    // 生成不重复文件名
+                    File outFile = new File(downloadDir, finalFileName);
+                    if (outFile.exists()) {
+                        String nameNoExt = finalFileName.contains(".")
+                            ? finalFileName.substring(0, finalFileName.lastIndexOf('.'))
+                            : finalFileName;
+                        String ext = finalFileName.contains(".")
+                            ? finalFileName.substring(finalFileName.lastIndexOf('.'))
+                            : "";
+                        int counter = 1;
+                        while (outFile.exists()) {
+                            outFile = new File(downloadDir, nameNoExt + "(" + counter++ + ")" + ext);
+                        }
+                    }
+
+                    // 写入文件
+                    FileOutputStream fos = new FileOutputStream(outFile);
+                    fos.write(finalBodyData, finalFileStart, finalFileLength);
+                    fos.flush();
+                    fos.close();
+
+                    // Android 10+ 加入 MediaStore
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        try {
+                            ContentValues values = new ContentValues();
+                            values.put(MediaStore.Downloads.DISPLAY_NAME, outFile.getName());
+                            values.put(MediaStore.Downloads.MIME_TYPE, guessMimeType(outFile.getName()));
+                            values.put(MediaStore.Downloads.SIZE, outFile.length());
+                            values.put(MediaStore.Downloads.DATE_ADDED, System.currentTimeMillis() / 1000);
+                            values.put(MediaStore.Downloads.IS_PENDING, 0);
+                            values.put(MediaStore.Downloads.RELATIVE_PATH,
+                                Environment.DIRECTORY_DOWNLOADS + "/\u55b5\u55b5\u5662\u5f71\u89c6");
+                            context.getContentResolver().insert(
+                                MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                        } catch (Exception ignored) {}
+                    }
+
+                    success[0] = true;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+            // 返回成功响应（简单 JSON）
+            final String savedFileName = fileName;
+            String response = "{\"status\":\"ok\",\"filename\":\"" + escapeJson(savedFileName) + "\",\"size\":" + fileLength + "}";
+            byte[] resBody = response.getBytes("UTF-8");
+            ps.print("HTTP/1.1 200 OK\r\n");
+            ps.print("Content-Type: application/json; charset=UTF-8\r\n");
+            ps.print("Content-Length: " + resBody.length + "\r\n");
+            ps.print("Access-Control-Allow-Origin: *\r\n");
+            ps.print("Connection: close\r\n\r\n");
+            ps.flush();
+            out.write(resBody);
+            out.flush();
+
+            // 更新对话框状态
+            mainHandler.post(() -> {
+                if (tvWaitStatus != null && dialog != null && dialog.isShowing()) {
+                    tvWaitStatus.setText("\u2705 \u5df2\u63a5\u6536\u6587\u4ef6\uff1a" + savedFileName);
+                }
+                Toast.makeText(context,
+                    "\u6587\u4ef6\u5df2\u4fdd\u5b58\uff1a" + savedFileName, Toast.LENGTH_LONG).show();
+            });
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                sendUploadError(ps, out, "\u4e0a\u4f20\u5931\u8d25\uff1a" + e.getMessage());
+            } catch (IOException ignored) {}
+        } finally {
+            try { client.close(); } catch (IOException ignored) {}
+        }
+    }
+
+    private void sendUploadError(PrintStream ps, OutputStream out, String msg) throws IOException {
+        String response = "{\"status\":\"error\",\"message\":\"" + escapeJson(msg) + "\"}";
+        byte[] body = response.getBytes("UTF-8");
+        ps.print("HTTP/1.1 400 Bad Request\r\n");
+        ps.print("Content-Type: application/json; charset=UTF-8\r\n");
+        ps.print("Content-Length: " + body.length + "\r\n");
+        ps.print("Connection: close\r\n\r\n");
+        ps.flush();
+        out.write(body);
+        out.flush();
+    }
+
+    private int findBytes(byte[] data, int len, byte[] pattern) {
+        outer:
+        for (int i = 0; i <= len - pattern.length; i++) {
+            for (int j = 0; j < pattern.length; j++) {
+                if (data[i + j] != pattern[j]) continue outer;
+            }
+            return i;
+        }
+        return -1;
+    }
+
+    private String guessMimeType(String fileName) {
+        String lower = fileName.toLowerCase();
+        if (lower.endsWith(".mp4")) return "video/mp4";
+        if (lower.endsWith(".mkv")) return "video/x-matroska";
+        if (lower.endsWith(".avi")) return "video/x-msvideo";
+        if (lower.endsWith(".mp3")) return "audio/mpeg";
+        if (lower.endsWith(".flac")) return "audio/flac";
+        if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+        if (lower.endsWith(".png")) return "image/png";
+        if (lower.endsWith(".pdf")) return "application/pdf";
+        if (lower.endsWith(".apk")) return "application/vnd.android.package-archive";
+        if (lower.endsWith(".zip")) return "application/zip";
+        return "application/octet-stream";
+    }
+
+    private String escapeJson(String s) {
+        if (s == null) return "";
+        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
     }
 
     /**

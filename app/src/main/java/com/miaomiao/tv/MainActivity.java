@@ -75,6 +75,8 @@ public class MainActivity extends AppCompatActivity {
     private CursorView cursorView;
 
     private QrInputHelper qrInputHelper;
+    private boolean mouseModeEnabled = true; // 默认开启鼠标模式
+    private long menuKeyDownTime = 0;
 
     // ---- USB 广播 ----
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -161,13 +163,13 @@ public class MainActivity extends AppCompatActivity {
         webView      = findViewById(R.id.webView);
         cursorView   = findViewById(R.id.cursorView);
 
-        // 首页大按钮：焦点放大动画
-        attachFocusScale(btnLive,      1.10f);
-        attachFocusScale(btnVod,       1.10f);
-        attachFocusScale(btnTools,     1.10f);
-        attachFocusScale(btnQrInput,   1.10f);
-        attachFocusScale(btnFileMgr,   1.10f);
-        attachFocusScale(btnUsbMgr,    1.10f);
+        // 首页大按钮：焦点放大动画（缩小缩放比例防止描边溢出）
+        attachFocusScale(btnLive,      1.06f);
+        attachFocusScale(btnVod,       1.06f);
+        attachFocusScale(btnTools,     1.06f);
+        attachFocusScale(btnQrInput,   1.06f);
+        attachFocusScale(btnFileMgr,   1.06f);
+        attachFocusScale(btnUsbMgr,    1.06f);
 
         // 工具栏小按钮：轻微放大
         attachFocusScale(btnBack,      1.15f);
@@ -253,10 +255,50 @@ public class MainActivity extends AppCompatActivity {
         homePage.setVisibility(View.GONE);
         webPage.setVisibility(View.VISIBLE);
         // 进入 WebView 显示光标
-        cursorView.setVisibility(View.VISIBLE);
+        cursorView.setVisibility(mouseModeEnabled ? View.VISIBLE : View.GONE);
         // 重置光标位置到中心
         cursorView.resetPosition();
+        // 进入网页时弹出一次提示
+        lastHintTime = 0;
+        showMouseModeHint();
     }
+
+    /** 显示鼠标模式操作提示（用自定义 View 实现，不使用 Toast） */
+    private void showMouseModeHint() {
+        // 避免短时间内重复弹出
+        long now = System.currentTimeMillis();
+        if (now - lastHintTime < 3000) return;
+        lastHintTime = now;
+
+        TextView tv = new TextView(this);
+        tv.setText("\uD83C\uDFAF 长按菜单键进入/退出鼠标模式\n进入后用上下左右键控制光标选择\n未进入鼠标模式可直接用遥控器方向键选择");
+        tv.setTextSize(15);
+        tv.setTextColor(0xFFFFFFFF);
+        tv.setGravity(Gravity.CENTER);
+        tv.setPadding(40, 24, 40, 24);
+        tv.setLineSpacing(6f, 1.2f);
+
+        AlertDialog d = new AlertDialog.Builder(this)
+            .setTitle("")
+            .setView(tv)
+            .setPositiveButton("\u77E5\u9053\u4E86", null)
+            .setCancelable(true)
+            .create();
+        if (d.getWindow() != null) {
+            d.getWindow().setGravity(Gravity.CENTER);
+            d.getWindow().setBackgroundDrawableResource(android.R.drawable.dialog_holo_dark_frame);
+        }
+        d.show();
+
+        // 3秒后自动关闭
+        tv.postDelayed(() -> {
+            try {
+                if (d.isShowing()) d.dismiss();
+            } catch (Exception ignored) {}
+        }, 3000);
+    }
+
+    private long lastHintTime = 0;
 
     /** U 盘插入时弹出提示 */
     private void showUsbMountedToast() {
@@ -382,21 +424,36 @@ public class MainActivity extends AppCompatActivity {
         if (webPage.getVisibility() == View.VISIBLE) {
             switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_UP:
-                    cursorView.moveCursor(0, -CursorView.STEP);
-                    return true;
+                    if (mouseModeEnabled) {
+                        cursorView.moveCursor(0, -CursorView.STEP);
+                        return true;
+                    }
+                    break;
                 case KeyEvent.KEYCODE_DPAD_DOWN:
-                    cursorView.moveCursor(0, CursorView.STEP);
-                    return true;
+                    if (mouseModeEnabled) {
+                        cursorView.moveCursor(0, CursorView.STEP);
+                        return true;
+                    }
+                    break;
                 case KeyEvent.KEYCODE_DPAD_LEFT:
-                    cursorView.moveCursor(-CursorView.STEP, 0);
-                    return true;
+                    if (mouseModeEnabled) {
+                        cursorView.moveCursor(-CursorView.STEP, 0);
+                        return true;
+                    }
+                    break;
                 case KeyEvent.KEYCODE_DPAD_RIGHT:
-                    cursorView.moveCursor(CursorView.STEP, 0);
-                    return true;
+                    if (mouseModeEnabled) {
+                        cursorView.moveCursor(CursorView.STEP, 0);
+                        return true;
+                    }
+                    break;
                 case KeyEvent.KEYCODE_DPAD_CENTER:
                 case KeyEvent.KEYCODE_ENTER:
-                    cursorView.performClick(webView);
-                    return true;
+                    if (mouseModeEnabled) {
+                        cursorView.performClick(webView);
+                        return true;
+                    }
+                    break;
                 case KeyEvent.KEYCODE_BACK:
                     if (webView.canGoBack()) {
                         webView.goBack();
@@ -405,13 +462,36 @@ public class MainActivity extends AppCompatActivity {
                     }
                     return true;
                 case KeyEvent.KEYCODE_MENU:
-                    toolbar.setVisibility(
-                        toolbar.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE
-                    );
+                    // 记录按下时间
+                    menuKeyDownTime = System.currentTimeMillis();
                     return true;
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public boolean onKeyUp(int keyCode, KeyEvent event) {
+        if (webPage.getVisibility() == View.VISIBLE && keyCode == KeyEvent.KEYCODE_MENU) {
+            long pressDuration = System.currentTimeMillis() - menuKeyDownTime;
+            if (pressDuration >= 500) {
+                // 长按菜单键：切换鼠标模式
+                mouseModeEnabled = !mouseModeEnabled;
+                cursorView.setVisibility(mouseModeEnabled ? View.VISIBLE : View.GONE);
+                Toast.makeText(this,
+                    mouseModeEnabled ? "\uD83C\uDFAF 已进入鼠标模式，用方向键控制光标"
+                                   : "\uD83D\uDCBB 已退出鼠标模式，用方向键直接选择",
+                    Toast.LENGTH_LONG).show();
+            } else {
+                // 短按菜单键：弹出提示 + 切换工具栏
+                showMouseModeHint();
+                toolbar.setVisibility(
+                    toolbar.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE
+                );
+            }
+            return true;
+        }
+        return super.onKeyUp(keyCode, event);
     }
 
     private void checkPermissions() {
@@ -460,7 +540,7 @@ public class MainActivity extends AppCompatActivity {
     private void attachFocusScale(View v, float scale) {
         v.setOnFocusChangeListener((view, hasFocus) -> {
             float target = hasFocus ? scale : 1.0f;
-            float elevTarget = hasFocus ? 24f : 8f;
+            float elevTarget = hasFocus ? 16f : 8f;
             AnimatorSet set = new AnimatorSet();
             set.playTogether(
                 ObjectAnimator.ofFloat(view, "scaleX", target),

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="400dp"
+    android:layout_width="420dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#1A1A2E"
@@ -11,7 +11,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#25195;&#30721;&#36755;&#20837;&#32593;&#22336;"
+        android:text="&#25195;&#30721;&#36755;&#20837;/&#19978;&#20256;&#25991;&#20214;"
         android:textSize="20sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
@@ -22,7 +22,7 @@
         android:id="@+id/tvQrHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#29992;&#25163;&#26426;&#25195;&#25551;&#20108;&#32508;&#30721;&#36755;&#20837;&#32593;&#22336;"
+        android:text="&#29992;&#25163;&#26426;&#25195;&#25551;&#20108;&#32508;&#30721;&#36755;&#20837;&#32593;&#22336;&#25110;&#19978;&#20256;&#25991;&#20214;"
         android:textSize="13sp"
         android:textColor="#AABBCC"
         android:gravity="center"
@@ -60,21 +60,47 @@
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
 
-    <!-- 取消按钮 -->
+    <!-- 按钮行 -->
     <LinearLayout
-        android:id="@+id/btnCancelQr"
-        android:layout_width="120dp"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:background="@drawable/btn_tool_bg"
-        android:focusable="true"
-        android:clickable="true">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="&#21462;&#28040;"
-            android:textSize="15sp"
-            android:textColor="#FFFFFF"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <!-- 取消按钮 -->
+        <LinearLayout
+            android:id="@+id/btnCancelQr"
+            android:layout_width="120dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_marginEnd="16dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#21462;&#28040;"
+                android:textSize="15sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- 上传文件按钮 -->
+        <LinearLayout
+            android:id="@+id/btnUploadFile"
+            android:layout_width="160dp"
+            android:layout_height="40dp"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="&#128228; &#25171;&#24320;&#19978;&#20256;&#39029;&#38754;"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

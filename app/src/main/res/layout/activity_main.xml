@@ -12,7 +12,9 @@
         android:orientation="vertical"
         android:gravity="center"
         android:visibility="visible"
-        android:background="@drawable/home_bg">
+        android:background="@drawable/home_bg"
+        android:clipChildren="false"
+        android:clipToPadding="false">
 
         <!-- Logo 区域 -->
         <LinearLayout
@@ -58,7 +60,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:gravity="center">
+            android:gravity="center"
+            android:clipChildren="false"
+            android:clipToPadding="false">
 
             <!-- 第一行：直播 | 点播 | 工具 -->
             <LinearLayout
@@ -66,7 +70,9 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <!-- 直播按钮 -->
                 <LinearLayout
@@ -166,7 +172,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:gravity="center">
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false">
 
                 <!-- 扫码输入按钮 -->
                 <LinearLayout
