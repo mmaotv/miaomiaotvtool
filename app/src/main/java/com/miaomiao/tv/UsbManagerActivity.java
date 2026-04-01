@@ -7,6 +7,15 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.media.MediaMetadataRetriever;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.InputType;
@@ -15,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -22,30 +32,26 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import java.io.File;
-import java.lang.reflect.Method;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * U盘管理器 Activity
  * 1. 监听 USB 插拔广播（主动弹窗提醒）
- * 2. 浏览 U 盘文件，支持重命名/删除
+ * 2. 浏览 U 盘文件，支持重命名/删除/移动/复制
  * 3. 适配 TV 遥控器 D-pad 操作
+ * 长按 OK 键 / 菜单键 弹出文件操作菜单
  */
 public class UsbManagerActivity extends AppCompatActivity {
 
-    public static final String ACTION_USB_PERMISSION =
-            "com.miaomiao.tv.USB_PERMISSION";
-
     private LinearLayout btnBackHome;
     private LinearLayout btnParentDir;
-    private LinearLayout btnRename;
-    private LinearLayout btnDelete;
     private LinearLayout btnRefresh;
     private TextView tvCurrentPath;
     private TextView tvUsbIcon;
@@ -61,6 +67,9 @@ public class UsbManagerActivity extends AppCompatActivity {
     private int selectedIndex = -1;
     /** 所有文件/文件夹（排序后） */
     private File[] sortedFiles;
+    /** 剪贴板 */
+    private File clipboardFile = null;
+    private boolean clipboardCopy = true;
 
     /** USB 广播接收器 */
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -69,11 +78,9 @@ public class UsbManagerActivity extends AppCompatActivity {
             String action = intent.getAction();
             if (Intent.ACTION_MEDIA_MOUNTED.equals(action)
                     || Intent.ACTION_MEDIA_CHECKING.equals(action)) {
-                // 有存储设备插入，检查是否是 U 盘
                 refreshUsbState();
             } else if (Intent.ACTION_MEDIA_UNMOUNTED.equals(action)
                     || Intent.ACTION_MEDIA_REMOVED.equals(action)) {
-                // 存储设备移除
                 onUsbRemoved();
             }
         }
@@ -93,7 +100,6 @@ public class UsbManagerActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        // 注册 USB 广播
         IntentFilter filter = new IntentFilter();
         filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
         filter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
@@ -107,16 +113,12 @@ public class UsbManagerActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-        try {
-            unregisterReceiver(usbReceiver);
-        } catch (Exception ignored) {}
+        try { unregisterReceiver(usbReceiver); } catch (Exception ignored) {}
     }
 
     private void initViews() {
         btnBackHome       = findViewById(R.id.btnBackHome);
         btnParentDir      = findViewById(R.id.btnParentDir);
-        btnRename         = findViewById(R.id.btnRename);
-        btnDelete         = findViewById(R.id.btnDelete);
         btnRefresh        = findViewById(R.id.btnRefresh);
         tvCurrentPath     = findViewById(R.id.tvCurrentPath);
         tvUsbIcon         = findViewById(R.id.tvUsbIcon);
@@ -131,26 +133,8 @@ public class UsbManagerActivity extends AppCompatActivity {
         });
         btnRefresh.setOnClickListener(v -> detectAndNavigateToUsb());
 
-        btnRename.setOnClickListener(v -> {
-            if (selectedIndex < 0 || sortedFiles == null || selectedIndex >= sortedFiles.length) {
-                Toast.makeText(this, "请先选择一个文件或文件夹", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            showRenameDialog(sortedFiles[selectedIndex]);
-        });
-
-        btnDelete.setOnClickListener(v -> {
-            if (selectedIndex < 0 || sortedFiles == null || selectedIndex >= sortedFiles.length) {
-                Toast.makeText(this, "请先选择一个文件或文件夹", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            showDeleteConfirm(sortedFiles[selectedIndex]);
-        });
-
         attachFocusScale(btnBackHome,  1.10f);
         attachFocusScale(btnParentDir, 1.10f);
-        attachFocusScale(btnRename,    1.10f);
-        attachFocusScale(btnDelete,    1.10f);
         attachFocusScale(btnRefresh,   1.10f);
 
         btnBackHome.requestFocus();
@@ -158,24 +142,18 @@ public class UsbManagerActivity extends AppCompatActivity {
 
     // ===================== USB 检测 =====================
 
-    /**
-     * 扫描并跳转到 U 盘（如果有多个取第一个外部存储）
-     */
     private void detectAndNavigateToUsb() {
         File usbRoot = findUsbDrive();
         if (usbRoot != null) {
             navigateTo(usbRoot);
-            tvUsbIcon.setText("\uD83D\uDCBB"); // 💻
+            tvUsbIcon.setText("\uD83D\uDCBB");
             usbEmptyView.setVisibility(View.GONE);
         } else {
             showUsbEmpty();
         }
     }
 
-    /**
-     * 查找 U 盘挂载路径
-     * 优先找 /storage/<uuid> 类型（非内部存储）的外部 SD 卡 / USB 设备
-     */
+    /** 查找 U 盘挂载路径 */
     private File findUsbDrive() {
         File storageRoot = new File("/storage");
         if (!storageRoot.exists()) return null;
@@ -188,33 +166,24 @@ public class UsbManagerActivity extends AppCompatActivity {
         for (File mount : mounts) {
             if (!mount.isDirectory() || !mount.canRead()) continue;
             String path = mount.getAbsolutePath();
-            // 排除内部存储本身
             if (path.equals(internalPath)) continue;
-            // 排除 emulated（模拟存储）
             if (path.contains("emulated")) continue;
-            // 排除 self（自己的内部存储视图）
             if (mount.getName().equals("self")) continue;
 
-            // 优先找外部 SD 或 USB
             String name = mount.getName().toLowerCase();
             if (name.contains("sd") || name.contains("usb") || name.contains("external")) {
-                // 确认有可读内容（检查是否真的挂载了）
                 File[] test = mount.listFiles();
-                if (test != null || mount.canRead()) {
-                    return mount;
-                }
+                if (test != null || mount.canRead()) return mount;
             }
         }
 
-        // fallback：如果没有明确 USB，找第一个非内部存储的挂载点
+        // fallback：找第一个非内部存储的挂载点
         for (File mount : mounts) {
             if (!mount.isDirectory() || !mount.canRead()) continue;
             String path = mount.getAbsolutePath();
             if (path.equals(internalPath) || path.contains("emulated") || mount.getName().equals("self")) continue;
             File[] test = mount.listFiles();
-            if (test != null || mount.canRead()) {
-                return mount;
-            }
+            if (test != null || mount.canRead()) return mount;
         }
 
         return null;
@@ -230,8 +199,8 @@ public class UsbManagerActivity extends AppCompatActivity {
     }
 
     private void showUsbEmpty() {
-        tvUsbIcon.setText("\uD83D\uDCE6"); // 📦
-        tvCurrentPath.setText("未检测到 U 盘");
+        tvUsbIcon.setText("\uD83D\uDCE6");
+        tvCurrentPath.setText("\u672A\u68C0\u6D4B\u5230 U \u76D8");
         usbEmptyView.setVisibility(View.VISIBLE);
         scrollView.setVisibility(View.GONE);
     }
@@ -251,7 +220,7 @@ public class UsbManagerActivity extends AppCompatActivity {
 
     private void navigateTo(File dir) {
         if (!dir.exists() || !dir.isDirectory()) {
-            Toast.makeText(this, "目录不可访问", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "\u76EE\u5F55\u4E0D\u53EF\u8BBF\u95EE", Toast.LENGTH_SHORT).show();
             return;
         }
         currentDir = dir;
@@ -310,11 +279,13 @@ public class UsbManagerActivity extends AppCompatActivity {
             tvName.setText(f.getName());
 
             if (f.isDirectory()) {
-                tvIcon.setText("\uD83D\uDCC1"); // 📁
-                tvSize.setText("文件夹");
+                tvIcon.setText("\uD83D\uDCC1");
+                tvSize.setText("\u6587\u4EF6\u5939");
             } else {
-                tvIcon.setText(getFileIcon(f.getName()));
+                String ext = getExtension(f.getName()).toLowerCase();
+                tvIcon.setText(getFileEmoji(ext));
                 tvSize.setText(formatFileSize(f.length()));
+                loadThumbnail(itemView, f, ext);
             }
 
             final int idx = i;
@@ -332,6 +303,10 @@ public class UsbManagerActivity extends AppCompatActivity {
                         else openFile(clicked);
                         return true;
                     }
+                    if (keyCode == KeyEvent.KEYCODE_MENU) {
+                        showContextMenu(sortedFiles[idx]);
+                        return true;
+                    }
                 }
                 return false;
             });
@@ -342,12 +317,96 @@ public class UsbManagerActivity extends AppCompatActivity {
         }
     }
 
+    /** 异步加载略缩图 */
+    private void loadThumbnail(View itemView, File f, String ext) {
+        ImageView ivThumb = itemView.findViewById(R.id.ivThumb);
+        TextView tvIcon   = itemView.findViewById(R.id.tvIcon);
+
+        new AsyncTask<Void, Void, Bitmap>() {
+            @Override
+            protected Bitmap doInBackground(Void... voids) {
+                try {
+                    if (ext.equals("apk")) return getApkIcon(f);
+                    else if (ext.equals("jpg") || ext.equals("jpeg")
+                            || ext.equals("png") || ext.equals("gif")
+                            || ext.equals("bmp") || ext.equals("webp")) {
+                        return getImageThumbnail(f, 128);
+                    } else if (ext.equals("mp4") || ext.equals("mkv") || ext.equals("avi")
+                            || ext.equals("mov") || ext.equals("wmv") || ext.equals("flv")
+                            || ext.equals("webm") || ext.equals("m4v") || ext.equals("3gp")) {
+                        return getVideoThumbnail(f, 128);
+                    }
+                } catch (Exception e) {}
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Bitmap bitmap) {
+                if (bitmap != null) {
+                    ivThumb.setImageBitmap(bitmap);
+                    ivThumb.setVisibility(View.VISIBLE);
+                    tvIcon.setVisibility(View.GONE);
+                }
+            }
+        }.execute();
+    }
+
+    private Bitmap getApkIcon(File apkFile) {
+        try {
+            PackageManager pm = getPackageManager();
+            ApplicationInfo info = pm.getApplicationInfo(apkFile.getAbsolutePath(), 0);
+            Drawable icon = pm.getApplicationIcon(info);
+            if (icon != null) {
+                if (icon instanceof android.graphics.drawable.BitmapDrawable) {
+                    return ((android.graphics.drawable.BitmapDrawable) icon).getBitmap();
+                }
+                Bitmap bitmap = Bitmap.createBitmap(
+                        icon.getIntrinsicWidth(), icon.getIntrinsicHeight(),
+                        Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(bitmap);
+                icon.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                icon.draw(canvas);
+                return bitmap;
+            }
+        } catch (Exception e) {}
+        return null;
+    }
+
+    private Bitmap getImageThumbnail(File file, int size) {
+        try {
+            BitmapFactory.Options opts = new BitmapFactory.Options();
+            opts.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
+            int sampleSize = Math.max(opts.outWidth / size, opts.outHeight / size);
+            if (sampleSize < 1) sampleSize = 1;
+            opts.inSampleSize = sampleSize;
+            opts.inJustDecodeBounds = false;
+            return BitmapFactory.decodeFile(file.getAbsolutePath(), opts);
+        } catch (Exception e) { return null; }
+    }
+
+    private Bitmap getVideoThumbnail(File file, int size) {
+        try {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            retriever.setDataSource(file.getAbsolutePath());
+            Bitmap frame = retriever.getFrameAtTime(1000000);
+            retriever.release();
+            if (frame == null) return null;
+            int w = frame.getWidth(), h = frame.getHeight();
+            int scale = Math.max(w / size, h / size);
+            if (scale < 1) scale = 1;
+            return Bitmap.createScaledBitmap(frame, w / scale, h / scale, true);
+        } catch (Exception e) { return null; }
+    }
+
     private void setSelected(int idx) {
         if (selectedIndex >= 0 && selectedIndex < fileItemViews.size()) {
             View old = fileItemViews.get(selectedIndex);
             old.setScaleX(1.0f);
             old.setScaleY(1.0f);
             old.setElevation(4f);
+            TextView oldSel = old.findViewById(R.id.tvSelected);
+            if (oldSel != null) oldSel.setVisibility(View.GONE);
         }
         selectedIndex = idx;
         if (idx >= 0 && idx < fileItemViews.size()) {
@@ -356,6 +415,8 @@ public class UsbManagerActivity extends AppCompatActivity {
             v.setScaleY(1.06f);
             v.setElevation(16f);
             v.requestFocus();
+            TextView sel = v.findViewById(R.id.tvSelected);
+            if (sel != null) sel.setVisibility(View.VISIBLE);
             scrollView.requestChildFocus(v, v);
         }
     }
@@ -363,6 +424,13 @@ public class UsbManagerActivity extends AppCompatActivity {
     // ===================== D-pad 导航 =====================
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        // 长按 OK 键：弹出上下文菜单
+        if ((keyCode == KeyEvent.KEYCODE_DPAD_CENTER || keyCode == KeyEvent.KEYCODE_ENTER) && event.isLongPress()) {
+            if (selectedIndex >= 0 && selectedIndex < sortedFiles.length) {
+                showContextMenu(sortedFiles[selectedIndex]);
+                return true;
+            }
+        }
         switch (keyCode) {
             case KeyEvent.KEYCODE_DPAD_UP: {
                 if (selectedIndex > 0) setSelected(selectedIndex - 1);
@@ -383,6 +451,12 @@ public class UsbManagerActivity extends AppCompatActivity {
                 }
                 return true;
             }
+            case KeyEvent.KEYCODE_MENU: {
+                if (selectedIndex >= 0 && selectedIndex < sortedFiles.length) {
+                    showContextMenu(sortedFiles[selectedIndex]);
+                }
+                return true;
+            }
             case KeyEvent.KEYCODE_BACK: {
                 if (currentDir != null) {
                     File parent = currentDir.getParentFile();
@@ -396,7 +470,93 @@ public class UsbManagerActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    // ===================== 文件操作 =====================
+    // ===================== 文件操作菜单 =====================
+
+    private void showContextMenu(File file) {
+        String[] ops = new String[]{"\u6253\u5F00", "\u91CD\u547D\u540D", "\u79FB\u52A8", "\u590D\u5236", "\u5220\u9664"};
+
+        new AlertDialog.Builder(this)
+            .setTitle(file.getName())
+            .setItems(ops, (d, which) -> {
+                switch (which) {
+                    case 0:
+                        if (file.isDirectory()) navigateTo(file);
+                        else openFile(file);
+                        break;
+                    case 1:
+                        showRenameDialog(file);
+                        break;
+                    case 2:
+                        clipboardFile = file;
+                        clipboardCopy = false;
+                        showMoveCopyDialog(file, false);
+                        break;
+                    case 3:
+                        clipboardFile = file;
+                        clipboardCopy = true;
+                        showMoveCopyDialog(file, true);
+                        break;
+                    case 4:
+                        showDeleteConfirm(file);
+                        break;
+                }
+            })
+            .setNegativeButton("\u53D6\u6D88", null)
+            .show();
+    }
+
+    private void showMoveCopyDialog(File file, boolean isCopy) {
+        String opName = isCopy ? "\u590D\u5236\u5230\u6B64\u5904" : "\u79FB\u52A8\u5230\u6B64\u5904";
+        String msg = (isCopy ? "\u786E\u8BA4\u590D\u5236\u5230\u5F53\u524D\u76EE\u5F55\uFF1F\n\n" : "\u786E\u8BA4\u79FB\u52A8\u5230\u5F53\u524D\u76EE\u5F55\uFF1F\n\n")
+                + "\u6765\u6E90\uFF1A" + file.getAbsolutePath();
+
+        new AlertDialog.Builder(this)
+            .setTitle(file.getName())
+            .setMessage(msg)
+            .setPositiveButton(opName, (d, w) -> {
+                boolean ok = isCopy ? copyFile(clipboardFile, currentDir) : moveFile(clipboardFile, currentDir);
+                Toast.makeText(this, ok ? (isCopy ? "\u590D\u5236\u6210\u529F" : "\u79FB\u52A8\u6210\u529F") : (isCopy ? "\u590D\u5236\u5931\u8D25" : "\u79FB\u52A8\u5931\u8D25"), Toast.LENGTH_SHORT).show();
+                if (ok) { clipboardFile = null; refresh(); }
+            })
+            .setNegativeButton("\u53D6\u6D88", null)
+            .show();
+    }
+
+    private boolean copyFile(File src, File destDir) {
+        File dest = new File(destDir, src.getName());
+        if (src.isDirectory()) {
+            if (!dest.mkdirs()) return false;
+            File[] children = src.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    if (!copyFile(child, dest)) return false;
+                }
+            }
+            return true;
+        } else {
+            try (InputStream in = new java.io.FileInputStream(src);
+                 FileOutputStream out = new FileOutputStream(dest)) {
+                byte[] buf = new byte[8192];
+                int len;
+                while ((len = in.read(buf)) > 0) out.write(buf, 0, len);
+                return true;
+            } catch (Exception e) { return false; }
+        }
+    }
+
+    private boolean moveFile(File src, File destDir) {
+        File dest = new File(destDir, src.getName());
+        if (dest.exists()) {
+            Toast.makeText(this, "\u76EE\u6807\u4F4D\u7F6E\u5DF2\u6709\u540D\u540C\u6587\u4EF6", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        if (src.renameTo(dest)) return true;
+        if (copyFile(src, destDir)) {
+            deleteRecursively(src);
+            return true;
+        }
+        return false;
+    }
 
     private void showRenameDialog(File file) {
         EditText et = new EditText(this);
@@ -405,41 +565,41 @@ public class UsbManagerActivity extends AppCompatActivity {
         et.setPadding(48, 24, 48, 24);
         et.selectAll();
         new AlertDialog.Builder(this)
-            .setTitle("\u270F\uFE0F 重命名")
-            .setMessage("当前：" + file.getName())
+            .setTitle("\u270F\uFE0F \u91CD\u547D\u540D")
+            .setMessage("\u5F53\u524D\uFF1A" + file.getName())
             .setView(et)
-            .setPositiveButton("确定", (d, w) -> {
+            .setPositiveButton("\u786E\u5B9A", (d, w) -> {
                 String newName = et.getText().toString().trim();
                 if (newName.isEmpty() || newName.equals(file.getName())) return;
                 File dest = new File(currentDir, newName);
                 if (dest.exists()) {
-                    Toast.makeText(this, "同名文件已存在", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\u540C\u540D\u6587\u4EF6\u5DF2\u5B58\u5728", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (file.renameTo(dest)) {
-                    Toast.makeText(this, "重命名成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\u91CD\u547D\u540D\u6210\u529F", Toast.LENGTH_SHORT).show();
                     refresh();
                 } else {
-                    Toast.makeText(this, "重命名失败", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "\u91CD\u547D\u540D\u5931\u8D25", Toast.LENGTH_SHORT).show();
                 }
             })
-            .setNegativeButton("取消", null)
+            .setNegativeButton("\u53D6\u6D88", null)
             .show();
     }
 
     private void showDeleteConfirm(File file) {
         String msg = file.isDirectory()
-                ? "确认删除文件夹及其所有内容？\n\n" + file.getName()
-                : "确认删除文件？\n\n" + file.getName();
+                ? "\u786E\u8BA4\u5220\u9664\u6587\u4EF6\u5939\u53CA\u5176\u6240\u6709\u5185\u5BB9\uFF1F\n\n" + file.getName()
+                : "\u786E\u8BA4\u5220\u9664\u6587\u4EF6\uFF1F\n\n" + file.getName();
         new AlertDialog.Builder(this)
-            .setTitle("\uD83D\uDDD1\uFE0F 确认删除")
+            .setTitle("\uD83D\uDDD1\uFE0F \u786E\u8BA4\u5220\u9664")
             .setMessage(msg)
-            .setPositiveButton("删除", (d, w) -> {
+            .setPositiveButton("\u5220\u9664", (d, w) -> {
                 boolean ok = deleteRecursively(file);
-                Toast.makeText(this, ok ? "删除成功" : "删除失败", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, ok ? "\u5220\u9664\u6210\u529F" : "\u5220\u9664\u5931\u8D25", Toast.LENGTH_SHORT).show();
                 if (ok) refresh();
             })
-            .setNegativeButton("取消", null)
+            .setNegativeButton("\u53D6\u6D88", null)
             .show();
     }
 
@@ -457,20 +617,25 @@ public class UsbManagerActivity extends AppCompatActivity {
 
     private void openFile(File file) {
         try {
-            android.content.Intent intent = new android.content.Intent(android.content.Intent.ACTION_VIEW);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
             String mime = android.webkit.MimeTypeMap.getSingleton()
                     .getMimeTypeFromExtension(getExtension(file.getName()));
-            if (mime != null) {
-                intent.setDataAndType(androidx.core.content.FileProvider.getUriForFile(
-                        this, getPackageName() + ".fileprovider", file), mime);
-            } else {
-                intent.setDataAndType(androidx.core.content.FileProvider.getUriForFile(
-                        this, getPackageName() + ".fileprovider", file), "*/*");
+            Uri uri;
+            try {
+                uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
+            } catch (Exception e) {
+                uri = Uri.fromFile(file);
             }
-            intent.addFlags(android.content.Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            if (mime != null) {
+                intent.setDataAndType(uri, mime);
+            } else {
+                intent.setDataAndType(uri, "*/*");
+            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
         } catch (Exception e) {
-            Toast.makeText(this, "无法打开该类型文件", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "\u65E0\u6CD5\u6253\u5F00\u8BE5\u6587\u4EF6\uFF0C\u8BF7\u5B89\u88C5\u76F8\u5173\u5E94\u7528", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -482,27 +647,27 @@ public class UsbManagerActivity extends AppCompatActivity {
     }
 
     private String formatFileSize(long size) {
+        if (size < 0) return "\u2014";
         if (size < 1024) return size + " B";
         if (size < 1024 * 1024) return String.format("%.1f KB", size / 1024.0);
         if (size < 1024 * 1024 * 1024) return String.format("%.1f MB", size / (1024.0 * 1024));
         return String.format("%.1f GB", size / (1024.0 * 1024 * 1024));
     }
 
-    private String getFileIcon(String name) {
-        String ext = getExtension(name);
+    private String getFileEmoji(String ext) {
         switch (ext) {
             case "mp4": case "mkv": case "avi": case "mov": case "wmv": case "flv":
             case "webm": case "m4v": case "3gp":
-                return "\uD83C\uDFAC";  // 🎬
+                return "\uD83C\uDFAC";
             case "mp3": case "wav": case "aac": case "flac": case "ogg": case "m4a":
-                return "\uD83C\uDFB5";  // 🎵
+                return "\uD83C\uDFB5";
             case "jpg": case "jpeg": case "png": case "gif": case "bmp": case "webp":
-                return "\uD83D\uDDBC\uFE0F";  // 🖼️
-            case "pdf": return "\uD83D\uDCC4";  // 📄
+                return "\uD83D\uDDBC\uFE0F";
+            case "pdf": return "\uD83D\uDCC4";
             case "zip": case "rar": case "7z": case "tar": case "gz":
-                return "\uD83D\uDCE6";  // 📦
-            case "apk": return "\uD83D\uDCF0";  // 📱
-            default: return "\uD83D\uDCC4";  // 📄
+                return "\uD83D\uDCE6";
+            case "apk": return "\uD83D\uDCF0";
+            default: return "\uD83D\uDCC4";
         }
     }
 

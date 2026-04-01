@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  &#39318;&#39029;"
+                android:text="  首页"
                 android:textSize="12sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  &#36820;&#22238;&#19978;&#32423;"
+                android:text="  返回上级"
                 android:textSize="12sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
@@ -95,12 +95,34 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="&#8634;"
-                android:textSize="16sp"
+                android:textSize="15sp"
+                android:textColor="#FFFFFF"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  刷新"
+                android:textSize="12sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
     </LinearLayout>
 
-    <!-- 文件列表（RecyclerView 效果，用 LinearLayout 垂直排列） -->
+    <!-- 操作提示 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#1A1A30"
+        android:paddingHorizontal="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="遥控器：方向键选择  |  OK键打开/进入  |  菜单键弹出操作菜单  |  返回上级"
+            android:textSize="11sp"
+            android:textColor="#556688"/>
+    </LinearLayout>
+
+    <!-- 文件列表 -->
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
@@ -145,61 +167,34 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  &#26032;&#24314;&#25991;&#20214;&#22841;"
+                android:text="  新建文件夹"
                 android:textSize="13sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
 
-        <!-- 重命名 -->
+        <!-- 提示：菜单键操作 -->
         <LinearLayout
-            android:id="@+id/btnRename"
             android:layout_width="wrap_content"
             android:layout_height="38dp"
             android:orientation="horizontal"
             android:gravity="center"
             android:background="@drawable/btn_tool_bg_inset"
             android:paddingHorizontal="18dp"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            android:clickable="true">
+            android:layout_marginStart="16dp"
+            android:focusable="false"
+            android:clickable="false">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#9998;"
-                android:textSize="15sp"
+                android:text="&#9776;"
+                android:textSize="14sp"
                 android:textColor="#FFFFFF"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  &#37325;&#21672;"
-                android:textSize="13sp"
-                android:textColor="#FFFFFF"/>
-        </LinearLayout>
-
-        <!-- 删除 -->
-        <LinearLayout
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/btn_delete_bg"
-            android:paddingHorizontal="18dp"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            android:clickable="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&#128465;"
-                android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="  &#21024;&#38500;"
-                android:textSize="13sp"
-                android:textColor="#FFFFFF"/>
+                android:text="  菜单键：重命名/删除/移动/复制"
+                android:textSize="12sp"
+                android:textColor="#88AABBCC"/>
         </LinearLayout>
     </LinearLayout>
 

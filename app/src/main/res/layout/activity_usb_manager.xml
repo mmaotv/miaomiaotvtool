@@ -35,7 +35,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  &#39318;&#39029;"
+                android:text="  首页"
                 android:textSize="12sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
@@ -61,7 +61,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="  &#36820;&#22238;&#19978;&#32423;"
+                android:text="  返回上级"
                 android:textSize="12sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
@@ -125,7 +125,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#26410;&#25514;&#20837;U &#30452;&#25509;"
+            android:text="未检测到U盘"
             android:textSize="24sp"
             android:textColor="#8899BB"
             android:textStyle="bold"
@@ -133,7 +133,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#35831;&#25554;&#20837;U&#30424;&#65292;&#28982;&#21518;&#28857;&#20987;&#39318;&#39029;&#30340;&#34;U&#30452;&#25509;&#34;&#25353;&#38062;"
+            android:text="请插入U盘后，点击首页的&#x201C;U盘&#x201D;按钮"
             android:textSize="14sp"
             android:textColor="#556688"
             android:layout_marginTop="10dp"/>
@@ -153,67 +153,5 @@
             android:orientation="vertical"
             android:padding="12dp"/>
     </ScrollView>
-
-    <!-- 底部操作栏 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:background="#14142A"
-        android:paddingHorizontal="12dp"
-        android:elevation="8dp">
-
-        <!-- 重命名 -->
-        <LinearLayout
-            android:id="@+id/btnRename"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/btn_tool_bg_inset"
-            android:paddingHorizontal="18dp"
-            android:focusable="true"
-            android:clickable="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&#9998;"
-                android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="  &#37325;&#21672;"
-                android:textSize="13sp"
-                android:textColor="#FFFFFF"/>
-        </LinearLayout>
-
-        <!-- 删除 -->
-        <LinearLayout
-            android:id="@+id/btnDelete"
-            android:layout_width="wrap_content"
-            android:layout_height="38dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:background="@drawable/btn_delete_bg"
-            android:paddingHorizontal="18dp"
-            android:layout_marginStart="10dp"
-            android:focusable="true"
-            android:clickable="true">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="&#128465;"
-                android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="  &#21024;&#38500;"
-                android:textSize="13sp"
-                android:textColor="#FFFFFF"/>
-        </LinearLayout>
-    </LinearLayout>
 
 </LinearLayout>

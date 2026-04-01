@@ -253,7 +253,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="U &#30452;&#25509;"
+                        android:text="U盘"
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"

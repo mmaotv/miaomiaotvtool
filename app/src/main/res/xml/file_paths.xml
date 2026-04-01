@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- FileProvider 文件路径配置 -->
 <paths xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 公共下载目录（含子目录如 喵喵嗷影视/） -->
+    <!-- 根目录（支持所有存储设备，包括U盘） -->
+    <root-path
+        name="root"
+        path="." />
+    <!-- 公共下载目录 -->
     <external-path
         name="external_downloads"
         path="Download/" />
-    <!-- 外部存储根目录（备用） -->
+    <!-- 外部存储根目录 -->
     <external-path
         name="external_root"
         path="." />
