@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="400dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#1A1A2E"
+    android:padding="24dp"
+    android:gravity="center">
+
+    <!-- 标题 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&#25195;&#30721;&#36755;&#20837;&#32593;&#22336;"
+        android:textSize="20sp"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:layout_marginBottom="6dp"/>
+
+    <!-- 说明 -->
+    <TextView
+        android:id="@+id/tvQrHint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&#29992;&#25163;&#26426;&#25195;&#25551;&#20108;&#32508;&#30721;&#36755;&#20837;&#32593;&#22336;"
+        android:textSize="13sp"
+        android:textColor="#AABBCC"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 二维码图片 -->
+    <ImageView
+        android:id="@+id/ivQrCode"
+        android:layout_width="220dp"
+        android:layout_height="220dp"
+        android:scaleType="fitCenter"
+        android:background="#FFFFFF"
+        android:padding="10dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- IP地址显示 -->
+    <TextView
+        android:id="@+id/tvIpAddress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&#27491;&#22312;&#33719;&#21462;IP&#22320;&#22336;..."
+        android:textSize="12sp"
+        android:textColor="#7788AA"
+        android:gravity="center"
+        android:layout_marginBottom="6dp"/>
+
+    <!-- 等待状态 -->
+    <TextView
+        android:id="@+id/tvWaitStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&#31561;&#24453;&#25163;&#26426;&#25171;&#24320;&#20108;&#32508;&#30721;..."
+        android:textSize="14sp"
+        android:textColor="#FFC107"
+        android:gravity="center"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 取消按钮 -->
+    <LinearLayout
+        android:id="@+id/btnCancelQr"
+        android:layout_width="120dp"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:background="@drawable/btn_tool_bg"
+        android:focusable="true"
+        android:clickable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="&#21462;&#28040;"
+            android:textSize="15sp"
+            android:textColor="#FFFFFF"/>
+    </LinearLayout>
+
+</LinearLayout>

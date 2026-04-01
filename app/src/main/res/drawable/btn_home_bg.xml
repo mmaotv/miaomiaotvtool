@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 首页按钮（工具栏）：蓝灰色 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 焦点选中：白色边框 + 更亮 -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#7B95EE"/>
+            <corners android:radius="8dp"/>
+            <stroke android:width="3dp" android:color="#FFFFFFFF"/>
+        </shape>
+    </item>
+
+    <!-- 按下状态 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#3B55AA"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <!-- 默认状态 -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#3B4A6B"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+</selector>

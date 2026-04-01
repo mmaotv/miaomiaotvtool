@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 扫码输入按钮：金黄渐变 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 焦点选中状态：白色粗边框 + 更亮 -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#FFE840"
+                android:endColor="#FFAA60"/>
+            <corners android:radius="20dp"/>
+            <stroke android:width="4dp" android:color="#FFFFFFFF"/>
+        </shape>
+    </item>
+
+    <!-- 按下状态 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#CCAC00"
+                android:endColor="#CC6A2A"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+    <!-- 默认状态 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#FFC800"
+                android:endColor="#FF7A38"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+</selector>

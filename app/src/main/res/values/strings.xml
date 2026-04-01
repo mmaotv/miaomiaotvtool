@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">喵喵嗷影视</string>
+
+    <!-- ===== 快速配置区（修改这里后运行 build.bat 即可打包） ===== -->
+    <string name="live_url">https://mengma.lanzoum.com/b01fphpgf</string>
+    <string name="vod_url">https://mengma.lanzoum.com/b01fhuuih</string>
+    <string name="tools_url">https://mengma.lanzoum.com/b0mb2pq7e</string>
+    <string name="info_text">密码：miao</string>
+    <!-- ===== 以上四项是主要配置 ===== -->
+
+    <!-- 首页大标题（默认与 app_name 相同） -->
+    <string name="home_title">喵喵嗷影视</string>
+    <!-- 首页副标题（APP名称下方小字） -->
+    <string name="subtitle_text">高清影视 · 随时随地</string>
+
+    <string name="btn_live">直播</string>
+    <string name="btn_vod">点播</string>
+    <string name="btn_tools">工具</string>
+    <string name="download_notification_channel">下载</string>
+    <string name="downloading">正在下载...</string>
+    <string name="download_complete">下载完成</string>
+    <string name="download_failed">下载失败</string>
+    <string name="download_confirm_title">下载文件</string>
+    <string name="download_confirm_msg">是否下载此文件？</string>
+    <string name="download_yes">下载</string>
+    <string name="download_no">取消</string>
+</resources>

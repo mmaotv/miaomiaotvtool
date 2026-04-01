@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 工具按钮：绿青渐变 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 焦点选中状态：白色粗边框 + 更亮 -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#44FFD0"
+                android:endColor="#00D4F8"/>
+            <corners android:radius="20dp"/>
+            <stroke android:width="4dp" android:color="#FFFFFFFF"/>
+        </shape>
+    </item>
+
+    <!-- 按下状态 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#00B47A"
+                android:endColor="#0090A8"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+    <!-- 默认状态 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:type="linear"
+                android:angle="135"
+                android:startColor="#00D490"
+                android:endColor="#00A0C8"/>
+            <corners android:radius="20dp"/>
+        </shape>
+    </item>
+
+</selector>

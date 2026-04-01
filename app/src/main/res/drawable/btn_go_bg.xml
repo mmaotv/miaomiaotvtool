@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 焦点选中：白色边框 + 更亮 -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FF9B5FFF"
+                android:endColor="#FF7B8FFF"
+                android:angle="45"/>
+            <corners android:radius="8dp"/>
+            <stroke android:width="3dp" android:color="#FFFFFFFF"/>
+        </shape>
+    </item>
+
+    <!-- 按下状态 -->
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#CC7B3FFF"
+                android:endColor="#CC5B6FFF"
+                android:angle="45"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+    <!-- 默认状态 -->
+    <item>
+        <shape android:shape="rectangle">
+            <gradient
+                android:startColor="#FF6B4FEE"
+                android:endColor="#FF4B5FEE"
+                android:angle="45"/>
+            <corners android:radius="8dp"/>
+        </shape>
+    </item>
+
+</selector>

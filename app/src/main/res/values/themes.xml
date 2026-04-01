@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 主题：Material3 深色，无标题栏，全屏，横屏 -->
+    <style name="Theme.MiaoMiaoTV" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">#0D0D1A</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">#0D0D1A</item>
+        <item name="android:navigationBarColor">#0D0D1A</item>
+        <!-- 主色调：蓝紫 -->
+        <item name="colorPrimary">#7B61FF</item>
+        <item name="colorPrimaryDark">#5B41DF</item>
+        <item name="colorAccent">#7B61FF</item>
+        <!-- 焦点高亮 -->
+        <item name="android:colorControlHighlight">#337B61FF</item>
+    </style>
+</resources>
