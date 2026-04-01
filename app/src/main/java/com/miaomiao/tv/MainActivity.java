@@ -4,12 +4,16 @@ import android.Manifest;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -24,6 +28,7 @@ import android.webkit.WebViewClient;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,8 +41,8 @@ import java.util.List;
 
 /**
  * 喵喵嗷影视 - 主界面
- * 首页：直播/点播/工具/扫码输入 四大按钮 + 文本框
- * 浏览器页：可编辑地址栏 + 后退/前进/刷新/首页/下载管理
+ * 首页：6个按钮（直播/点播/工具/扫码输入/文件管理/U盘）
+ * 首页不显示光标，进入WebView时自动开启光标控制
  */
 public class MainActivity extends AppCompatActivity {
 
@@ -55,6 +60,8 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnVod;
     private LinearLayout btnTools;
     private LinearLayout btnQrInput;
+    private LinearLayout btnFileMgr;
+    private LinearLayout btnUsbMgr;
     private LinearLayout toolbar;
     private LinearLayout btnBack;
     private LinearLayout btnForward;
@@ -69,6 +76,21 @@ public class MainActivity extends AppCompatActivity {
 
     private QrInputHelper qrInputHelper;
 
+    // ---- USB 广播 ----
+    private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (Intent.ACTION_MEDIA_MOUNTED.equals(action)) {
+                // U 盘插入，弹出提示
+                showUsbMountedToast();
+            } else if (Intent.ACTION_MEDIA_UNMOUNTED.equals(action)
+                    || Intent.ACTION_MEDIA_REMOVED.equals(action)) {
+                // U 盘移除
+            }
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        // 读取配置（支持修改 strings.xml 快速更换）
+        // 读取配置
         LIVE_URL  = getString(R.string.live_url);
         VOD_URL   = getString(R.string.vod_url);
         TOOLS_URL = getString(R.string.tools_url);
@@ -90,6 +112,32 @@ public class MainActivity extends AppCompatActivity {
         initViews();
         setupWebView();
         checkPermissions();
+
+        // 初始状态：首页隐藏光标
+        cursorView.setVisibility(View.GONE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 注册 USB 广播
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Intent.ACTION_MEDIA_MOUNTED);
+        filter.addAction(Intent.ACTION_MEDIA_UNMOUNTED);
+        filter.addAction(Intent.ACTION_MEDIA_REMOVED);
+        filter.addDataScheme("file");
+        ContextCompat.registerReceiver(this, usbReceiver, filter,
+                ContextCompat.RECEIVER_NOT_EXPORTED);
+        if (webView != null) webView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        try {
+            unregisterReceiver(usbReceiver);
+        } catch (Exception ignored) {}
+        if (webView != null) webView.onPause();
     }
 
     private void initViews() {
@@ -99,6 +147,8 @@ public class MainActivity extends AppCompatActivity {
         btnVod       = findViewById(R.id.btnVod);
         btnTools     = findViewById(R.id.btnTools);
         btnQrInput   = findViewById(R.id.btnQrInput);
+        btnFileMgr   = findViewById(R.id.btnFileMgr);
+        btnUsbMgr    = findViewById(R.id.btnUsbMgr);
         toolbar      = findViewById(R.id.toolbar);
         btnBack      = findViewById(R.id.btnBack);
         btnForward   = findViewById(R.id.btnForward);
@@ -111,11 +161,13 @@ public class MainActivity extends AppCompatActivity {
         webView      = findViewById(R.id.webView);
         cursorView   = findViewById(R.id.cursorView);
 
-        // 首页大按钮：添加焦点放大动画
-        attachFocusScale(btnLive,    1.10f);
-        attachFocusScale(btnVod,     1.10f);
-        attachFocusScale(btnTools,   1.10f);
-        attachFocusScale(btnQrInput, 1.10f);
+        // 首页大按钮：焦点放大动画
+        attachFocusScale(btnLive,      1.10f);
+        attachFocusScale(btnVod,       1.10f);
+        attachFocusScale(btnTools,     1.10f);
+        attachFocusScale(btnQrInput,   1.10f);
+        attachFocusScale(btnFileMgr,   1.10f);
+        attachFocusScale(btnUsbMgr,    1.10f);
 
         // 工具栏小按钮：轻微放大
         attachFocusScale(btnBack,      1.15f);
@@ -125,38 +177,24 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnHome,      1.15f);
         attachFocusScale(btnDownloads, 1.15f);
 
-        // 直播按钮
+        // 首页按钮点击事件
         btnLive.setOnClickListener(v -> openUrl(LIVE_URL));
-
-        // 点播按钮
         btnVod.setOnClickListener(v -> openUrl(VOD_URL));
-
-        // 工具按钮
         btnTools.setOnClickListener(v -> openUrl(TOOLS_URL));
-
-        // 扫码输入按钮
         btnQrInput.setOnClickListener(v -> showQrInput());
+        btnFileMgr.setOnClickListener(v -> startActivity(new Intent(this, FileManagerActivity.class)));
+        btnUsbMgr.setOnClickListener(v -> startActivity(new Intent(this, UsbManagerActivity.class)));
 
-        // 后退
+        // 工具栏按钮
         btnBack.setOnClickListener(v -> {
             if (webView.canGoBack()) webView.goBack();
         });
-
-        // 前进
         btnForward.setOnClickListener(v -> {
             if (webView.canGoForward()) webView.goForward();
         });
-
-        // 刷新
         btnRefresh.setOnClickListener(v -> webView.reload());
-
-        // GO 按钮
         btnGo.setOnClickListener(v -> navigateToUrl(etUrl.getText().toString()));
-
-        // 首页按钮（返回主页）
         btnHome.setOnClickListener(v -> showHomePage());
-
-        // 地址栏回车
         etUrl.setOnEditorActionListener((v, actionId, event) -> {
             if (actionId == EditorInfo.IME_ACTION_GO ||
                 (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
@@ -165,31 +203,22 @@ public class MainActivity extends AppCompatActivity {
             }
             return false;
         });
-
-        // 下载管理
         btnDownloads.setOnClickListener(v ->
             startActivity(new Intent(this, DownloadsActivity.class))
         );
     }
 
-    /**
-     * 显示扫码输入对话框
-     */
     private void showQrInput() {
         if (qrInputHelper != null) {
             qrInputHelper.dismiss();
         }
         qrInputHelper = new QrInputHelper(this, url -> {
-            // 手机输入网址后，TV端打开它
             openUrl(url);
             Toast.makeText(this, "\u5df2\u63a5\u6536\u7f51\u5740\uff1a" + url, Toast.LENGTH_LONG).show();
         });
         qrInputHelper.show();
     }
 
-    /**
-     * 打开 URL：切换到 WebView 页
-     */
     private void openUrl(String url) {
         if (url == null || url.trim().isEmpty()) {
             Toast.makeText(this, "\u7f51\u5740\u672a\u914d\u7f6e", Toast.LENGTH_SHORT).show();
@@ -200,18 +229,13 @@ public class MainActivity extends AppCompatActivity {
         etUrl.setText(url);
     }
 
-    /**
-     * 地址栏跳转
-     */
     private void navigateToUrl(String input) {
         if (input == null || input.trim().isEmpty()) return;
         input = input.trim();
         if (!input.startsWith("http://") && !input.startsWith("https://")) {
-            // 自动补全协议
             if (input.contains(".")) {
                 input = "https://" + input;
             } else {
-                // 视为搜索词
                 input = "https://www.bing.com/search?q=" + Uri.encode(input);
             }
         }
@@ -221,11 +245,40 @@ public class MainActivity extends AppCompatActivity {
     private void showHomePage() {
         homePage.setVisibility(View.VISIBLE);
         webPage.setVisibility(View.GONE);
+        // 首页隐藏光标
+        cursorView.setVisibility(View.GONE);
     }
 
     private void showWebPage() {
         homePage.setVisibility(View.GONE);
         webPage.setVisibility(View.VISIBLE);
+        // 进入 WebView 显示光标
+        cursorView.setVisibility(View.VISIBLE);
+        // 重置光标位置到中心
+        cursorView.resetPosition();
+    }
+
+    /** U 盘插入时弹出提示 */
+    private void showUsbMountedToast() {
+        TextView tv = new TextView(this);
+        tv.setText("\uD83D\uDCBB U \u76D8\u5DF2\u63D2\u5165\uFF01");
+        tv.setTextSize(18);
+        tv.setTextColor(0xFFFFFFFF);
+        tv.setGravity(Gravity.CENTER);
+        tv.setPadding(40, 20, 40, 20);
+
+        AlertDialog d = new AlertDialog.Builder(this)
+            .setTitle("")
+            .setView(tv)
+            .setPositiveButton("\u6253\u5F00 U \u76D8", (dialog, which) -> {
+                startActivity(new Intent(this, UsbManagerActivity.class));
+            })
+            .setNegativeButton("\u5FFD\u7565", null)
+            .create();
+        if (d.getWindow() != null) {
+            d.getWindow().setGravity(Gravity.CENTER);
+        }
+        d.show();
     }
 
     private void setupWebView() {
@@ -257,7 +310,6 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
-                // 同步更新地址栏
                 if (url != null) etUrl.setText(url);
                 updateNavButtons();
             }
@@ -326,43 +378,38 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        switch (keyCode) {
-            case KeyEvent.KEYCODE_DPAD_UP:
-                cursorView.moveCursor(0, -CursorView.STEP);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_DOWN:
-                cursorView.moveCursor(0, CursorView.STEP);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_LEFT:
-                cursorView.moveCursor(-CursorView.STEP, 0);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_RIGHT:
-                cursorView.moveCursor(CursorView.STEP, 0);
-                return true;
-            case KeyEvent.KEYCODE_DPAD_CENTER:
-            case KeyEvent.KEYCODE_ENTER:
-                if (webPage.getVisibility() == View.VISIBLE) {
+        // 只有在 WebView 页面才处理光标控制
+        if (webPage.getVisibility() == View.VISIBLE) {
+            switch (keyCode) {
+                case KeyEvent.KEYCODE_DPAD_UP:
+                    cursorView.moveCursor(0, -CursorView.STEP);
+                    return true;
+                case KeyEvent.KEYCODE_DPAD_DOWN:
+                    cursorView.moveCursor(0, CursorView.STEP);
+                    return true;
+                case KeyEvent.KEYCODE_DPAD_LEFT:
+                    cursorView.moveCursor(-CursorView.STEP, 0);
+                    return true;
+                case KeyEvent.KEYCODE_DPAD_RIGHT:
+                    cursorView.moveCursor(CursorView.STEP, 0);
+                    return true;
+                case KeyEvent.KEYCODE_DPAD_CENTER:
+                case KeyEvent.KEYCODE_ENTER:
                     cursorView.performClick(webView);
-                }
-                return true;
-            case KeyEvent.KEYCODE_BACK:
-                if (webPage.getVisibility() == View.VISIBLE) {
+                    return true;
+                case KeyEvent.KEYCODE_BACK:
                     if (webView.canGoBack()) {
                         webView.goBack();
                     } else {
                         showHomePage();
                     }
                     return true;
-                }
-                break;
-            case KeyEvent.KEYCODE_MENU:
-                if (webPage.getVisibility() == View.VISIBLE) {
+                case KeyEvent.KEYCODE_MENU:
                     toolbar.setVisibility(
                         toolbar.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE
                     );
                     return true;
-                }
-                break;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -401,27 +448,14 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
-        super.onPause();
-        webView.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        webView.onResume();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (qrInputHelper != null) qrInputHelper.dismiss();
-        webView.destroy();
+        if (webView != null) webView.destroy();
     }
 
     /**
-     * 给 View 附加焦点放大/缩小动画
-     * 获焦时缩放到 scale，失焦时恢复 1.0
+     * 焦点放大/缩小动画
      */
     private void attachFocusScale(View v, float scale) {
         v.setOnFocusChangeListener((view, hasFocus) -> {

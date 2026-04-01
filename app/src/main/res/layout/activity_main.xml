@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0D0D1A">
+    android:background="#0A0A14">
 
     <!-- ==================== 首页面板 ==================== -->
     <LinearLayout
@@ -20,20 +20,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:layout_marginBottom="6dp">
+            android:layout_marginBottom="8dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="&#128049;"
-                android:textSize="36sp"
+                android:textSize="32sp"
                 android:layout_marginEnd="10dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/home_title"
-                android:textSize="34sp"
+                android:textSize="32sp"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"
                 android:letterSpacing="0.05"
@@ -48,168 +48,232 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/subtitle_text"
-            android:textSize="13sp"
+            android:textSize="12sp"
             android:textColor="#99AABBDD"
-            android:letterSpacing="0.1"
-            android:layout_marginBottom="36dp"/>
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="28dp"/>
 
-        <!-- 第一行按钮：直播 + 点播 -->
+        <!-- ====== 3列2行按钮网格 ====== -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginBottom="20dp">
-
-            <!-- 直播按钮 -->
-            <LinearLayout
-                android:id="@+id/btnLive"
-                android:layout_width="190dp"
-                android:layout_height="100dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/btn_live_bg_inset"
-                android:layout_marginEnd="24dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:elevation="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#128225;"
-                    android:textSize="30sp"
-                    android:layout_marginBottom="6dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#30452;  &#25773;"
-                    android:textSize="20sp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.15"/>
-
-            </LinearLayout>
-
-            <!-- 点播按钮 -->
-            <LinearLayout
-                android:id="@+id/btnVod"
-                android:layout_width="190dp"
-                android:layout_height="100dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/btn_vod_bg_inset"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:elevation="8dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#127916;"
-                    android:textSize="30sp"
-                    android:layout_marginBottom="6dp"/>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#28857;  &#25773;"
-                    android:textSize="20sp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.15"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!-- 第二行按钮：工具 + 扫码输入 -->
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:gravity="center">
 
-            <!-- 工具按钮 -->
+            <!-- 第一行：直播 | 点播 | 工具 -->
             <LinearLayout
-                android:id="@+id/btnTools"
-                android:layout_width="190dp"
-                android:layout_height="100dp"
-                android:orientation="vertical"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_tools_bg_inset"
-                android:layout_marginEnd="24dp"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:elevation="8dp">
+                android:layout_marginBottom="16dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#128295;"
-                    android:textSize="30sp"
-                    android:layout_marginBottom="6dp"/>
+                <!-- 直播按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnLive"
+                    android:layout_width="180dp"
+                    android:layout_height="98dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_live_bg_inset"
+                    android:layout_marginEnd="16dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#24037;  &#20855;"
-                    android:textSize="20sp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.15"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#128225;"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#30452;  &#25773;"
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </LinearLayout>
+
+                <!-- 点播按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnVod"
+                    android:layout_width="180dp"
+                    android:layout_height="98dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_vod_bg_inset"
+                    android:layout_marginEnd="16dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#127916;"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#28857;  &#25773;"
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </LinearLayout>
+
+                <!-- 工具按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnTools"
+                    android:layout_width="180dp"
+                    android:layout_height="98dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_tools_bg_inset"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#128295;"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#24037;  &#20855;"
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.15"/>
+                </LinearLayout>
             </LinearLayout>
 
-            <!-- 扫码输入按钮 -->
+            <!-- 第二行：扫码输入 | 文件管理 | U盘 -->
             <LinearLayout
-                android:id="@+id/btnQrInput"
-                android:layout_width="190dp"
-                android:layout_height="100dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:background="@drawable/btn_qr_bg_inset"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:clickable="true"
-                android:elevation="8dp">
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#128247;"
-                    android:textSize="30sp"
-                    android:layout_marginBottom="6dp"/>
+                <!-- 扫码输入按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnQrInput"
+                    android:layout_width="180dp"
+                    android:layout_height="98dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_qr_bg_inset"
+                    android:layout_marginEnd="16dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="&#25195;&#30721;&#36755;&#20837;"
-                    android:textSize="20sp"
-                    android:textColor="#FFFFFF"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.08"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#128247;"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#25195;&#30721;&#36755;&#20837;"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.08"/>
+                </LinearLayout>
+
+                <!-- 文件管理按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnFileMgr"
+                    android:layout_width="180dp"
+                    android:layout_height="98dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_file_bg_inset"
+                    android:layout_marginEnd="16dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#128193;"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#25991;&#20214;&#31649;&#29702;"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05"/>
+                </LinearLayout>
+
+                <!-- U盘按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnUsbMgr"
+                    android:layout_width="180dp"
+                    android:layout_height="98dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_usb_bg_inset"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="&#128187;"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="U &#30452;&#25509;"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"
+                        android:letterSpacing="0.05"/>
+                </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
 
-        <!-- 文本框（密码提示），在按钮下方居中 -->
+        <!-- 文本框（密码提示） -->
         <TextView
             android:id="@+id/infoText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/info_text"
-            android:textSize="15sp"
+            android:textSize="14sp"
             android:textColor="#FFDD88"
-            android:paddingHorizontal="28dp"
-            android:paddingVertical="10dp"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="8dp"
             android:background="@drawable/info_text_bg"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="24dp"
             android:gravity="center"/>
 
     </LinearLayout>
@@ -221,7 +285,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="#0D0D1A">
+        android:background="#0A0A14">
 
         <!-- 顶部工具栏 -->
         <LinearLayout

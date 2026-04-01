@@ -5,6 +5,8 @@
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- USB 存储权限 -->
+    <!-- 已通过下方的 WRITE_EXTERNAL_STORAGE / READ_EXTERNAL_STORAGE 声明 -->
     <!-- 存储权限（下载文件） -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
@@ -57,6 +59,20 @@
         <!-- 下载管理界面 -->
         <activity
             android:name=".DownloadsActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <!-- 文件管理器界面 -->
+        <activity
+            android:name=".FileManagerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <!-- U盘管理器界面 -->
+        <activity
+            android:name=".UsbManagerActivity"
             android:exported="false"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>

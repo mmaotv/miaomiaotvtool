@@ -146,4 +146,13 @@ public class CursorView extends View {
     public PointF getCursorPosition() {
         return new PointF(cursorX, cursorY);
     }
+
+    /**
+     * 重置光标到屏幕中心
+     */
+    public void resetPosition() {
+        cursorX = getWidth() > 0 ? getWidth() / 2f : 960f;
+        cursorY = getHeight() > 0 ? getHeight() / 2f : 540f;
+        invalidate();
+    }
 }

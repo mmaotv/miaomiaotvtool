@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/file_item_bg"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="14dp"
+    android:layout_marginBottom="6dp"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:clickable="true"
+    android:elevation="4dp">
+
+    <!-- 文件/文件夹图标 -->
+    <TextView
+        android:id="@+id/tvIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&#128193;"
+        android:textSize="26sp"
+        android:layout_marginEnd="14dp"/>
+
+    <!-- 文件名 -->
+    <TextView
+        android:id="@+id/tvFileName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="filename.txt"
+        android:textSize="16sp"
+        android:textColor="#E8EAF6"
+        android:singleLine="true"
+        android:ellipsize="middle"/>
+
+    <!-- 文件大小（仅文件显示） -->
+    <TextView
+        android:id="@+id/tvFileSize"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.2 MB"
+        android:textSize="12sp"
+        android:textColor="#8899BB"
+        android:layout_marginStart="12dp"/>
+
+</LinearLayout>
