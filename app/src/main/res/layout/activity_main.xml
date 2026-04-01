@@ -68,7 +68,7 @@
                 android:layout_height="100dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/btn_live_bg"
+                android:background="@drawable/btn_live_bg_inset"
                 android:layout_marginEnd="24dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -100,7 +100,7 @@
                 android:layout_height="100dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/btn_vod_bg"
+                android:background="@drawable/btn_vod_bg_inset"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:clickable="true"
@@ -140,7 +140,7 @@
                 android:layout_height="100dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/btn_tools_bg"
+                android:background="@drawable/btn_tools_bg_inset"
                 android:layout_marginEnd="24dp"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
@@ -172,7 +172,7 @@
                 android:layout_height="100dp"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="@drawable/btn_qr_bg"
+                android:background="@drawable/btn_qr_bg_inset"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:clickable="true"
@@ -242,7 +242,7 @@
                 android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_tool_bg"
+                android:background="@drawable/btn_tool_bg_inset"
                 android:focusable="true"
                 android:clickable="true">
                 <TextView
@@ -260,7 +260,7 @@
                 android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_tool_bg"
+                android:background="@drawable/btn_tool_bg_inset"
                 android:layout_marginStart="5dp"
                 android:focusable="true"
                 android:clickable="true">
@@ -279,7 +279,7 @@
                 android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_tool_bg"
+                android:background="@drawable/btn_tool_bg_inset"
                 android:layout_marginStart="5dp"
                 android:focusable="true"
                 android:clickable="true">
@@ -316,7 +316,7 @@
                 android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_go_bg"
+                android:background="@drawable/btn_go_bg_inset"
                 android:layout_marginEnd="5dp"
                 android:focusable="true"
                 android:clickable="true">
@@ -336,7 +336,7 @@
                 android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_home_bg"
+                android:background="@drawable/btn_home_bg_inset"
                 android:layout_marginEnd="5dp"
                 android:focusable="true"
                 android:clickable="true">
@@ -355,7 +355,7 @@
                 android:layout_height="38dp"
                 android:orientation="horizontal"
                 android:gravity="center"
-                android:background="@drawable/btn_download_bg"
+                android:background="@drawable/btn_download_bg_inset"
                 android:focusable="true"
                 android:clickable="true">
                 <TextView
