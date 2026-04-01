@@ -83,7 +83,7 @@ public class QrInputHelper {
         String serverUrl = "http://" + localIp + ":" + SERVER_PORT + "/";
 
         if (!localIp.isEmpty() && !localIp.equals("0.0.0.0")) {
-            tvIpAddress.setText("\u624b\u673a\u8fde\u540c\u4e00\u4e2a WiFi\uff0c\u626b\u7801\u8f93\u5165\u7f51\u5740");
+            tvIpAddress.setText("\u624b\u673a\u8fde\u540c\u4e00\u4e2a\u5c40\u57df\u7f51\uff0c\u626b\u7801\u8f93\u5165\u7f51\u5740");
 
             // 生成二维码
             Bitmap qrBitmap = generateQrCode(serverUrl, 600);
@@ -94,7 +94,7 @@ public class QrInputHelper {
             // 启动 HTTP Server
             startServer(localIp, tvWaitStatus);
         } else {
-            tvIpAddress.setText("\u672a\u8fde\u63a5 WiFi\uff0c\u8bf7\u5148\u8fde\u63a5\u5c40\u57df\u7f51");
+            tvIpAddress.setText("\u672a\u8fde\u63a5\u5c40\u57df\u7f51\uff0c\u8bf7\u5148\u8fde\u63a5 WiFi \u6216\u7f51\u7ebf");
             tvWaitStatus.setText("\u65e0\u6cd5\u542f\u52a8\u670d\u52a1\u5668");
             ivQrCode.setImageResource(android.R.drawable.ic_dialog_alert);
         }
@@ -349,29 +349,41 @@ public class QrInputHelper {
     }
 
     /**
-     * 获取本机 WiFi IP 地址
+     * 获取本机局域网 IP 地址
+     * 优先通过遍历所有网络接口获取（支持 WiFi / 以太网 / 网线）
+     * WiFi 作为 fallback
      */
     private String getLocalIpAddress() {
         try {
+            // 优先：遍历所有网络接口，找局域网 IPv4
+            java.net.NetworkInterface iface;
+            java.util.Enumeration<java.net.NetworkInterface> interfaces =
+                java.net.NetworkInterface.getNetworkInterfaces();
+            while (interfaces != null && interfaces.hasMoreElements()) {
+                iface = interfaces.nextElement();
+                // 跳过 loopback 和无效接口
+                if (iface.isLoopback() || !iface.isUp()) continue;
+                java.util.Enumeration<java.net.InetAddress> addrs = iface.getInetAddresses();
+                while (addrs.hasMoreElements()) {
+                    java.net.InetAddress addr = addrs.nextElement();
+                    if (!addr.isLoopbackAddress() && addr instanceof java.net.Inet4Address) {
+                        String ip = addr.getHostAddress();
+                        // 过滤掉容器/虚拟地址（如 172.x、192.168.56.x 等常见虚拟机网段可保留，
+                        // 但排除 127.x loopback 已在上层过滤）
+                        if (ip != null && !ip.isEmpty()) {
+                            return ip;
+                        }
+                    }
+                }
+            }
+
+            // Fallback：尝试从 WifiManager 获取
             WifiManager wifiManager = (WifiManager) context.getApplicationContext()
                 .getSystemService(Context.WIFI_SERVICE);
             if (wifiManager != null && wifiManager.isWifiEnabled()) {
                 int ipInt = wifiManager.getConnectionInfo().getIpAddress();
                 if (ipInt != 0) {
                     return Formatter.formatIpAddress(ipInt);
-                }
-            }
-            // fallback：遍历网络接口
-            java.util.Enumeration<java.net.NetworkInterface> interfaces =
-                java.net.NetworkInterface.getNetworkInterfaces();
-            while (interfaces != null && interfaces.hasMoreElements()) {
-                java.net.NetworkInterface iface = interfaces.nextElement();
-                java.util.Enumeration<java.net.InetAddress> addrs = iface.getInetAddresses();
-                while (addrs.hasMoreElements()) {
-                    java.net.InetAddress addr = addrs.nextElement();
-                    if (!addr.isLoopbackAddress() && addr instanceof java.net.Inet4Address) {
-                        return addr.getHostAddress();
-                    }
                 }
             }
         } catch (Exception e) {

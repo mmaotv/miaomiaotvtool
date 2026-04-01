@@ -22,7 +22,7 @@ LIVE_URL=https://mengma.lanzoum.com/b01fphpgf
 VOD_URL=https://mengma.lanzoum.com/b01fhuuih
 
 [工具按钮]
-TOOLS_URL=https://mengma.lanzoum.com/b0mb2pq7e
+TOOLS_URL=https://mengma.lanzoum.com/b0mcflmwf
 
 [提示文字]
 INFO_TEXT=密码：miao
