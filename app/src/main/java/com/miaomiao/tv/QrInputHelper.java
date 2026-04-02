@@ -89,22 +89,30 @@ public class QrInputHelper {
 
         btnCancel.setOnClickListener(v -> dismiss());
         btnUploadFile.setOnClickListener(v -> {
-            // 打开上传页面（在系统浏览器中打开）
-            String uploadUrl = "http://" + localIp + ":" + SERVER_PORT + "/upload";
-            try {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(uploadUrl));
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
-            } catch (Exception e) {
-                Toast.makeText(context, "\u65e0\u6cd5\u6253\u5f00\u6d4f\u89c8\u5668", Toast.LENGTH_SHORT).show();
-            }
+            // 跳转到下载管理页面
+            dismiss();
+            Intent intent = new Intent(context, DownloadsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
         });
         dialog.setOnDismissListener(d -> stopServer());
 
         String serverUrl = "http://" + localIp + ":" + SERVER_PORT + "/";
 
         if (!localIp.isEmpty() && !localIp.equals("0.0.0.0")) {
-            tvIpAddress.setText("\u624b\u673a\u8fde\u540c\u4e00\u4e2a\u5c40\u57df\u7f51\uff0c\u626b\u7801\u8f93\u5165\u7f51\u5740");
+            // 显示 IP:端口 格式，方便手机浏览器直接输入
+            tvIpAddress.setText(serverUrl);
+            // 点击 IP 地址直接在系统浏览器打开
+            tvIpAddress.setOnClickListener(v -> {
+                try {
+                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(serverUrl));
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    Toast.makeText(context, "无法打开浏览器", Toast.LENGTH_SHORT).show();
+                }
+            });
+            tvIpAddress.setTextColor(0xFF7B61FF); // 紫色高亮
 
             // 生成二维码
             Bitmap qrBitmap = generateQrCode(serverUrl, 600);
@@ -115,8 +123,10 @@ public class QrInputHelper {
             // 启动 HTTP Server
             startServer(localIp, tvWaitStatus);
         } else {
-            tvIpAddress.setText("\u672a\u8fde\u63a5\u5c40\u57df\u7f51\uff0c\u8bf7\u5148\u8fde\u63a5 WiFi \u6216\u7f51\u7ebf");
-            tvWaitStatus.setText("\u65e0\u6cd5\u542f\u52a8\u670d\u52a1\u5668");
+            // 未连接到局域网
+            tvIpAddress.setText("\u672a\u8fde\u63a5\u5c40\u57df\u7f51");
+            tvIpAddress.setTextColor(0xFFFF5252); // 红色提示
+            tvWaitStatus.setText("\u65e0\u6cd5\u542f\u52a8\u670d\u52a1\u5668\uff0c\u8bf7\u5148\u8fde\u63a5 WiFi \u6216\u7f51\u7ebf");
             ivQrCode.setImageResource(android.R.drawable.ic_dialog_alert);
         }
 
@@ -267,54 +277,117 @@ public class QrInputHelper {
             "<head>\n" +
             "<meta charset='UTF-8'>\n" +
             "<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0'>\n" +
-            "<title>\u55b5\u55b5\u5662\u5f71\u89c6 - \u8f93\u5165\u7f51\u5740</title>\n" +
+            "<title>\u55b5\u55b5\u5662\u5f71\u89c6</title>\n" +
             "<style>\n" +
             "* { box-sizing: border-box; margin: 0; padding: 0; }\n" +
             "body { background: #0d0d1a; color: #fff; font-family: -apple-system, sans-serif;\n" +
             "       display: flex; align-items: center; justify-content: center;\n" +
-            "       min-height: 100vh; padding: 20px; }\n" +
-            ".card { background: #1a1a2e; border-radius: 20px; padding: 32px 24px;\n" +
-            "        width: 100%; max-width: 400px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }\n" +
-            ".logo { font-size: 28px; font-weight: bold; text-align: center; margin-bottom: 6px;\n" +
+            "       min-height: 100vh; padding: 16px; }\n" +
+            ".card { background: #1a1a2e; border-radius: 16px; padding: 20px;\n" +
+            "        width: 100%; max-width: 380px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); }\n" +
+            ".logo { font-size: 22px; font-weight: bold; text-align: center; margin-bottom: 16px;\n" +
             "        background: linear-gradient(135deg, #7B61FF, #FF6090); -webkit-background-clip: text;\n" +
             "        -webkit-text-fill-color: transparent; }\n" +
-            ".sub { text-align: center; color: #778; font-size: 13px; margin-bottom: 28px; }\n" +
-            "input[type=url], input[type=text] {\n" +
-            "  width: 100%; padding: 14px 16px; border-radius: 12px;\n" +
-            "  background: #0d1030; border: 2px solid #2a2a4a;\n" +
-            "  color: #fff; font-size: 16px; outline: none;\n" +
-            "  transition: border-color 0.2s; }\n" +
+            ".section { margin-bottom: 16px; }\n" +
+            ".section-title { font-size: 12px; color: #889; margin-bottom: 8px; text-align: center; }\n" +
+            "input[type=url] { width: 100%; padding: 12px; border-radius: 10px;\n" +
+            "  background: #0d1030; border: 2px solid #2a2a4a; color: #fff; font-size: 15px; outline: none; }\n" +
             "input:focus { border-color: #7B61FF; }\n" +
-            ".btn { width: 100%; padding: 14px; margin-top: 16px; border: none;\n" +
-            "       border-radius: 12px; background: linear-gradient(135deg, #7B61FF, #FF6090);\n" +
-            "       color: #fff; font-size: 18px; font-weight: bold; cursor: pointer;\n" +
-            "       letter-spacing: 2px; transition: opacity 0.2s; }\n" +
+            ".btn { width: 100%; padding: 12px; border: none; border-radius: 10px;\n" +
+            "       color: #fff; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 8px; }\n" +
+            ".btn-url { background: linear-gradient(135deg, #7B61FF, #FF6090); }\n" +
+            ".btn-file { background: linear-gradient(135deg, #00C853, #00E676); }\n" +
             ".btn:active { opacity: 0.8; }\n" +
-            ".hint { margin-top: 12px; font-size: 12px; color: #556; text-align: center; }\n" +
+            ".btn:disabled { opacity: 0.4; cursor: not-allowed; }\n" +
+            ".upload-area { border: 2px dashed #3a3a5a; border-radius: 10px; padding: 16px;\n" +
+            "             text-align: center; cursor: pointer; }\n" +
+            ".upload-area:active { border-color: #00C853; }\n" +
+            ".upload-icon { font-size: 28px; }\n" +
+            ".upload-text { color: #889; font-size: 12px; margin-top: 4px; }\n" +
+            "#fileInput { display: none; }\n" +
+            ".file-info { margin-top: 8px; padding: 8px; background: #0d1030; border-radius: 8px;\n" +
+            "             font-size: 11px; color: #aab; display: none; }\n" +
+            ".progress { margin-top: 8px; display: none; }\n" +
+            ".progress-bar { height: 4px; background: #2a2a4a; border-radius: 2px; overflow: hidden; }\n" +
+            ".progress-fill { height: 100%; background: #00C853; border-radius: 2px; width: 0%; }\n" +
+            ".progress-text { text-align: center; font-size: 11px; color: #667; margin-top: 4px; }\n" +
             "</style>\n" +
             "</head>\n" +
             "<body>\n" +
             "<div class='card'>\n" +
             "  <div class='logo'>&#128049; \u55b5\u55b5\u5662\u5f71\u89c6</div>\n" +
-            "  <div class='sub'>\u8f93\u5165\u8981\u5728\u7535\u89c6\u4e0a\u6253\u5f00\u7684\u7f51\u5740</div>\n" +
-            "  <form action='/submit' method='get' id='form'>\n" +
-            "    <input type='url' name='url' id='urlInput'\n" +
-            "           placeholder='https://...'\n" +
-            "           autocomplete='off' autocorrect='off' autocapitalize='off'\n" +
-            "           spellcheck='false'/>\n" +
-            "    <button type='submit' class='btn'>\u53d1\u9001\u5230\u7535\u89c6</button>\n" +
-            "  </form>\n" +
-            "  <div class='hint'>\u70b9\u51fb\u6309\u9215\u540e\u7535\u89c6\u5c06\u81ea\u52a8\u6253\u5f00\u8be5\u7f51\u5740</div>\n" +
+            "  \n" +
+            "  <div class='section'>\n" +
+            "    <div class='section-title'>\ud83d\udd17 \u63a8\u9001\u7f51\u5740\u5230\u7535\u89c6</div>\n" +
+            "    <form action='/submit' method='get' id='form'>\n" +
+            "      <input type='url' name='url' id='urlInput' placeholder='https://...' autocomplete='off'/>\n" +
+            "      <button type='submit' class='btn btn-url'>\u53d1\u9001\u7f51\u5740</button>\n" +
+            "    </form>\n" +
+            "  </div>\n" +
+            "  \n" +
+            "  <div class='section'>\n" +
+            "    <div class='section-title'>\ud83d\udce4 \u4e0a\u4f20\u6587\u4ef6\u5230\u7535\u89c6</div>\n" +
+            "    <div class='upload-area' id='uploadArea' onclick='document.getElementById(\"fileInput\").click()'>\n" +
+            "      <div class='upload-icon'>&#128228;</div>\n" +
+            "      <div class='upload-text'>\u70b9\u51fb\u9009\u62e9\u6587\u4ef6</div>\n" +
+            "    </div>\n" +
+            "    <input type='file' id='fileInput' onchange='onFileSelected(this)'/>\n" +
+            "    <div class='file-info' id='fileInfo'></div>\n" +
+            "    <div class='progress' id='progress'>\n" +
+            "      <div class='progress-bar'><div class='progress-fill' id='progressFill'></div></div>\n" +
+            "      <div class='progress-text' id='progressText'></div>\n" +
+            "    </div>\n" +
+            "    <button class='btn btn-file' id='btnUpload' onclick='doUpload()' style='display:none'>\u4e0a\u4f20\u6587\u4ef6</button>\n" +
+            "  </div>\n" +
             "</div>\n" +
             "<script>\n" +
-            "document.getElementById('urlInput').focus();\n" +
             "document.getElementById('form').onsubmit = function(e) {\n" +
             "  var v = document.getElementById('urlInput').value.trim();\n" +
             "  if (!v) { e.preventDefault(); return false; }\n" +
-            "  if (!v.startsWith('http')) { \n" +
-            "    document.getElementById('urlInput').value = 'https://' + v;\n" +
-            "  }\n" +
+            "  if (!v.startsWith('http')) { document.getElementById('urlInput').value = 'https://' + v; }\n" +
             "};\n" +
+            "var selectedFile = null;\n" +
+            "function onFileSelected(input) {\n" +
+            "  if (input.files && input.files[0]) {\n" +
+            "    selectedFile = input.files[0];\n" +
+            "    var sizeStr = selectedFile.size < 1024*1024 ? (selectedFile.size/1024).toFixed(1)+' KB' : (selectedFile.size/1024/1024).toFixed(1)+' MB';\n" +
+            "    document.getElementById('fileInfo').style.display = 'block';\n" +
+            "    document.getElementById('fileInfo').textContent = selectedFile.name + ' (' + sizeStr + ')';\n" +
+            "    document.getElementById('btnUpload').style.display = 'block';\n" +
+            "    document.getElementById('btnUpload').disabled = false;\n" +
+            "  }\n" +
+            "}\n" +
+            "function doUpload() {\n" +
+            "  if (!selectedFile) return;\n" +
+            "  var btn = document.getElementById('btnUpload');\n" +
+            "  var prog = document.getElementById('progress');\n" +
+            "  prog.style.display = 'block';\n" +
+            "  btn.disabled = true;\n" +
+            "  btn.textContent = '\u4e0a\u4f20\u4e2d...';\n" +
+            "  var xhr = new XMLHttpRequest();\n" +
+            "  var fd = new FormData();\n" +
+            "  fd.append('file', selectedFile);\n" +
+            "  xhr.upload.onprogress = function(e) {\n" +
+            "    if (e.lengthComputable) {\n" +
+            "      var pct = Math.round(e.loaded / e.total * 100);\n" +
+            "      document.getElementById('progressFill').style.width = pct + '%';\n" +
+            "      document.getElementById('progressText').textContent = pct + '%';\n" +
+            "    }\n" +
+            "  };\n" +
+            "  xhr.onload = function() {\n" +
+            "    if (xhr.status === 200) {\n" +
+            "      document.getElementById('progressFill').style.width = '100%';\n" +
+            "      document.getElementById('progressText').textContent = '\u2714 \u6210\u529f!';\n" +
+            "      btn.textContent = '\u2714 \u4e0a\u4f20\u6210\u529f';\n" +
+            "    } else {\n" +
+            "      document.getElementById('progressText').textContent = '\u5931\u8d25: ' + xhr.status;\n" +
+            "      btn.disabled = false; btn.textContent = '\u91cd\u8bd5';\n" +
+            "    }\n" +
+            "  };\n" +
+            "  xhr.onerror = function() { document.getElementById('progressText').textContent = '\u7f51\u7edc\u9519\u8bef'; btn.disabled = false; };\n" +
+            "  xhr.open('POST', '/upload', true);\n" +
+            "  xhr.send(fd);\n" +
+            "}\n" +
             "</script>\n" +
             "</body></html>";
     }

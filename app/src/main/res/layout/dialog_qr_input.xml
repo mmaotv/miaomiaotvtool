@@ -38,15 +38,18 @@
         android:padding="10dp"
         android:layout_marginBottom="16dp"/>
 
-    <!-- IP地址显示 -->
+    <!-- IP地址/端口显示（可点击） -->
     <TextView
         android:id="@+id/tvIpAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="&#27491;&#22312;&#33719;&#21462;IP&#22320;&#22336;..."
-        android:textSize="12sp"
-        android:textColor="#7788AA"
+        android:textSize="15sp"
+        android:textColor="#7B61FF"
+        android:textStyle="bold"
         android:gravity="center"
+        android:padding="8dp"
+        android:background="@drawable/url_bar_bg"
         android:layout_marginBottom="6dp"/>
 
     <!-- 等待状态 -->
@@ -85,10 +88,10 @@
                 android:textColor="#FFFFFF"/>
         </LinearLayout>
 
-        <!-- 上传文件按钮 -->
+        <!-- 已上传文件目录按钮 -->
         <LinearLayout
             android:id="@+id/btnUploadFile"
-            android:layout_width="160dp"
+            android:layout_width="180dp"
             android:layout_height="40dp"
             android:gravity="center"
             android:background="@drawable/btn_tool_bg"
@@ -97,7 +100,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#128228; &#25171;&#24320;&#19978;&#20256;&#39029;&#38754;"
+                android:text="&#128193; &#26597;&#30475;&#19978;&#20256;&#25991;&#20214;"
                 android:textSize="13sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>

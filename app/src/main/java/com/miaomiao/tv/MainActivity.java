@@ -422,6 +422,20 @@ public class MainActivity extends AppCompatActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         // 只有在 WebView 页面才处理光标控制
         if (webPage.getVisibility() == View.VISIBLE) {
+            // 如果地址栏正在编辑中，按方向键则退出编辑并转移焦点
+            if (etUrl.hasFocus() && !mouseModeEnabled) {
+                switch (keyCode) {
+                    case KeyEvent.KEYCODE_DPAD_UP:
+                    case KeyEvent.KEYCODE_DPAD_DOWN:
+                    case KeyEvent.KEYCODE_DPAD_LEFT:
+                    case KeyEvent.KEYCODE_DPAD_RIGHT:
+                        // 清除地址栏焦点，焦点转移到工具栏第一个可focus的按钮
+                        etUrl.clearFocus();
+                        btnBack.requestFocus();
+                        return true;
+                }
+            }
+
             switch (keyCode) {
                 case KeyEvent.KEYCODE_DPAD_UP:
                     if (mouseModeEnabled) {
