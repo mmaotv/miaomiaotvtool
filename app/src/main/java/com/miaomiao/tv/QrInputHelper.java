@@ -630,63 +630,92 @@ public class QrInputHelper {
             final int finalFileStart = fileDataStart;
             final byte[] finalBodyData = bodyData;
 
-            boolean[] success = {false};
-
             // 在后台线程保存文件
             executor.execute(() -> {
+                boolean saved = false;
+                String savedName = finalFileName;
                 try {
-                    File downloadDir = new File(
-                        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
-                        "\u55b5\u55b5\u5662\u5f71\u89c6"
-                    );
-                    if (!downloadDir.exists()) downloadDir.mkdirs();
-
-                    // 生成不重复文件名
-                    File outFile = new File(downloadDir, finalFileName);
-                    if (outFile.exists()) {
-                        String nameNoExt = finalFileName.contains(".")
-                            ? finalFileName.substring(0, finalFileName.lastIndexOf('.'))
-                            : finalFileName;
-                        String ext = finalFileName.contains(".")
-                            ? finalFileName.substring(finalFileName.lastIndexOf('.'))
-                            : "";
-                        int counter = 1;
-                        while (outFile.exists()) {
-                            outFile = new File(downloadDir, nameNoExt + "(" + counter++ + ")" + ext);
-                        }
-                    }
-
-                    // 写入文件
-                    FileOutputStream fos = new FileOutputStream(outFile);
-                    fos.write(finalBodyData, finalFileStart, finalFileLength);
-                    fos.flush();
-                    fos.close();
-
-                    // Android 10+ 加入 MediaStore
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        try {
-                            ContentValues values = new ContentValues();
-                            values.put(MediaStore.Downloads.DISPLAY_NAME, outFile.getName());
-                            values.put(MediaStore.Downloads.MIME_TYPE, guessMimeType(outFile.getName()));
-                            values.put(MediaStore.Downloads.SIZE, outFile.length());
-                            values.put(MediaStore.Downloads.DATE_ADDED, System.currentTimeMillis() / 1000);
-                            values.put(MediaStore.Downloads.IS_PENDING, 0);
-                            values.put(MediaStore.Downloads.RELATIVE_PATH,
-                                Environment.DIRECTORY_DOWNLOADS + "/\u55b5\u55b5\u5662\u5f71\u89c6");
-                            context.getContentResolver().insert(
-                                MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-                        } catch (Exception ignored) {}
-                    }
+                        // ===== Android 10+ : MediaStore API，无需存储权限 =====
+                        ContentValues values = new ContentValues();
+                        values.put(MediaStore.Downloads.DISPLAY_NAME, finalFileName);
+                        values.put(MediaStore.Downloads.MIME_TYPE, guessMimeType(finalFileName));
+                        values.put(MediaStore.Downloads.RELATIVE_PATH,
+                            Environment.DIRECTORY_DOWNLOADS + "/\u55b5\u55b5\u5662\u5f71\u89c6");
+                        values.put(MediaStore.Downloads.IS_PENDING, 1);
 
-                    success[0] = true;
+                        Uri uri = context.getContentResolver().insert(
+                            MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                        if (uri == null) throw new IOException("MediaStore insert failed");
+
+                        try (java.io.OutputStream fos =
+                                context.getContentResolver().openOutputStream(uri)) {
+                            if (fos == null) throw new IOException("Cannot open MediaStore stream");
+                            fos.write(finalBodyData, finalFileStart, finalFileLength);
+                            fos.flush();
+                        }
+
+                        // 写完清除 pending 标记
+                        ContentValues done = new ContentValues();
+                        done.put(MediaStore.Downloads.IS_PENDING, 0);
+                        context.getContentResolver().update(uri, done, null, null);
+                        saved = true;
+                    } else {
+                        // ===== Android 9- : 传统文件路径写入 =====
+                        File downloadDir = new File(
+                            Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_DOWNLOADS),
+                            "\u55b5\u55b5\u5662\u5f71\u89c6"
+                        );
+                        if (!downloadDir.exists()) downloadDir.mkdirs();
+
+                        // 生成不重复文件名
+                        File outFile = new File(downloadDir, finalFileName);
+                        if (outFile.exists()) {
+                            String nameNoExt = finalFileName.contains(".")
+                                ? finalFileName.substring(0, finalFileName.lastIndexOf('.'))
+                                : finalFileName;
+                            String ext = finalFileName.contains(".")
+                                ? finalFileName.substring(finalFileName.lastIndexOf('.'))
+                                : "";
+                            int counter = 1;
+                            while (outFile.exists()) {
+                                outFile = new File(downloadDir,
+                                    nameNoExt + "(" + counter++ + ")" + ext);
+                            }
+                        }
+                        savedName = outFile.getName();
+
+                        FileOutputStream fos = new FileOutputStream(outFile);
+                        fos.write(finalBodyData, finalFileStart, finalFileLength);
+                        fos.flush();
+                        fos.close();
+                        saved = true;
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+                final boolean finalSaved = saved;
+                final String finalSavedName = savedName;
+                mainHandler.post(() -> {
+                    if (finalSaved) {
+                        if (tvWaitStatus != null && dialog != null && dialog.isShowing()) {
+                            tvWaitStatus.setText("\u2705 \u5df2\u63a5\u6536\u6587\u4ef6\uff1a" + finalSavedName);
+                        }
+                        Toast.makeText(context,
+                            "\u6587\u4ef6\u5df2\u4fdd\u5b58\uff1a" + finalSavedName,
+                            Toast.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context,
+                            "\u6587\u4ef6\u4fdd\u5b58\u5931\u8d25",
+                            Toast.LENGTH_LONG).show();
+                    }
+                });
             });
 
-            // 返回成功响应（简单 JSON）
-            final String savedFileName = fileName;
-            String response = "{\"status\":\"ok\",\"filename\":\"" + escapeJson(savedFileName) + "\",\"size\":" + fileLength + "}";
+            // 立即返回 HTTP 成功响应（文件保存在后台异步进行）
+            String response = "{\"status\":\"ok\",\"filename\":\"" + escapeJson(finalFileName) + "\",\"size\":" + fileLength + "}";
             byte[] resBody = response.getBytes("UTF-8");
             ps.print("HTTP/1.1 200 OK\r\n");
             ps.print("Content-Type: application/json; charset=UTF-8\r\n");
@@ -696,15 +725,6 @@ public class QrInputHelper {
             ps.flush();
             out.write(resBody);
             out.flush();
-
-            // 更新对话框状态
-            mainHandler.post(() -> {
-                if (tvWaitStatus != null && dialog != null && dialog.isShowing()) {
-                    tvWaitStatus.setText("\u2705 \u5df2\u63a5\u6536\u6587\u4ef6\uff1a" + savedFileName);
-                }
-                Toast.makeText(context,
-                    "\u6587\u4ef6\u5df2\u4fdd\u5b58\uff1a" + savedFileName, Toast.LENGTH_LONG).show();
-            });
 
         } catch (Exception e) {
             e.printStackTrace();

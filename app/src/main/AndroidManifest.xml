@@ -5,18 +5,27 @@
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- USB 存储权限 -->
-    <!-- 已通过下方的 WRITE_EXTERNAL_STORAGE / READ_EXTERNAL_STORAGE 声明 -->
-    <!-- 存储权限（下载文件） -->
+
+    <!-- 存储权限：Android 9 及以下才需要 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="32" />
-    <!-- Android 10+ 下载目录无需额外权限 -->
+
+    <!-- Android 13+ 细粒度媒体权限（代替 READ_EXTERNAL_STORAGE） -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <!-- Android 10+ 下载/文件管理（可选，用于文件管理器功能）-->
     <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
+
     <!-- 前台服务（下载服务） -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+
+    <!-- 通知权限（Android 13+ 必须声明） -->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- TV 支持声明 -->

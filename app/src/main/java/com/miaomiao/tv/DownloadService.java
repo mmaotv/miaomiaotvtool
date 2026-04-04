@@ -128,11 +128,11 @@ public class DownloadService extends Service {
     private void doDownload(String urlStr, String fileName,
                              String userAgent, String mimeType, String cookie, int startId) {
 
-        File outFile = getUniqueFile(getDownloadDir(), fileName);
-
         HttpURLConnection conn = null;
         InputStream in = null;
         OutputStream out = null;
+        File outFile = null;      // 仅 Android 9- 使用
+        Uri mediaUri = null;      // Android 10+ 使用 MediaStore URI
         boolean success = false;
 
         try {
@@ -186,66 +186,93 @@ public class DownloadService extends Service {
                 break;
             }
 
-            // 从最终 URL 更新文件名（如果原始文件名不太好的话）
+            // 从 Content-Disposition 更新文件名
             String contentDisp = conn.getHeaderField("Content-Disposition");
             if (contentDisp != null) {
                 String parsedName = parseFileNameFromDisposition(contentDisp);
                 if (parsedName != null && !parsedName.isEmpty()) {
                     fileName = parsedName;
-                    outFile = getUniqueFile(getDownloadDir(), fileName);
                 }
             }
 
-            // 获取实际内容长度
             long totalBytes = conn.getContentLengthLong();
             long downloadedBytes = 0;
 
             in = conn.getInputStream();
-            out = new FileOutputStream(outFile);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                // ===== Android 10+ : 用 MediaStore API 写文件，无需存储权限 =====
+                final String finalMimeType2 = (mimeType != null && !mimeType.isEmpty())
+                    ? mimeType : "application/octet-stream";
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Downloads.DISPLAY_NAME, fileName);
+                values.put(MediaStore.Downloads.MIME_TYPE, finalMimeType2);
+                values.put(MediaStore.Downloads.RELATIVE_PATH,
+                    Environment.DIRECTORY_DOWNLOADS + "/" + SUB_DIR);
+                values.put(MediaStore.Downloads.IS_PENDING, 1); // 写入中标记
+
+                mediaUri = getContentResolver().insert(
+                    MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
+                if (mediaUri == null) {
+                    throw new IOException("MediaStore insert failed");
+                }
+                out = getContentResolver().openOutputStream(mediaUri);
+            } else {
+                // ===== Android 9- : 传统文件路径写入 =====
+                outFile = getUniqueFile(getDownloadDir(), fileName);
+                out = new FileOutputStream(outFile);
+            }
 
             byte[] buffer = new byte[16384]; // 16KB 缓冲区
             int bytesRead;
             int lastProgress = -1;
+            final String displayName = fileName;
 
             while ((bytesRead = in.read(buffer)) != -1) {
                 out.write(buffer, 0, bytesRead);
                 downloadedBytes += bytesRead;
 
-                // 更新进度（每2%更新一次，减少通知开销）
+                // 更新进度（每2%更新一次）
                 if (totalBytes > 0) {
                     int progress = (int) (downloadedBytes * 100 / totalBytes);
                     if (Math.abs(progress - lastProgress) >= 2 || progress == 100) {
                         lastProgress = progress;
-                        final String fn = outFile.getName();
-                        notifManager.notify(NOTIF_ID, buildProgressNotification(fn, progress));
+                        notifManager.notify(NOTIF_ID, buildProgressNotification(displayName, progress));
                     }
                 } else {
                     // 未知大小，每200KB更新一次
                     if (downloadedBytes / 200_000 != lastProgress) {
                         lastProgress = (int) (downloadedBytes / 200_000);
-                        final String fn = outFile.getName();
                         String sizeStr = formatSize(downloadedBytes);
-                        notifManager.notify(NOTIF_ID, buildProgressNotification(fn + " (" + sizeStr + ")", 0));
+                        notifManager.notify(NOTIF_ID,
+                            buildProgressNotification(displayName + " (" + sizeStr + ")", 0));
                     }
                 }
             }
             out.flush();
-            success = true;
 
-            // 在 Android 10+ 将文件加入 MediaStore
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                addToMediaStore(outFile, mimeType);
-            } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && mediaUri != null) {
+                // 写完后清除 IS_PENDING 标记，文件才对外可见
+                ContentValues updateValues = new ContentValues();
+                updateValues.put(MediaStore.Downloads.IS_PENDING, 0);
+                getContentResolver().update(mediaUri, updateValues, null, null);
+            } else if (outFile != null) {
                 // 旧版本通知媒体扫描
                 Intent scanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
                 scanIntent.setData(Uri.fromFile(outFile));
                 sendBroadcast(scanIntent);
             }
 
+            success = true;
+
         } catch (Exception e) {
             e.printStackTrace();
             // 删除不完整的文件
-            if (outFile.exists()) outFile.delete();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && mediaUri != null) {
+                try { getContentResolver().delete(mediaUri, null, null); } catch (Exception ignored) {}
+            } else if (outFile != null && outFile.exists()) {
+                outFile.delete();
+            }
             onDownloadFailed(fileName, e.getMessage(), startId);
             return;
         } finally {
@@ -255,34 +282,49 @@ public class DownloadService extends Service {
         }
 
         if (success) {
-            onDownloadComplete(outFile, startId);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && mediaUri != null) {
+                onDownloadCompleteUri(mediaUri, fileName, startId);
+            } else if (outFile != null) {
+                onDownloadComplete(outFile, startId);
+            }
         }
     }
 
     /**
-     * 将文件加入 MediaStore（Android 10+）
+     * 下载成功（Android 10+ MediaStore URI 版本）
      */
-    private void addToMediaStore(File file, String mimeType) {
-        try {
-            ContentValues values = new ContentValues();
-            values.put(MediaStore.Downloads.DISPLAY_NAME, file.getName());
-            values.put(MediaStore.Downloads.MIME_TYPE, mimeType != null ? mimeType : "application/octet-stream");
-            values.put(MediaStore.Downloads.SIZE, file.length());
-            values.put(MediaStore.Downloads.DATE_ADDED, System.currentTimeMillis() / 1000);
-            values.put(MediaStore.Downloads.IS_PENDING, 0);
+    private void onDownloadCompleteUri(Uri fileUri, String fileName, int startId) {
+        // 查询实际 MIME 类型
+        String mimeType = getMimeType(fileName);
 
-            // 使用 RELATIVE_PATH 设置子目录
-            values.put(MediaStore.Downloads.RELATIVE_PATH,
-                Environment.DIRECTORY_DOWNLOADS + "/" + SUB_DIR);
+        Intent openIntent = new Intent(Intent.ACTION_VIEW);
+        openIntent.setDataAndType(fileUri, mimeType);
+        openIntent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            getContentResolver().insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+            this, 0, openIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        Notification notif = new NotificationCompat.Builder(this, CHANNEL_ID)
+            .setSmallIcon(android.R.drawable.stat_sys_download_done)
+            .setContentTitle("\u4e0b\u8f7d\u5b8c\u6210") // 下载完成
+            .setContentText(fileName)
+            .setAutoCancel(true)
+            .setContentIntent(pendingIntent)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .build();
+
+        notifManager.notify((int) System.currentTimeMillis(), notif);
+        uiHandler.post(() ->
+            Toast.makeText(this, "\u4e0b\u8f7d\u5b8c\u6210\uff1a" + fileName, Toast.LENGTH_LONG).show()
+        );
+        stopForeground(true);
+        stopSelf(startId);
     }
 
     /**
-     * 下载成功
+     * 下载成功（Android 9- 文件路径版本）
      */
     private void onDownloadComplete(File file, int startId) {
         // 构建打开文件的 Intent

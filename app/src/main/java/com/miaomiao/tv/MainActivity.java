@@ -509,15 +509,57 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void checkPermissions() {
+        List<String> perms = new ArrayList<>();
+
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-            List<String> perms = new ArrayList<>();
+            // Android 9 及以下：需要读写存储权限
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
                     != PackageManager.PERMISSION_GRANTED) {
                 perms.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
             }
-            if (!perms.isEmpty()) {
-                ActivityCompat.requestPermissions(this,
-                    perms.toArray(new String[0]), PERMISSION_REQUEST_CODE);
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                perms.add(Manifest.permission.READ_EXTERNAL_STORAGE);
+            }
+        }
+
+        // Android 13+ 需要通知权限
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+                perms.add(Manifest.permission.POST_NOTIFICATIONS);
+            }
+        }
+
+        if (!perms.isEmpty()) {
+            ActivityCompat.requestPermissions(this,
+                perms.toArray(new String[0]), PERMISSION_REQUEST_CODE);
+        }
+
+        // Android 11+ 检查「所有文件访问」权限（用于文件管理功能）
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            if (!android.os.Environment.isExternalStorageManager()) {
+                // 弹框引导用户去系统设置授权
+                new AlertDialog.Builder(this)
+                    .setTitle("需要文件访问权限")
+                    .setMessage("为了能够下载和管理文件，需要授予「所有文件访问」权限。\n\n请在接下来的设置页面中开启。")
+                    .setPositiveButton("去授权", (d, w) -> {
+                        try {
+                            Intent intent = new Intent(
+                                android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                                Uri.parse("package:" + getPackageName())
+                            );
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            // 部分设备不支持精确跳转，跳到通用设置
+                            try {
+                                startActivity(new Intent(
+                                    android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+                            } catch (Exception ignored) {}
+                        }
+                    })
+                    .setNegativeButton("暂不授权", null)
+                    .show();
             }
         }
     }
@@ -526,6 +568,15 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode,
             @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            // 权限申请结果处理（可按需扩展）
+            for (int i = 0; i < permissions.length; i++) {
+                if (grantResults[i] != PackageManager.PERMISSION_GRANTED) {
+                    // 某项权限被拒绝
+                    android.util.Log.w("Permission", "Denied: " + permissions[i]);
+                }
+            }
+        }
     }
 
     @Override
