@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnDownloads;
     private LinearLayout btnBookmark;
     private LinearLayout btnHistory;
-    private LinearLayout btnCast;
     private EditText etUrl;
     private ProgressBar progressBar;
     private WebView webView;
@@ -153,10 +152,6 @@ public class MainActivity extends AppCompatActivity {
         setupWebView();
         checkPermissions();
 
-        // 启动投屏接收服务
-        Intent castIntent = new Intent(this, CastReceiverService.class);
-        startService(castIntent);
-
         // 初始状态：首页隐藏光标
         cursorView.setVisibility(View.GONE);
     }
@@ -204,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
         btnDownloads = findViewById(R.id.btnDownloads);
         btnBookmark  = findViewById(R.id.btnBookmark);
         btnHistory   = findViewById(R.id.btnHistory);
-        btnCast      = findViewById(R.id.btnCast);
         etUrl        = findViewById(R.id.etUrl);
         progressBar  = findViewById(R.id.progressBar);
         webView      = findViewById(R.id.webView);
@@ -243,7 +237,6 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnDownloads, 1.15f);
         attachFocusScale(btnBookmark,   1.15f);
         attachFocusScale(btnHistory,    1.15f);
-        attachFocusScale(btnCast,       1.15f);
 
         // 首页按钮点击事件
         btnLive.setOnClickListener(v -> openUrl(LIVE_URL));
@@ -295,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
         btnBookmark.setOnClickListener(v -> onBookmarkClick());
         btnHistory.setOnClickListener(v -> startActivityForResult(
             new Intent(this, HistoryActivity.class), REQUEST_HISTORY));
-        btnCast.setOnClickListener(v -> startActivity(new Intent(this, CastReceiverActivity.class)));
     }
 
     private void showQrInput() {

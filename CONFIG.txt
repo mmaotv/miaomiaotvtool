@@ -5,8 +5,8 @@
 
 [应用信息]
 APP_NAME=喵喵嗷影视
-VERSION_NAME=1.3
-VERSION_CODE=4
+VERSION_NAME=1.4
+VERSION_CODE=5
 
 # 首页大标题（默认与 APP_NAME 相同，可单独设置）
 # 修改此项只改首页显示的大字，不影响应用名称
