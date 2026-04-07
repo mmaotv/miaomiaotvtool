@@ -513,14 +513,29 @@ public class CastReceiverService extends Service {
         writer.flush();
     }
 
-    /** 获取本机IP地址 */
+    /** 获取本机IP地址 - 优先获取局域网IP */
     private String getLocalIP() {
         try {
-            java.net.InetAddress addr = java.net.InetAddress.getLocalHost();
-            return addr.getHostAddress();
+            // 遍历所有网络接口查找真实IP
+            Enumeration<java.net.NetworkInterface> interfaces =
+                java.net.NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                java.net.NetworkInterface ni = interfaces.nextElement();
+                Enumeration<java.net.InetAddress> addresses = ni.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    java.net.InetAddress addr = addresses.nextElement();
+                    // 跳过回环地址和链路本地地址
+                    if (!addr.isLoopbackAddress() &&
+                        !addr.isLinkLocalAddress() &&
+                        addr instanceof java.net.Inet4Address) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
         } catch (Exception e) {
-            return "127.0.0.1";
+            Log.e(TAG, "获取IP失败: " + e.getMessage());
         }
+        return "127.0.0.1";
     }
 
     /** 通知服务已启动 */

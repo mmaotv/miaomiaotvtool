@@ -61,7 +61,6 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
     private TextView tvCastUrl;
     private LinearLayout btnBack;
     private LinearLayout btnHistory;
-    private LinearLayout btnApps;
     private LinearLayout btnRefresh;
     private ProgressBar progressBar;
 
@@ -101,7 +100,6 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
         tvCastUrl = findViewById(R.id.tvCastUrl);
         btnBack = findViewById(R.id.btnBack);
         btnHistory = findViewById(R.id.btnHistory);
-        btnApps = findViewById(R.id.btnApps);
         btnRefresh = findViewById(R.id.btnRefresh);
         progressBar = findViewById(R.id.progressBar);
 
@@ -112,13 +110,11 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
         // 按钮事件
         btnBack.setOnClickListener(v -> finish());
         btnHistory.setOnClickListener(v -> showHistory());
-        btnApps.setOnClickListener(v -> showAppManager());
         btnRefresh.setOnClickListener(v -> refreshContent());
 
         // 焦点效果
         setFocusEffect(btnBack);
         setFocusEffect(btnHistory);
-        setFocusEffect(btnApps);
         setFocusEffect(btnRefresh);
 
         // 默认显示说明界面
@@ -329,11 +325,6 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
     private void showHistory() {
         Intent intent = new Intent(this, CastHistoryActivity.class);
         startActivityForResult(intent, REQUEST_HISTORY);
-    }
-
-    /** 显示应用管理 - 已移除，提示用户 */
-    private void showAppManager() {
-        Toast.makeText(this, "应用管理功能已移除", Toast.LENGTH_SHORT).show();
     }
 
     /** 刷新内容 */
