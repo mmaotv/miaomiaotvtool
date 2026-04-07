@@ -5,6 +5,8 @@
     <!-- 网络权限 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
 
     <!-- 存储权限：Android 9 及以下才需要 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -91,12 +93,39 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <!-- 投屏界面 -->
+        <!-- 投屏界面（发送端-已废弃） -->
+        <!-- 投屏接收Activity -->
         <activity
-            android:name=".CastActivity"
+            android:name=".CastReceiverActivity"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 投屏历史记录 -->
+        <activity
+            android:name=".CastHistoryActivity"
             android:exported="false"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <!-- 应用管理器 -->
+        <activity
+            android:name=".AppManagerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <!-- 投屏接收服务（后台运行） -->
+        <service
+            android:name=".CastReceiverService"
+            android:exported="false"
+            android:foregroundServiceType="mediaPlayback"/>
 
         <!-- 下载前台服务 -->
         <service
