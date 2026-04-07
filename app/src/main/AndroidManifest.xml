@@ -93,19 +93,13 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
-        <!-- 投屏界面（发送端-已废弃） -->
         <!-- 投屏接收Activity -->
         <activity
             android:name=".CastReceiverActivity"
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:launchMode="singleTask"/>
 
         <!-- 投屏历史记录 -->
         <activity

@@ -459,6 +459,25 @@
                     android:textColor="#FFB300"/>
             </LinearLayout>
 
+            <!-- 投屏 -->
+            <LinearLayout
+                android:id="@+id/btnCast"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="6dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_bookmark_bg_inset"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📺"
+                    android:textSize="18sp"
+                    android:textColor="#00D9FF"/>
+            </LinearLayout>
+
         </LinearLayout>
 
         <!-- 加载进度条 -->
