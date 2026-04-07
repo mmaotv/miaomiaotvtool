@@ -5,8 +5,8 @@
 
 [应用信息]
 APP_NAME=喵喵嗷影视
-VERSION_NAME=1.1
-VERSION_CODE=2
+VERSION_NAME=1.2
+VERSION_CODE=3
 
 # 首页大标题（默认与 APP_NAME 相同，可单独设置）
 # 修改此项只改首页显示的大字，不影响应用名称
@@ -16,13 +16,41 @@ HOME_TITLE=
 SUBTITLE_TEXT=高清影视 · 随时随地
 
 [直播按钮]
+LIVE_NAME=直播
 LIVE_URL=https://mengma.lanzoum.com/b01fphpgf
 
 [点播按钮]
+VOD_NAME=点播
 VOD_URL=https://mengma.lanzoum.com/b01fhuuih
 
 [工具按钮]
+TOOLS_NAME=工具
 TOOLS_URL=https://mengma.lanzoum.com/b0mcflmwf
+
+[扫码按钮]
+# 二维码扫描输入URL功能，保持默认即可
+QR_NAME=扫码输入
+
+[文件按钮]
+# 文件管理器，保持默认即可
+FILE_NAME=文件管理
+
+[U盘按钮]
+# U盘管理器，保持默认即可
+USB_NAME=U盘
+
+[浏览器UA伪装]
+# 可选UA：chrome / edge / safari / mobile / desktop / 默认
+# chrome:  电脑Chrome浏览器
+# edge:    电脑Edge浏览器
+# safari:  Mac Safari浏览器
+# mobile:  手机浏览器
+# desktop: 电脑通用
+# custom:  自定义UA（填写下方CUSTOM_UA的值）
+USER_AGENT=chrome
+
+# 自定义UA（当USER_AGENT=custom时生效）
+CUSTOM_UA=
 
 [提示文字]
 INFO_TEXT=密码：miao
@@ -42,4 +70,13 @@ ICON_PATH=
   - ICON_PATH 填写本地图片路径，例如：C:\图片\我的图标.png
   - 图片会自动缩放到各分辨率，生成完整图标集
   - 留空 ICON_PATH 则保留现有图标不变
+
+  UA说明：
+  - USER_AGENT 设置默认UA，影响所有WebView加载
+  - 可选值：chrome / edge / safari / mobile / desktop / custom
+  - custom模式需填写CUSTOM_UA
+
+  首页按钮说明：
+  - 按钮名称(NAME)和链接(URL)均可自定义
+  - 例如：LIVE_NAME=蓝光直播 / LIVE_URL=https://xxx.com
 ============================================================

@@ -54,6 +54,13 @@ public class MainActivity extends AppCompatActivity {
     private String LIVE_URL;
     private String VOD_URL;
     private String TOOLS_URL;
+    // 按钮名称（可自定义）
+    private String BTN_LIVE;
+    private String BTN_VOD;
+    private String BTN_TOOLS;
+    private String BTN_QR;
+    private String BTN_FILE;
+    private String BTN_USB;
 
     private static final int PERMISSION_REQUEST_CODE = 100;
 
@@ -118,6 +125,13 @@ public class MainActivity extends AppCompatActivity {
         LIVE_URL  = getString(R.string.live_url);
         VOD_URL   = getString(R.string.vod_url);
         TOOLS_URL = getString(R.string.tools_url);
+        // 读取按钮名称
+        BTN_LIVE  = getString(R.string.btn_live);
+        BTN_VOD   = getString(R.string.btn_vod);
+        BTN_TOOLS = getString(R.string.btn_tools);
+        BTN_QR    = getString(R.string.btn_qr);
+        BTN_FILE  = getString(R.string.btn_file);
+        BTN_USB   = getString(R.string.btn_usb);
 
         bookmarkManager = new BookmarkManager(this);
 
@@ -173,6 +187,20 @@ public class MainActivity extends AppCompatActivity {
         progressBar  = findViewById(R.id.progressBar);
         webView      = findViewById(R.id.webView);
         cursorView   = findViewById(R.id.cursorView);
+
+        // 动态设置首页按钮文字
+        TextView tvBtnLive   = findViewById(R.id.tvBtnLive);
+        TextView tvBtnVod    = findViewById(R.id.tvBtnVod);
+        TextView tvBtnTools  = findViewById(R.id.tvBtnTools);
+        TextView tvBtnQr     = findViewById(R.id.tvBtnQr);
+        TextView tvBtnFile   = findViewById(R.id.tvBtnFile);
+        TextView tvBtnUsb    = findViewById(R.id.tvBtnUsb);
+        if (tvBtnLive != null)  tvBtnLive.setText(BTN_LIVE);
+        if (tvBtnVod != null)   tvBtnVod.setText(BTN_VOD);
+        if (tvBtnTools != null) tvBtnTools.setText(BTN_TOOLS);
+        if (tvBtnQr != null)    tvBtnQr.setText(BTN_QR);
+        if (tvBtnFile != null)  tvBtnFile.setText(BTN_FILE);
+        if (tvBtnUsb != null)   tvBtnUsb.setText(BTN_USB);
 
         // 首页大按钮：焦点放大动画（缩小缩放比例防止描边溢出）
         attachFocusScale(btnLive,      1.06f);
@@ -435,11 +463,17 @@ public class MainActivity extends AppCompatActivity {
         settings.setDisplayZoomControls(false);
         settings.setMediaPlaybackRequiresUserGesture(false);
         settings.setAllowFileAccess(true);
-        settings.setUserAgentString(
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
-            "AppleWebKit/537.36 (KHTML, like Gecko) " +
-            "Chrome/124.0.0.0 Safari/537.36"
-        );
+        // 使用配置文件中的UA（从strings.xml读取）
+        String ua = getString(R.string.user_agent);
+        if (ua != null && !ua.isEmpty()) {
+            settings.setUserAgentString(ua);
+        } else {
+            settings.setUserAgentString(
+                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) " +
+                "AppleWebKit/537.36 (KHTML, like Gecko) " +
+                "Chrome/124.0.0.0 Safari/537.36"
+            );
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             settings.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW);

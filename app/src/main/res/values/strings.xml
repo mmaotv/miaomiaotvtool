@@ -14,9 +14,18 @@
     <!-- 首页副标题（APP名称下方小字） -->
     <string name="subtitle_text">高清影视 · 随时随地</string>
 
+    <!-- 首页按钮名称 -->
     <string name="btn_live">直播</string>
     <string name="btn_vod">点播</string>
     <string name="btn_tools">工具</string>
+    <string name="btn_qr">扫码输入</string>
+    <string name="btn_file">文件管理</string>
+    <string name="btn_usb">U盘</string>
+
+    <!-- 浏览器UA伪装 -->
+    <string name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36</string>
+    <string name="user_agent_type">chrome</string>
+
     <string name="download_notification_channel">下载</string>
     <string name="downloading">正在下载...</string>
     <string name="download_complete">下载完成</string>
