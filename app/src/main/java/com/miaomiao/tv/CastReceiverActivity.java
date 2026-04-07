@@ -154,48 +154,54 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
         webView.addJavascriptInterface(new CastJSInterface(), "castReceiver");
     }
 
-    /** 显示引导页面 */
+    /** 显示引导页面 - 白色主题 */
     private void showGuidePage() {
         String castUrl = CastReceiverService.getCastUrl();
+        // 生成二维码URL（使用在线二维码生成服务）
+        String qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + java.net.URLEncoder.encode(castUrl);
         String html = "<!DOCTYPE html><html><head>" +
             "<meta charset='UTF-8'>" +
             "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
             "<style>" +
             "*{margin:0;padding:0;box-sizing:border-box}" +
-            "body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:linear-gradient(135deg,#0D0D1A 0%,#1a1a2e 100%);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}" +
-            ".logo{font-size:80px;margin-bottom:20px;animation:pulse 2s infinite}" +
-            "@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}" +
-            "h1{font-size:36px;margin-bottom:10px;background:linear-gradient(90deg,#00D9FF,#7B61FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent}" +
-            ".subtitle{color:#888;font-size:16px;margin-bottom:40px}" +
-            ".url-box{background:#1a1a2e;border:2px dashed #00D9FF;border-radius:16px;padding:20px 40px;margin-bottom:30px}" +
-            ".url-box .label{color:#888;font-size:14px;margin-bottom:8px}" +
-            ".url-box .url{color:#00D9FF;font-size:24px;font-weight:bold;word-break:break-all}" +
-            ".tip{color:#666;font-size:14px;line-height:2}" +
-            ".tip strong{color:#FFD700}" +
-            ".step{display:flex;gap:20px;margin-top:40px;flex-wrap:wrap;justify-content:center}" +
-            ".step-item{background:#1a1a2e;padding:20px;border-radius:12px;width:180px}" +
-            ".step-item .num{background:#00D9FF;color:#000;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;margin:0 auto 12px}" +
-            ".step-item .text{color:#ccc;font-size:14px}" +
-            ".status{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a2e;padding:10px 30px;border-radius:30px;border:1px solid #00D9FF}" +
-            ".status span{color:#00FF00;margin-left:8px}" +
+            "body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#FFFFFF;color:#2C3E50;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}" +
+            ".logo{font-size:80px;margin-bottom:16px}" +
+            "h1{font-size:32px;margin-bottom:8px;color:#2C3E50}" +
+            ".subtitle{color:#7F8C8D;font-size:14px;margin-bottom:24px}" +
+            ".main-box{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;justify-content:center;margin-bottom:24px}" +
+            ".url-section{background:#F8F9FA;border:2px dashed #00D9FF;border-radius:16px;padding:20px 30px;text-align:left}" +
+            ".url-section .label{color:#7F8C8D;font-size:14px;margin-bottom:8px}" +
+            ".url-section .url{color:#00D9FF;font-size:20px;font-weight:bold;word-break:break-all}" +
+            ".qr-section{background:#F8F9FA;border-radius:16px;padding:16px;text-align:center}" +
+            ".qr-section .label{color:#7F8C8D;font-size:14px;margin-bottom:12px}" +
+            ".qr-section img{width:160px;height:160px;border-radius:8px}" +
+            ".step{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap;justify-content:center}" +
+            ".step-item{background:#F8F9FA;padding:16px;border-radius:12px;width:160px}" +
+            ".step-item .num{background:#00D9FF;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;margin:0 auto 10px;font-size:14px}" +
+            ".step-item .text{color:#2C3E50;font-size:13px}" +
+            ".tip{color:#E65100;font-size:13px;margin-top:24px;line-height:1.8}" +
+            ".status{background:#E8F8F5;border:1px solid #00D9FF;color:#00D9FF;padding:10px 24px;border-radius:20px;font-size:14px;margin-top:20px}" +
             "</style></head><body>" +
             "<div class='logo'>📺</div>" +
             "<h1>喵喵嗷投屏接收</h1>" +
             "<p class='subtitle'>让您的设备成为投屏接收器</p>" +
-            "<div class='url-box'>" +
+            "<div class='main-box'>" +
+            "<div class='url-section'>" +
             "<div class='label'>📱 手机访问以下地址即可投屏</div>" +
             "<div class='url'>" + castUrl + "</div>" +
             "</div>" +
+            "<div class='qr-section'>" +
+            "<div class='label'>📷 扫码访问</div>" +
+            "<img src='" + qrCodeUrl + "' alt='二维码'>" +
+            "</div>" +
+            "</div>" +
             "<div class='step'>" +
             "<div class='step-item'><div class='num'>1</div><div class='text'>确保在同一WiFi</div></div>" +
-            "<div class='step-item'><div class='num'>2</div><div class='text'>手机浏览器打开地址</div></div>" +
+            "<div class='step-item'><div class='num'>2</div><div class='text'>扫码或输入地址</div></div>" +
             "<div class='step-item'><div class='num'>3</div><div class='text'>输入视频URL投屏</div></div>" +
             "</div>" +
-            "<p class='tip' style='margin-top:40px'>" +
-            "<strong>💡 提示：</strong>也可以使用投屏APP扫描下方二维码<br>" +
-            "支持DLNA/AirPlay协议的手机可直接发现本设备" +
-            "</p>" +
-            "<div class='status'>🟢 服务运行中<span>●</span></div>" +
+            "<p class='tip'>💡 提示：支持DLNA/AirPlay协议的手机可直接发现本设备</p>" +
+            "<div class='status'>🟢 服务运行中 · IP: " + castUrl.replace("http://", "").replace(":" + CastReceiverService.PORT, "") + "</div>" +
             "</body></html>";
 
         webView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
@@ -284,37 +290,50 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
         }).start();
     }
 
-    /** 加载视频 */
+    /** 加载视频 - 白色主题播放器 */
     private void loadVideo(String url) {
         imageView.setVisibility(View.GONE);
         webView.setVisibility(View.VISIBLE);
 
-        // 使用视频播放器页面
+        // 使用视频播放器页面 - 白色主题
         String html = "<!DOCTYPE html><html><head>" +
             "<meta charset='UTF-8'>" +
             "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
             "<style>" +
             "*{margin:0;padding:0;box-sizing:border-box}" +
-            "body{background:#000;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center}" +
-            "video{width:100%;height:100%;max-width:1920px}" +
-            ".info{position:fixed;top:0;left:0;right:0;background:rgba(0,0,0,0.8);padding:15px;color:#fff;text-align:center;z-index:100}" +
-            ".info h2{font-size:18px;margin-bottom:5px}" +
-            ".info p{font-size:14px;color:#888}" +
-            ".controls{position:fixed;bottom:0;left:0;right:0;background:rgba(0,0,0,0.8);padding:15px;display:flex;justify-content:center;gap:20px;z-index:100}" +
-            ".controls button{background:#00D9FF;color:#000;border:none;padding:10px 30px;border-radius:20px;font-size:14px;cursor:pointer}" +
+            "body{background:#000;min-height:100vh;display:flex;flex-direction:column}" +
+            "video{width:100%;height:100%;max-width:1920px;background:#000}" +
+            ".info{position:fixed;top:0;left:0;right:0;background:#2C3E50;padding:12px 20px;display:flex;justify-content:space-between;align-items:center;z-index:100}" +
+            ".info-left{display:flex;align-items:center;gap:12px}" +
+            ".info-left .icon{font-size:20px}" +
+            ".info-left h2{font-size:16px;color:#fff;font-weight:normal}" +
+            ".info-left .device{color:#00D9FF;font-size:13px}" +
+            ".info-right{color:#7F8C8D;font-size:12px}" +
+            ".controls{position:fixed;bottom:0;left:0;right:0;background:#2C3E50;padding:12px 20px;display:flex;justify-content:center;gap:16px;z-index:100}" +
+            ".controls button{background:#00D9FF;color:#fff;border:none;padding:10px 24px;border-radius:20px;font-size:14px;cursor:pointer}" +
+            ".controls button:active{opacity:0.8}" +
             "</style></head><body>" +
             "<div class='info'>" +
-            "<h2>📺 " + currentDeviceName + " 投屏中</h2>" +
-            "<p>" + url + "</p>" +
+            "<div class='info-left'>" +
+            "<span class='icon'>📺</span>" +
+            "<div>" +
+            "<h2>投屏播放中</h2>" +
+            "<span class='device'>" + currentDeviceName + "</span>" +
             "</div>" +
-            "<video id='player' src='" + url + "' controls autoplay playsinline>" +
+            "</div>" +
+            "<div class='info-right'>" + url + "</div>" +
+            "</div>" +
+            "<video id='player' src='" + url + "' controls playsinline>" +
             "您的浏览器不支持视频播放" +
             "</video>" +
             "<div class='controls'>" +
             "<button onclick='document.getElementById(\"player\").requestFullscreen()'>全屏播放</button>" +
+            "<button onclick='window.castReceiver.onVideoEnd()'>结束投屏</button>" +
             "</div>" +
             "<script>" +
-            "document.getElementById('player').play().catch(e=>console.log('autoplay blocked'));" +
+            "var p=document.getElementById('player');" +
+            "p.play().catch(e=>console.log('autoplay blocked'));" +
+            "p.onended=function(){window.castReceiver.onVideoEnd()};" +
             "</script>" +
             "</body></html>";
 

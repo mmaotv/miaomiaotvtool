@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000">
+    android:background="#FFFFFF">
 
     <!-- 视频/图片显示区域 -->
     <WebView
@@ -22,7 +22,7 @@
         android:id="@+id/infoPanel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#CC000000"
+        android:background="#2C3E50"
         android:orientation="vertical"
         android:padding="12dp"
         android:visibility="gone">
@@ -36,7 +36,7 @@
             android:textSize="14sp"/>
     </LinearLayout>
 
-    <!-- 底部控制栏 - 统一风格 -->
+    <!-- 底部控制栏 - 白色主题 -->
     <LinearLayout
         android:id="@+id/controlsPanel"
         android:layout_width="match_parent"

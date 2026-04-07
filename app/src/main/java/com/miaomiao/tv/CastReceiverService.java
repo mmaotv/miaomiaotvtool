@@ -34,7 +34,7 @@ import java.util.concurrent.Executors;
 public class CastReceiverService extends Service {
 
     private static final String TAG = "CastReceiverService";
-    private static final int PORT = 18766; // 投屏服务端口
+    public static final int PORT = 18766; // 投屏服务端口（public供外部访问）
     private static final String SERVICE_NAME = "MiaoMiaoTV"; // NSD 服务名称
     private static final String SERVICE_TYPE_HTTP = "_http._tcp.";  // HTTP 服务类型
     private static final String SERVICE_TYPE_AIRPLAY = "_airplay._tcp."; // AirPlay 服务类型
@@ -550,14 +550,42 @@ public class CastReceiverService extends Service {
         return true; // 简化判断
     }
 
-    /** 获取投屏地址 */
+    /** 获取投屏地址 - 使用真实局域网IP */
     public static String getCastUrl() {
-        try {
-            java.net.InetAddress addr = java.net.InetAddress.getLocalHost();
-            return "http://" + addr.getHostAddress() + ":" + PORT;
-        } catch (Exception e) {
-            return "";
+        String ip = getLocalIPStatic();
+        if (ip == null || ip.isEmpty() || ip.equals("127.0.0.1")) {
+            // 尝试备用方法
+            try {
+                java.net.InetAddress addr = java.net.InetAddress.getLocalHost();
+                ip = addr.getHostAddress();
+            } catch (Exception e) {
+                return "";
+            }
         }
+        return "http://" + ip + ":" + PORT;
+    }
+
+    /** 获取本机IP的静态方法（供外部调用） */
+    private static String getLocalIPStatic() {
+        try {
+            Enumeration<java.net.NetworkInterface> interfaces =
+                java.net.NetworkInterface.getNetworkInterfaces();
+            while (interfaces.hasMoreElements()) {
+                java.net.NetworkInterface ni = interfaces.nextElement();
+                Enumeration<java.net.InetAddress> addresses = ni.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    java.net.InetAddress addr = addresses.nextElement();
+                    if (!addr.isLoopbackAddress() &&
+                        !addr.isLinkLocalAddress() &&
+                        addr instanceof java.net.Inet4Address) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "获取IP失败: " + e.getMessage());
+        }
+        return "127.0.0.1";
     }
 
     @Override
