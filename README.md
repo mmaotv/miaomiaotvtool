@@ -9,11 +9,11 @@ Android TV WebView 应用，支持遥控器操作，专为大屏设备优化。
 - **扫码推送**：手机扫码后可推送网址或上传文件到设备，无需遥控器打字
 - **局域网直接访问**：二维码下方显示 IP 地址和端口，浏览器直接输入也可推送网址和上传文件
 - **文件管理器**：内置文件浏览/重命名/删除/分享等操作，支持图片/视频缩略图
-- **U 盘管理**：自动检测 USB 存储设备，支持文件复制与浏览
+- **U盘管理**：自动检测 USB 存储设备，支持文件复制与浏览
 - **下载管理**：内置下载功能，管理已下载的影视资源
 - **地址栏**：支持手动输入任意网址，含前进/后退/刷新/首页
-- **关于页面**：点击关于按钮可直接在应用内打开 GitHub 仓库页面
 - **收藏与历史**：支持收藏网址、查看浏览历史
+- **关于页面**：点击关于按钮可直接在应用内打开 GitHub 仓库页面
 
 ## 扫码 / 局域网推送
 
@@ -78,8 +78,11 @@ TVapp/
 │   │   ├── FileManagerActivity.java  # 文件管理器
 │   │   ├── UsbManagerActivity.java   # U 盘管理
 │   │   ├── HistoryActivity.java      # 历史记录
-│   │   ├── AboutActivity.java        # 关于页面
-│   │   └── DownloadService.java      # 后台下载服务
+│   │   ├── BookmarkActivity.java     # 收藏
+│   │   ├── BookmarkManager.java      # 收藏管理
+│   │   ├── WebHistoryManager.java    # 历史记录管理
+│   │   ├── DownloadService.java      # 后台下载服务
+│   │   └── DialogHelper.java         # 弹窗工具
 │   └── res/                          # 布局、图片等资源
 ├── build_helper.py                   # 构建脚本（读取 CONFIG.txt）
 ├── CONFIG.txt                        # 快速配置文件
