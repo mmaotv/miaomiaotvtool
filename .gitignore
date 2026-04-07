@@ -36,7 +36,15 @@ local.properties.template
 *.log
 *.tmp
 *.bak
+*.zip
 
-# 输出目录里的临时文件
-OUTPUT/
-dist/
+# APK 反编译资源（apk_extract）
+apk_extract/
+
+# 构建日志
+build_error.txt
+build_output.txt
+
+# 密钥文件（绝对保密，不要上传）
+keystore.jks
+

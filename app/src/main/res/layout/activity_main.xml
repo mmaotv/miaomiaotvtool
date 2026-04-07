@@ -428,6 +428,7 @@
                 android:orientation="horizontal"
                 android:gravity="center"
                 android:background="@drawable/btn_download_bg_inset"
+                android:layout_marginEnd="5dp"
                 android:focusable="true"
                 android:clickable="true">
                 <TextView
@@ -436,6 +437,24 @@
                     android:text="&#128229; &#19979;&#36733;"
                     android:textSize="11sp"
                     android:textColor="#FFFFFF"/>
+            </LinearLayout>
+
+            <!-- 收藏夹 -->
+            <LinearLayout
+                android:id="@+id/btnBookmark"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_bookmark_bg_inset"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="&#9733;"
+                    android:textSize="18sp"
+                    android:textColor="#FFD700"/>
             </LinearLayout>
 
         </LinearLayout>

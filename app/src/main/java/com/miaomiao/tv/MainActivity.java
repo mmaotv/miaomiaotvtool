@@ -31,6 +31,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.content.DialogInterface;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -69,14 +73,18 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnGo;
     private LinearLayout btnHome;
     private LinearLayout btnDownloads;
+    private LinearLayout btnBookmark;
     private EditText etUrl;
     private ProgressBar progressBar;
     private WebView webView;
     private CursorView cursorView;
 
     private QrInputHelper qrInputHelper;
+    private BookmarkManager bookmarkManager;
     private boolean mouseModeEnabled = true; // 默认开启鼠标模式
     private long menuKeyDownTime = 0;
+
+    private static final int REQUEST_BOOKMARK = 2001;
 
     // ---- USB 广播 ----
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -110,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         LIVE_URL  = getString(R.string.live_url);
         VOD_URL   = getString(R.string.vod_url);
         TOOLS_URL = getString(R.string.tools_url);
+
+        bookmarkManager = new BookmarkManager(this);
 
         initViews();
         setupWebView();
@@ -158,6 +168,7 @@ public class MainActivity extends AppCompatActivity {
         btnGo        = findViewById(R.id.btnGo);
         btnHome      = findViewById(R.id.btnHome);
         btnDownloads = findViewById(R.id.btnDownloads);
+        btnBookmark  = findViewById(R.id.btnBookmark);
         etUrl        = findViewById(R.id.etUrl);
         progressBar  = findViewById(R.id.progressBar);
         webView      = findViewById(R.id.webView);
@@ -178,6 +189,7 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnGo,        1.15f);
         attachFocusScale(btnHome,      1.15f);
         attachFocusScale(btnDownloads, 1.15f);
+        attachFocusScale(btnBookmark,   1.15f);
 
         // 首页按钮点击事件
         btnLive.setOnClickListener(v -> openUrl(LIVE_URL));
@@ -208,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         btnDownloads.setOnClickListener(v ->
             startActivity(new Intent(this, DownloadsActivity.class))
         );
+        btnBookmark.setOnClickListener(v -> onBookmarkClick());
     }
 
     private void showQrInput() {
@@ -219,6 +232,93 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(this, "\u5df2\u63a5\u6536\u7f51\u5740\uff1a" + url, Toast.LENGTH_LONG).show();
         });
         qrInputHelper.show();
+    }
+
+    /** 收藏按钮点击：收藏当前页或打开收藏夹 */
+    private void onBookmarkClick() {
+        String currentUrl = webView.getUrl();
+        String currentTitle = "";
+        try {
+            currentTitle = webView.getTitle();
+        } catch (Exception ignored) {}
+
+        if (currentUrl == null || currentUrl.isEmpty()) {
+            // 无当前页面 → 直接打开收藏夹
+            startActivityForResult(new Intent(this, BookmarkActivity.class), REQUEST_BOOKMARK);
+            return;
+        }
+
+        if (bookmarkManager.exists(currentUrl)) {
+            // 已收藏 → 弹出选项：查看收藏夹 或 取消收藏
+            new AlertDialog.Builder(this)
+                .setTitle("\u5df2\u6536\u85cf")
+                .setMessage("\u8be5\u9875\u9762\u5df2\u5728\u6536\u85cf\u5939\u4e2d\uff0c\u662f\u5426\u67e5\u770b\u6536\u85cf\u5939\uff1f")
+                .setPositiveButton("\u67e5\u770b\u6536\u85cf\u5939", (d, w) ->
+                    startActivityForResult(new Intent(this, BookmarkActivity.class), REQUEST_BOOKMARK)
+                )
+                .setNegativeButton("\u53d6\u6d88", null)
+                .show();
+        } else {
+            // 未收藏 → 弹出添加对话框
+            showAddBookmarkDialog(currentTitle, currentUrl);
+        }
+    }
+
+    /** 添加书签对话框 */
+    private void showAddBookmarkDialog(String title, String url) {
+        android.app.Dialog dialog = new android.app.Dialog(this);
+        dialog.setContentView(R.layout.dialog_add_bookmark);
+
+        android.view.Window window = dialog.getWindow();
+        if (window != null) {
+            window.setBackgroundDrawableResource(android.R.color.transparent);
+            window.setGravity(Gravity.CENTER);
+            window.setLayout(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            );
+        }
+
+        EditText etTitle = dialog.findViewById(R.id.etTitle);
+        EditText etUrl   = dialog.findViewById(R.id.etUrl);
+        LinearLayout btnConfirm = dialog.findViewById(R.id.btnConfirm);
+        LinearLayout btnCancel  = dialog.findViewById(R.id.btnCancel);
+
+        etTitle.setText(title);
+        etUrl.setText(url);
+
+        btnConfirm.setOnClickListener(v -> {
+            String newTitle = etTitle.getText().toString().trim();
+            if (newTitle.isEmpty()) newTitle = url;
+            BookmarkManager.Bookmark b = new BookmarkManager.Bookmark(null, newTitle, url, System.currentTimeMillis());
+            if (bookmarkManager.add(b)) {
+                Toast.makeText(this, "\u5df2\u6dfb\u52a0\u6536\u85cf", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "\u8be5\u7f51\u5740\u5df2\u5b58\u5728", Toast.LENGTH_SHORT).show();
+            }
+            dialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> {
+            // 取消时打开收藏夹
+            dialog.dismiss();
+            startActivityForResult(new Intent(this, BookmarkActivity.class), REQUEST_BOOKMARK);
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_BOOKMARK && resultCode == RESULT_OK && data != null) {
+            String url = data.getStringExtra("bookmark_url");
+            String title = data.getStringExtra("bookmark_title");
+            if (url != null && !url.isEmpty()) {
+                openUrl(url);
+                Toast.makeText(this, "\u6253\u5f00\u6536\u85cf\uff1a" + title, Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     private void openUrl(String url) {
@@ -536,32 +636,10 @@ public class MainActivity extends AppCompatActivity {
                 perms.toArray(new String[0]), PERMISSION_REQUEST_CODE);
         }
 
-        // Android 11+ 检查「所有文件访问」权限（用于文件管理功能）
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            if (!android.os.Environment.isExternalStorageManager()) {
-                // 弹框引导用户去系统设置授权
-                new AlertDialog.Builder(this)
-                    .setTitle("需要文件访问权限")
-                    .setMessage("为了能够下载和管理文件，需要授予「所有文件访问」权限。\n\n请在接下来的设置页面中开启。")
-                    .setPositiveButton("去授权", (d, w) -> {
-                        try {
-                            Intent intent = new Intent(
-                                android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
-                                Uri.parse("package:" + getPackageName())
-                            );
-                            startActivity(intent);
-                        } catch (Exception e) {
-                            // 部分设备不支持精确跳转，跳到通用设置
-                            try {
-                                startActivity(new Intent(
-                                    android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
-                            } catch (Exception ignored) {}
-                        }
-                    })
-                    .setNegativeButton("暂不授权", null)
-                    .show();
-            }
-        }
+        // Android 14+ 引导用户授权 MANAGE_EXTERNAL_STORAGE（手机/平板需要）
+        // Android 10-13 使用 MediaStore API 无需额外权限
+        // Android 9- 申请传统存储权限
+        checkStoragePermission();
     }
 
     @Override
@@ -577,6 +655,43 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    /**
+     * 方案 C：区分版本处理存储权限
+     * - Android 14+：引导授权 MANAGE_EXTERNAL_STORAGE
+     * - Android 10-13：MediaStore 无需额外权限
+     * - Android 9-：已申请传统权限
+     */
+    private void checkStoragePermission() {
+        if (Build.VERSION.SDK_INT >= 34) { // Android 14+
+            if (!android.os.Environment.isExternalStorageManager()) {
+                new AlertDialog.Builder(this)
+                    .setTitle("需要文件访问权限")
+                    .setMessage("为了能够管理外部存储文件（如 U 盘、下载目录），需要授予「所有文件访问」权限。\n\n请在设置页面中开启此权限。")
+                    .setPositiveButton("去授权", (d, w) -> {
+                        try {
+                            Intent intent = new Intent(
+                                android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
+                                Uri.parse("package:" + getPackageName())
+                            );
+                            startActivity(intent);
+                        } catch (Exception e) {
+                            // 部分设备不支持精确跳转，跳到通用设置
+                            try {
+                                startActivity(new Intent(
+                                    android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+                            } catch (Exception ignored) {}
+                        }
+                    })
+                    .setNegativeButton("暂不授权", (d, w) -> {
+                        Toast.makeText(this, "未授权将只能访问应用私有目录", Toast.LENGTH_LONG).show();
+                    })
+                    .show();
+            }
+        }
+        // Android 10-13：MediaStore API 无需额外权限
+        // Android 9-：已在 checkPermissions() 中申请 WRITE_EXTERNAL_STORAGE
     }
 
     @Override

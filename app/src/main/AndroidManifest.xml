@@ -17,9 +17,7 @@
     <uses-permission android:name="android.permission.READ_MEDIA_VIDEO" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
-    <!-- Android 10+ 下载/文件管理（可选，用于文件管理器功能）-->
-    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
-        tools:ignore="ScopedStorage" />
+    <!-- Android 10+ 分区存储适配，不再申请 MANAGE_EXTERNAL_STORAGE -->
 
     <!-- 前台服务（下载服务） -->
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -82,6 +80,13 @@
         <!-- U盘管理器界面 -->
         <activity
             android:name=".UsbManagerActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
+        <!-- 收藏夹界面 -->
+        <activity
+            android:name=".BookmarkActivity"
             android:exported="false"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
