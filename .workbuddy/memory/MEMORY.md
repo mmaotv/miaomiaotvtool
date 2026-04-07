@@ -18,16 +18,18 @@
 3. 或直接修改 strings.xml 再运行构建脚本
 4. 图标：在 ICON_PATH 填写本地图片路径，需安装 Pillow（pip install Pillow）
 
-## APP 结构（2026-04-01 最新版）
-- 首页：4个按钮（2行2列）+ 下方文本框
-  - 第一行：直播（蓝紫渐变）+ 点播（粉橙渐变）
-  - 第二行：工具（绿青渐变）+ 扫码输入（金黄渐变）
-- WebView 工具栏：后退/前进/刷新 + 可编辑地址栏 + GO + 🏠首页 + 📥下载
+## APP 结构（2026-04-07 最新版）
+- 首页：4个按钮（2行2列）+ 底部提示栏
+  - 第一行：直播（蓝绿渐变）+ 点播（粉橙渐变）
+  - 第二行：工具（绿青渐变）+ 投屏（红粉渐变）
+  - 底部提示：扫码输入 · 文件管理 · U盘
+- WebView 工具栏：后退/前进/刷新 + 可编辑地址栏 + GO + 🏠首页 + 📥下载 + ⭐收藏 + 📜历史 + 📺投屏
 - 下载管理 → DownloadsActivity（扫描 Download/喵喵嗷影视/ 目录）
 - 扫码输入：局域网 HTTP Server（端口18765）+ ZXing 二维码，手机扫码输入网址
+- 投屏功能：CastReceiverService（端口18766）+ NSD/mDNS广播
 - 遥控器：D-pad 移动光标，确认键点击，BACK 返回首页
-- 配色：深色 #0D0D1A 背景，主色调 #7B61FF
-- 按钮焦点效果：白色实线边框 + scaleX/Y 放大动画（150ms），遥控器选中时高亮明显
+- 配色：纯白背景 #FFFFFF，主色调 #00D9FF
+- 按钮焦点效果：scaleX/Y 放大动画（150ms），遥控器选中时放大明显
 
 ## 配置文件
 - 快速配置：CONFIG.txt（APP_NAME / VERSION_NAME / VERSION_CODE / LIVE_URL / VOD_URL / TOOLS_URL / INFO_TEXT / HOME_TITLE / SUBTITLE_TEXT / ICON_PATH）

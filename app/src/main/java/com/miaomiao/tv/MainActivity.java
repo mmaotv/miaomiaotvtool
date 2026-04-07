@@ -46,7 +46,9 @@ import java.util.List;
 
 /**
  * 喵喵嗷影视 - 主界面
- * 首页：6个按钮（直播/点播/工具/扫码输入/文件管理/U盘）
+ * 首页：8个按钮（2行4列）
+ * 第一行：直播、点播、工具、历史记录
+ * 第二行：投屏、扫码输入、文件管理、U盘
  * 首页不显示光标，进入WebView时自动开启光标控制
  */
 public class MainActivity extends AppCompatActivity {
@@ -71,7 +73,11 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnLive;
     private LinearLayout btnVod;
     private LinearLayout btnTools;
+    private LinearLayout btnHistoryHome;
     private LinearLayout btnCastHome;
+    private LinearLayout btnQrInput;
+    private LinearLayout btnFileMgr;
+    private LinearLayout btnUsbMgr;
     private LinearLayout toolbar;
     private LinearLayout btnBack;
     private LinearLayout btnForward;
@@ -180,7 +186,11 @@ public class MainActivity extends AppCompatActivity {
         btnLive      = findViewById(R.id.btnLive);
         btnVod       = findViewById(R.id.btnVod);
         btnTools     = findViewById(R.id.btnTools);
+        btnHistoryHome = findViewById(R.id.btnHistoryHome);
         btnCastHome  = findViewById(R.id.btnCastHome);
+        btnQrInput   = findViewById(R.id.btnQrInput);
+        btnFileMgr   = findViewById(R.id.btnFileMgr);
+        btnUsbMgr    = findViewById(R.id.btnUsbMgr);
         toolbar      = findViewById(R.id.toolbar);
         btnBack      = findViewById(R.id.btnBack);
         btnForward   = findViewById(R.id.btnForward);
@@ -200,15 +210,25 @@ public class MainActivity extends AppCompatActivity {
         TextView tvBtnLive   = findViewById(R.id.tvBtnLive);
         TextView tvBtnVod    = findViewById(R.id.tvBtnVod);
         TextView tvBtnTools  = findViewById(R.id.tvBtnTools);
+        TextView tvBtnQr     = findViewById(R.id.tvBtnQr);
+        TextView tvBtnFile   = findViewById(R.id.tvBtnFile);
+        TextView tvBtnUsb    = findViewById(R.id.tvBtnUsb);
         if (tvBtnLive != null)  tvBtnLive.setText(BTN_LIVE);
         if (tvBtnVod != null)   tvBtnVod.setText(BTN_VOD);
         if (tvBtnTools != null) tvBtnTools.setText(BTN_TOOLS);
+        if (tvBtnQr != null)    tvBtnQr.setText(BTN_QR);
+        if (tvBtnFile != null)  tvBtnFile.setText(BTN_FILE);
+        if (tvBtnUsb != null)   tvBtnUsb.setText(BTN_USB);
 
         // 首页大按钮：焦点放大动画
         attachFocusScale(btnLive,      1.08f);
         attachFocusScale(btnVod,       1.08f);
         attachFocusScale(btnTools,     1.08f);
+        attachFocusScale(btnHistoryHome, 1.08f);
         attachFocusScale(btnCastHome,  1.08f);
+        attachFocusScale(btnQrInput,   1.08f);
+        attachFocusScale(btnFileMgr,   1.08f);
+        attachFocusScale(btnUsbMgr,    1.08f);
 
         // 工具栏小按钮：轻微放大
         attachFocusScale(btnBack,      1.15f);
@@ -225,7 +245,16 @@ public class MainActivity extends AppCompatActivity {
         btnLive.setOnClickListener(v -> openUrl(LIVE_URL));
         btnVod.setOnClickListener(v -> openUrl(VOD_URL));
         btnTools.setOnClickListener(v -> openUrl(TOOLS_URL));
+        btnHistoryHome.setOnClickListener(v -> startActivityForResult(
+            new Intent(this, HistoryActivity.class), REQUEST_HISTORY));
         btnCastHome.setOnClickListener(v -> startActivity(new Intent(this, CastReceiverActivity.class)));
+        btnQrInput.setOnClickListener(v -> showQrInput());
+        btnFileMgr.setOnClickListener(v -> {
+            Intent intent = new Intent(this, FileManagerActivity.class);
+            intent.putExtra("path", "/storage/emulated/0");
+            startActivity(intent);
+        });
+        btnUsbMgr.setOnClickListener(v -> startActivity(new Intent(this, UsbManagerActivity.class)));
 
         // 工具栏按钮
         btnBack.setOnClickListener(v -> {
