@@ -36,7 +36,10 @@
 - 代码配置：app/src/main/res/values/strings.xml
 - strings.xml 包含 app_name / home_title / subtitle_text / live_url / vod_url / tools_url / info_text 等 key
 - build.gradle 版本号由 build_helper.py 动态写入（versionCode / versionName）
-- 图标：ICON_PATH 指向本地图片 → 自动生成 mdpi/hdpi/xhdpi/xxhdpi/xxxhdpi 五套 PNG
+- 投屏界面（CastReceiverActivity）：极简设计，只显示接收器名称和IP地址
+  - 接收器名称："喵喵嗷投屏接收器"
+  - IP地址：显示局域网IP（如192.168.x.x）
+  - 白色背景，无二维码，无使用说明
 
 ## 依赖
 - build.gradle 新增：com.google.zxing:core:3.5.2（用于二维码生成）

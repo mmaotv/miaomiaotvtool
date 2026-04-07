@@ -43,12 +43,13 @@ import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
 import java.util.List;
+import android.content.SharedPreferences;
 
 /**
  * 喵喵嗷影视 - 主界面
- * 首页：8个按钮（2行4列）
+ * 首页：7个按钮（2行4列 - 投屏已移除）
  * 第一行：直播、点播、工具、历史记录
- * 第二行：投屏、扫码输入、文件管理、U盘
+ * 第二行：扫码输入、文件管理、U盘
  * 首页不显示光标，进入WebView时自动开启光标控制
  */
 public class MainActivity extends AppCompatActivity {
@@ -66,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private String BTN_USB;
 
     private static final int PERMISSION_REQUEST_CODE = 100;
+    private static final String PREF_NAME = "miaomiao_prefs";
+    private static final String KEY_FIRST_LAUNCH = "first_launch";
 
     // 视图
     private View homePage;
@@ -74,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnVod;
     private LinearLayout btnTools;
     private LinearLayout btnHistoryHome;
-    private LinearLayout btnCastHome;
     private LinearLayout btnQrInput;
     private LinearLayout btnFileMgr;
     private LinearLayout btnUsbMgr;
@@ -187,7 +189,6 @@ public class MainActivity extends AppCompatActivity {
         btnVod       = findViewById(R.id.btnVod);
         btnTools     = findViewById(R.id.btnTools);
         btnHistoryHome = findViewById(R.id.btnHistoryHome);
-        btnCastHome  = findViewById(R.id.btnCastHome);
         btnQrInput   = findViewById(R.id.btnQrInput);
         btnFileMgr   = findViewById(R.id.btnFileMgr);
         btnUsbMgr    = findViewById(R.id.btnUsbMgr);
@@ -225,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnVod,       1.08f);
         attachFocusScale(btnTools,     1.08f);
         attachFocusScale(btnHistoryHome, 1.08f);
-        attachFocusScale(btnCastHome,  1.08f);
         attachFocusScale(btnQrInput,   1.08f);
         attachFocusScale(btnFileMgr,   1.08f);
         attachFocusScale(btnUsbMgr,    1.08f);
@@ -247,7 +247,6 @@ public class MainActivity extends AppCompatActivity {
         btnTools.setOnClickListener(v -> openUrl(TOOLS_URL));
         btnHistoryHome.setOnClickListener(v -> startActivityForResult(
             new Intent(this, HistoryActivity.class), REQUEST_HISTORY));
-        btnCastHome.setOnClickListener(v -> startActivity(new Intent(this, CastReceiverActivity.class)));
         btnQrInput.setOnClickListener(v -> showQrInput());
         btnFileMgr.setOnClickListener(v -> {
             Intent intent = new Intent(this, FileManagerActivity.class);
@@ -422,47 +421,40 @@ public class MainActivity extends AppCompatActivity {
         cursorView.setVisibility(mouseModeEnabled ? View.VISIBLE : View.GONE);
         // 重置光标位置到中心
         cursorView.resetPosition();
-        // 进入网页时弹出一次提示
-        lastHintTime = 0;
+        // 首次进入网页时弹出提示
         showMouseModeHint();
     }
 
-    /** 显示鼠标模式操作提示（用自定义 View 实现，不使用 Toast） */
+    /** 显示鼠标模式操作提示（仅首次进入网页时显示，白色主题） */
     private void showMouseModeHint() {
-        // 避免短时间内重复弹出
-        long now = System.currentTimeMillis();
-        if (now - lastHintTime < 3000) return;
-        lastHintTime = now;
+        SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+        boolean hasShownHint = prefs.getBoolean("mouse_hint_shown", false);
+        if (hasShownHint) return;
+        prefs.edit().putBoolean("mouse_hint_shown", true).apply();
 
         TextView tv = new TextView(this);
-        tv.setText("\uD83C\uDFAF 长按菜单键进入/退出鼠标模式\n进入后用上下左右键控制光标选择\n未进入鼠标模式可直接用遥控器方向键选择");
-        tv.setTextSize(15);
-        tv.setTextColor(0xFFFFFFFF);
+        tv.setText("📍 长按菜单键切换鼠标模式\n用方向键控制光标点击");
+        tv.setTextSize(13);
+        tv.setTextColor(0xFF2C3E50);
+        tv.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
         tv.setGravity(Gravity.CENTER);
-        tv.setPadding(40, 24, 40, 24);
-        tv.setLineSpacing(6f, 1.2f);
+        tv.setPadding(32, 16, 32, 16);
 
-        AlertDialog d = new AlertDialog.Builder(this)
-            .setTitle("")
+        AlertDialog d = new AlertDialog.Builder(this, android.app.AlertDialog.THEME_HOLO_LIGHT)
             .setView(tv)
-            .setPositiveButton("\u77E5\u9053\u4E86", null)
+            .setPositiveButton("知道了", null)
             .setCancelable(true)
             .create();
-        if (d.getWindow() != null) {
-            d.getWindow().setGravity(Gravity.CENTER);
-            d.getWindow().setBackgroundDrawableResource(android.R.drawable.dialog_holo_dark_frame);
-        }
+        d.getWindow().setGravity(Gravity.CENTER);
         d.show();
 
-        // 3秒后自动关闭
+        // 4秒后自动关闭
         tv.postDelayed(() -> {
             try {
                 if (d.isShowing()) d.dismiss();
             } catch (Exception ignored) {}
-        }, 3000);
+        }, 4000);
     }
-
-    private long lastHintTime = 0;
 
     /** U 盘插入时弹出提示 */
     private void showUsbMountedToast() {
@@ -735,13 +727,18 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 方案 C：区分版本处理存储权限
-     * - Android 14+：引导授权 MANAGE_EXTERNAL_STORAGE
+     * - Android 14+：引导授权 MANAGE_EXTERNAL_STORAGE（仅首次启动时提示）
      * - Android 10-13：MediaStore 无需额外权限
      * - Android 9-：已申请传统权限
      */
     private void checkStoragePermission() {
         if (Build.VERSION.SDK_INT >= 34) { // Android 14+
-            if (!android.os.Environment.isExternalStorageManager()) {
+            // 检查是否是首次启动
+            SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
+            boolean isFirstLaunch = prefs.getBoolean(KEY_FIRST_LAUNCH, true);
+
+            if (isFirstLaunch && !android.os.Environment.isExternalStorageManager()) {
+                prefs.edit().putBoolean(KEY_FIRST_LAUNCH, false).apply();
                 new AlertDialog.Builder(this)
                     .setTitle("需要文件访问权限")
                     .setMessage("为了能够管理外部存储文件（如 U 盘、下载目录），需要授予「所有文件访问」权限。\n\n请在设置页面中开启此权限。")
