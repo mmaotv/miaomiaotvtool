@@ -18,6 +18,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.content.FileProvider;
 
 import java.io.File;
@@ -68,6 +70,10 @@ public class FileManagerActivity extends AppCompatActivity {
     private File clipboardFile = null;
     /** 剪贴板模式：true=复制，false=移动 */
     private boolean clipboardCopy = true;
+    /** 标记：是否显示过权限提示 */
+    private static boolean hasShownPermissionTip = false;
+    /** 权限模式：true=全权限，false=受限模式 */
+    private boolean isFullPermissionMode = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,18 +83,127 @@ public class FileManagerActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         initViews();
-        // 优先使用外部存储根目录（需要 MANAGE_EXTERNAL_STORAGE 或传统存储权限）
-        // Android 14+ 未授权时会自动降级到应用私有目录
-        File root = Environment.getExternalStorageDirectory();
-        if (Build.VERSION.SDK_INT >= 34 && !android.os.Environment.isExternalStorageManager()) {
-            // Android 14+ 未授权所有文件访问权限，使用应用私有目录
-            root = getExternalFilesDir(null);
-            if (root == null) {
-                root = getFilesDir();
-            }
-            Toast.makeText(this, "未授权外部存储权限，使用应用私有目录", Toast.LENGTH_LONG).show();
+        checkAndRequestPermissions();
+    }
+
+    /** 分级权限检测与引导 */
+    private void checkAndRequestPermissions() {
+        File root;
+        boolean hasFullAccess;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            hasFullAccess = Environment.isExternalStorageManager();
+        } else {
+            hasFullAccess = true; // Android 11以下默认有权限
         }
-        navigateTo(root);
+
+        if (hasFullAccess) {
+            // 已授权，直接使用外部存储
+            root = Environment.getExternalStorageDirectory();
+            navigateTo(root);
+        } else {
+            // 未授权全文件访问权限，显示友好引导
+            isFullPermissionMode = false;
+            if (!hasShownPermissionTip) {
+                hasShownPermissionTip = true;
+                showPermissionGuideDialog();
+            } else {
+                // 直接降级到受限模式
+                navigateToLimitedMode();
+            }
+        }
+    }
+
+    /** 显示权限引导对话框 */
+    private void showPermissionGuideDialog() {
+        String brand = Build.MANUFACTURER.toLowerCase();
+        String deviceTip = "";
+        if (brand.contains("xiaomi") || brand.contains("redmi")) {
+            deviceTip = "\n\n小米/红米手机：设置 > 应用设置 > 应用管理 > 喵喵嗷 > 权限管理 > 允许访问管理所有文件";
+        } else if (brand.contains("huawei") || brand.contains("honor")) {
+            deviceTip = "\n\n华为/荣耀手机：设置 > 应用 > 应用管理 > 喵喵嗷 > 权限 > 访问管理 > 允许访问管理所有文件";
+        } else if (brand.contains("oppo")) {
+            deviceTip = "\n\nOPPO手机：设置 > 应用管理 > 找到本应用 > 权限 > 允许访问管理所有文件";
+        } else if (brand.contains("vivo")) {
+            deviceTip = "\n\nvivo手机：设置 > 应用与权限 > 应用管理 > 喵喵嗷 > 权限 > 允许访问管理所有文件";
+        } else if (brand.contains("samsung")) {
+            deviceTip = "\n\n三星手机：设置 > 应用程序 > 喵喵嗷 > 权限 > 允许访问所有文件";
+        }
+
+        String message = "\uD83D\uDCB0 权限说明\n\n" +
+                "为了访问手机上的所有文件（下载、视频、图片等），需要开启「访问所有文件」权限。\n\n" +
+                "\uD83C\uDF40 如选择「受限模式」，只能访问：\n" +
+                "• Downloads 下载目录\n" +
+                "• 应用私有存储\n\n" +
+                "功能会受限，但基本可用。\n" + deviceTip;
+
+        new AlertDialog.Builder(this)
+                .setTitle("\uD83D\uDD12 权限提示")
+                .setMessage(message)
+                .setPositiveButton("\uD83D\uDD12 去开启权限", (d, w) -> {
+                    openAppSettings();
+                })
+                .setNegativeButton("\uD83D\uDE41 受限模式（继续）", (d, w) -> {
+                    navigateToLimitedMode();
+                })
+                .setCancelable(false)
+                .show();
+    }
+
+    /** 打开应用设置页面 */
+    private void openAppSettings() {
+        try {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+            intent.setData(Uri.parse("package:" + getPackageName()));
+            startActivity(intent);
+        } catch (Exception e) {
+            // 部分设备可能不支持此Intent，回退到通用设置
+            try {
+                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                intent.setData(Uri.parse("package:" + getPackageName()));
+                startActivity(intent);
+            } catch (Exception e2) {
+                Toast.makeText(this, "\u65E0\u6CD5\u6253\u5F00\u8BBE\u7F6E\u9875\u9762\uFF0C\u8BF7\u624B\u52A8\u627E\u5230\u5E94\u7528\u8BBE\u7F6E", Toast.LENGTH_LONG).show();
+            }
+        }
+        // 用户去设置后，返回时重新检测权限
+        navigateToLimitedMode();
+    }
+
+    /** 降级到受限模式 */
+    private void navigateToLimitedMode() {
+        // 优先使用 Downloads 目录（大部分应用都有访问权限）
+        File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if (downloadsDir.exists() && downloadsDir.canRead()) {
+            currentDir = downloadsDir;
+            tvCurrentPath.setText(downloadsDir.getAbsolutePath());
+            Toast.makeText(this, "\uD83D\uDD25 受限模式：只能访问下载目录\n如需全部功能，请开启全部文件访问权限", Toast.LENGTH_LONG).show();
+        } else {
+            // 回退到应用私有目录
+            File privateDir = getExternalFilesDir(null);
+            if (privateDir == null) privateDir = getFilesDir();
+            currentDir = privateDir;
+            tvCurrentPath.setText(privateDir.getAbsolutePath());
+            Toast.makeText(this, "\uD83D\uDD25 受限模式：使用应用私有存储\n请开启全部文件访问权限以访问所有文件", Toast.LENGTH_LONG).show();
+        }
+        refresh();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // 从设置页面返回时重新检测权限
+        if (!isFullPermissionMode) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (Environment.isExternalStorageManager()) {
+                    // 权限已开启，切换到全权限模式
+                    isFullPermissionMode = true;
+                    File root = Environment.getExternalStorageDirectory();
+                    Toast.makeText(this, "\u2705 权限已开启，正在访问全部文件...", Toast.LENGTH_SHORT).show();
+                    navigateTo(root);
+                }
+            }
+        }
     }
 
     private void initViews() {
