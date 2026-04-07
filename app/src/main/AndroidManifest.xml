@@ -91,6 +91,13 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
+        <!-- 投屏界面 -->
+        <activity
+            android:name=".CastActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
         <!-- 下载前台服务 -->
         <service
             android:name=".DownloadService"

@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnHome;
     private LinearLayout btnDownloads;
     private LinearLayout btnBookmark;
+    private LinearLayout btnCast;
     private EditText etUrl;
     private ProgressBar progressBar;
     private WebView webView;
@@ -183,6 +184,7 @@ public class MainActivity extends AppCompatActivity {
         btnHome      = findViewById(R.id.btnHome);
         btnDownloads = findViewById(R.id.btnDownloads);
         btnBookmark  = findViewById(R.id.btnBookmark);
+        btnCast      = findViewById(R.id.btnCast);
         etUrl        = findViewById(R.id.etUrl);
         progressBar  = findViewById(R.id.progressBar);
         webView      = findViewById(R.id.webView);
@@ -218,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnHome,      1.15f);
         attachFocusScale(btnDownloads, 1.15f);
         attachFocusScale(btnBookmark,   1.15f);
+        attachFocusScale(btnCast,       1.15f);
 
         // 首页按钮点击事件
         btnLive.setOnClickListener(v -> openUrl(LIVE_URL));
@@ -249,6 +252,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, DownloadsActivity.class))
         );
         btnBookmark.setOnClickListener(v -> onBookmarkClick());
+        btnCast.setOnClickListener(v -> openCastActivity());
     }
 
     private void showQrInput() {
@@ -293,6 +297,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /** 添加书签对话框 */
+    /** 打开投屏界面 */
+    private void openCastActivity() {
+        String currentUrl = webView.getUrl();
+        Intent intent = new Intent(this, CastActivity.class);
+        // 如果当前页面是视频页面，传递URL
+        if (currentUrl != null && !currentUrl.isEmpty()) {
+            intent.putExtra("video_url", currentUrl);
+        }
+        startActivity(intent);
+    }
+
     private void showAddBookmarkDialog(String title, String url) {
         android.app.Dialog dialog = new android.app.Dialog(this);
         dialog.setContentView(R.layout.dialog_add_bookmark);
