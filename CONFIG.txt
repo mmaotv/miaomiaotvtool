@@ -5,8 +5,8 @@
 
 [应用信息]
 APP_NAME=喵喵嗷影视
-VERSION_NAME=1.2
-VERSION_CODE=3
+VERSION_NAME=1.3
+VERSION_CODE=4
 
 # 首页大标题（默认与 APP_NAME 相同，可单独设置）
 # 修改此项只改首页显示的大字，不影响应用名称
@@ -38,6 +38,13 @@ FILE_NAME=文件管理
 [U盘按钮]
 # U盘管理器，保持默认即可
 USB_NAME=U盘
+
+[关于按钮]
+# 关于弹窗显示的开发者信息
+ABOUT_TITLE=关于
+ABOUT_MESSAGE=一款简洁好用的电视直播点播应用
+ABOUT_CONTACT=mmaotv@outlook.com
+ABOUT_GITHUB=github.com/mmaotv/miaomiaotvtool
 
 [浏览器UA伪装]
 # 可选UA：chrome / edge / safari / mobile / desktop / 默认

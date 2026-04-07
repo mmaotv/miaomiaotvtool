@@ -86,15 +86,69 @@ public class DialogHelper {
     }
 
     /**
-     * 显示关于弹窗
+     * 显示关于弹窗（使用本软件WebView打开GitHub）
+     * @param activity 上下文
+     * @param onOpenGithub 点击打开GitHub的回调（会在本软件WebView中打开）
      */
-    public static void showAbout(Activity activity) {
-        String message = "📺 喵喵嗷影视\n\n" +
-            "一款简洁好用的电视直播点播应用\n\n" +
-            "👨‍💻 开发者：MiaoMiao TV\n" +
-            "📧 邮箱：mmaotv@outlook.com\n" +
-            "🔗 GitHub：\ngithub.com/mmaotv/miaomiaotvtool";
+    public static void showAbout(Activity activity, Runnable onOpenGithub) {
+        String appName = activity.getString(R.string.app_name);
+        String aboutTitle = activity.getString(R.string.about_title);
+        String aboutMessage = activity.getString(R.string.about_message);
+        String aboutContact = activity.getString(R.string.about_contact);
+        String aboutGithub = activity.getString(R.string.about_github);
 
-        show(activity, "ℹ️", "关于", message, "知道了", null);
+        StringBuilder message = new StringBuilder();
+        message.append("📺 ").append(appName).append("\n\n");
+        if (aboutMessage != null && !aboutMessage.isEmpty()) {
+            message.append(aboutMessage).append("\n\n");
+        }
+        message.append("📧 邮箱：").append(aboutContact != null ? aboutContact : "").append("\n");
+        message.append("🔗 GitHub：\n").append(aboutGithub != null ? aboutGithub : "");
+
+        View dialogView = LayoutInflater.from(activity).inflate(R.layout.dialog_custom, null);
+
+        TextView tvIcon = dialogView.findViewById(R.id.dialogIcon);
+        TextView tvTitle = dialogView.findViewById(R.id.dialogTitle);
+        TextView tvMessage = dialogView.findViewById(R.id.dialogMessage);
+        LinearLayout btnNegative = dialogView.findViewById(R.id.btnNegative);
+        TextView tvNegative = dialogView.findViewById(R.id.tvNegative);
+        LinearLayout btnPositive = dialogView.findViewById(R.id.btnPositive);
+        TextView tvPositive = dialogView.findViewById(R.id.tvPositive);
+
+        tvIcon.setText("ℹ️");
+        tvTitle.setText(aboutTitle != null ? aboutTitle : "关于");
+        tvMessage.setText(message.toString());
+        tvPositive.setText("打开GitHub");
+        tvNegative.setText("知道了");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity, R.style.DialogRoundedStyle);
+        builder.setView(dialogView);
+        builder.setCancelable(true);
+
+        AlertDialog dialog = builder.create();
+
+        // 设置对话框背景透明+圆角
+        if (dialog.getWindow() != null) {
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.getWindow().setGravity(Gravity.CENTER);
+            dialog.getWindow().setLayout(
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.WRAP_CONTENT
+            );
+        }
+
+        // 打开GitHub按钮 - 调用回调在本软件打开
+        btnPositive.setOnClickListener(v -> {
+            dialog.dismiss();
+            if (onOpenGithub != null) {
+                onOpenGithub.run();
+            }
+        });
+
+        // 知道按钮
+        btnNegative.setVisibility(View.VISIBLE);
+        btnNegative.setOnClickListener(v -> dialog.dismiss());
+
+        dialog.show();
     }
 }

@@ -32,17 +32,22 @@
 - 按钮焦点效果：scaleX/Y 放大动画（150ms），遥控器选中时放大明显
 
 ## 配置文件
-- 快速配置：CONFIG.txt（APP_NAME / VERSION_NAME / VERSION_CODE / LIVE_URL / VOD_URL / TOOLS_URL / INFO_TEXT / HOME_TITLE / SUBTITLE_TEXT / ICON_PATH）
+- 快速配置：CONFIG.txt（APP_NAME / VERSION_NAME / VERSION_CODE / LIVE_URL / VOD_URL / TOOLS_URL / INFO_TEXT / HOME_TITLE / SUBTITLE_TEXT / ICON_PATH / ABOUT_TITLE / ABOUT_MESSAGE / ABOUT_CONTACT / ABOUT_GITHUB）
 - 代码配置：app/src/main/res/values/strings.xml
 - strings.xml 包含 app_name / home_title / subtitle_text / live_url / vod_url / tools_url / info_text 等 key
 - build.gradle 版本号由 build_helper.py 动态写入（versionCode / versionName）
-- 主页布局：7个按钮（2行4列，第一行4个，第二行3个），已移除投屏功能
+- 主页布局：8个按钮（2行4列，第一行4个，第二行4个）
   - 第一行：直播、点播、工具、历史记录
-  - 第二行：扫码输入、文件管理、U盘
+  - 第二行：扫码输入、文件管理、U盘、关于
   - 按钮统一尺寸 145dp×100dp，圆角16dp
-- 授权弹窗：Android 14+ 仅首次启动时提示文件访问权限
-- 鼠标模式提示：白色主题，小巧简洁，仅首次进入网页时显示一次
-- 投屏功能已移除（因无法正常使用）
+- 统一弹窗样式：DialogHelper工具类 + 圆角布局（适配Android 6-16）
+  - dialog_custom.xml：统一弹窗布局
+  - dialog_rounded_bg.xml：圆角白色背景
+  - btn_dialog_confirm_bg.xml：确认按钮（青蓝渐变）
+  - btn_dialog_cancel_bg.xml：取消按钮（灰白）
+- 授权弹窗：Android 14+ 仅首次启动时提示
+- 鼠标模式提示：圆角弹窗，只在首次进入网页时显示一次
+- 关于按钮：显示开发者联系方式和GitHub仓库地址
 
 ## 依赖
 - build.gradle 新增：com.google.zxing:core:3.5.2（用于二维码生成）
@@ -57,3 +62,8 @@
 - 每次完成代码修改后自动 commit + push
 - Git 代理配置：`git config --global http.proxy http://127.0.0.1:7897`（Clash，需开启 VPN）
 - .gitignore：排除 .apk / build/ / .gradle/ / .workbuddy/
+
+## 关于弹窗功能（2026-04-07）
+- 点击关于按钮后，弹窗显示两个按钮："打开GitHub" + "知道了"
+- 点击"打开GitHub"会调用系统浏览器打开 CONFIG.txt 中配置的 ABOUT_GITHUB 地址
+- 如果地址没有 https:// 前缀，会自动添加

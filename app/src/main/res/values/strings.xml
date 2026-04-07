@@ -34,4 +34,10 @@
     <string name="download_confirm_msg">是否下载此文件？</string>
     <string name="download_yes">下载</string>
     <string name="download_no">取消</string>
+
+    <!-- 关于弹窗信息 -->
+    <string name="about_title">关于</string>
+    <string name="about_message">一款简洁好用的电视直播点播应用</string>
+    <string name="about_contact">mmaotv@outlook.com</string>
+    <string name="about_github">github.com/mmaotv/miaomiaotvtool</string>
 </resources>

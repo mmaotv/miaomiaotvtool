@@ -22,6 +22,11 @@ TOOLS_URL     = "https://mengma.lanzoum.com/b0mcflmwf"      # 工具按钮链接
 QR_NAME       = "扫码输入"                                    # 扫码按钮名称（固定功能）
 FILE_NAME     = "文件管理"                                    # 文件按钮名称（固定功能）
 USB_NAME      = "U盘"                                        # U盘按钮名称（固定功能）
+ABOUT_NAME    = "关于"                                         # 关于按钮名称（固定功能）
+ABOUT_TITLE   = "关于"                                         # 关于弹窗标题
+ABOUT_MESSAGE = "一款简洁好用的电视直播点播应用"                 # 关于弹窗内容
+ABOUT_CONTACT = "mmaotv@outlook.com"                          # 联系方式
+ABOUT_GITHUB  = "github.com/mmaotv/miaomiaotvtool"            # GitHub地址
 USER_AGENT    = "chrome"                                     # UA类型：chrome/edge/safari/mobile/desktop/custom
 CUSTOM_UA     = ""                                          # 自定义UA（当USER_AGENT=custom时）
 INFO_TEXT     = "密码：miao"                                  # 首页提示文字
@@ -66,7 +71,8 @@ def get_ua_string(ua_type, custom_ua=""):
 
 def update_strings(app_name, live_name, live_url, vod_name, vod_url, tools_name, tools_url,
                    qr_name, file_name, usb_name, info_text, subtitle_text="",
-                   home_title="", user_agent="chrome", custom_ua=""):
+                   home_title="", user_agent="chrome", custom_ua="",
+                   about_title="关于", about_message="", about_contact="", about_github=""):
     """更新 strings.xml 配置"""
     if not subtitle_text:
         subtitle_text = "高清影视 · 随时随地"
@@ -77,33 +83,34 @@ def update_strings(app_name, live_name, live_url, vod_name, vod_url, tools_name,
     # 获取UA字符串
     ua_string = get_ua_string(user_agent, custom_ua)
 
-    content = f'''<?xml version="1.0" encoding="utf-8"?>
+    # 拼接XML内容（使用占位符避免f-string特殊字符问题）
+    content = '''<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">{app_name}</string>
+    <string name="app_name">APP_NAME_P</string>
 
     <!-- ===== 快速配置区（修改这里后运行 build.bat 即可打包） ===== -->
-    <string name="live_url">{live_url}</string>
-    <string name="vod_url">{vod_url}</string>
-    <string name="tools_url">{tools_url}</string>
-    <string name="info_text">{info_text}</string>
+    <string name="live_url">LIVE_URL_P</string>
+    <string name="vod_url">VOD_URL_P</string>
+    <string name="tools_url">TOOLS_URL_P</string>
+    <string name="info_text">INFO_TEXT_P</string>
     <!-- ===== 以上四项是主要配置 ===== -->
 
     <!-- 首页大标题（默认与 app_name 相同） -->
-    <string name="home_title">{home_title}</string>
+    <string name="home_title">HOME_TITLE_P</string>
     <!-- 首页副标题（APP名称下方小字） -->
-    <string name="subtitle_text">{subtitle_text}</string>
+    <string name="subtitle_text">SUBTITLE_TEXT_P</string>
 
     <!-- 首页按钮名称 -->
-    <string name="btn_live">{live_name}</string>
-    <string name="btn_vod">{vod_name}</string>
-    <string name="btn_tools">{tools_name}</string>
-    <string name="btn_qr">{qr_name}</string>
-    <string name="btn_file">{file_name}</string>
-    <string name="btn_usb">{usb_name}</string>
+    <string name="btn_live">LIVE_NAME_P</string>
+    <string name="btn_vod">VOD_NAME_P</string>
+    <string name="btn_tools">TOOLS_NAME_P</string>
+    <string name="btn_qr">QR_NAME_P</string>
+    <string name="btn_file">FILE_NAME_P</string>
+    <string name="btn_usb">USB_NAME_P</string>
 
     <!-- 浏览器UA伪装 -->
-    <string name="user_agent">{ua_string}</string>
-    <string name="user_agent_type">{user_agent}</string>
+    <string name="user_agent">USER_AGENT_P</string>
+    <string name="user_agent_type">USER_AGENT_TYPE_P</string>
 
     <string name="download_notification_channel">下载</string>
     <string name="downloading">正在下载...</string>
@@ -113,13 +120,41 @@ def update_strings(app_name, live_name, live_url, vod_name, vod_url, tools_name,
     <string name="download_confirm_msg">是否下载此文件？</string>
     <string name="download_yes">下载</string>
     <string name="download_no">取消</string>
+
+    <!-- 关于弹窗信息 -->
+    <string name="about_title">ABOUT_TITLE_P</string>
+    <string name="about_message">ABOUT_MESSAGE_P</string>
+    <string name="about_contact">ABOUT_CONTACT_P</string>
+    <string name="about_github">ABOUT_GITHUB_P</string>
 </resources>
 '''
+    # 替换占位符
+    content = content.replace("APP_NAME_P", app_name)
+    content = content.replace("LIVE_URL_P", live_url)
+    content = content.replace("VOD_URL_P", vod_url)
+    content = content.replace("TOOLS_URL_P", tools_url)
+    content = content.replace("INFO_TEXT_P", info_text)
+    content = content.replace("HOME_TITLE_P", home_title)
+    content = content.replace("SUBTITLE_TEXT_P", subtitle_text)
+    content = content.replace("LIVE_NAME_P", live_name)
+    content = content.replace("VOD_NAME_P", vod_name)
+    content = content.replace("TOOLS_NAME_P", tools_name)
+    content = content.replace("QR_NAME_P", qr_name)
+    content = content.replace("FILE_NAME_P", file_name)
+    content = content.replace("USB_NAME_P", usb_name)
+    content = content.replace("USER_AGENT_P", ua_string)
+    content = content.replace("USER_AGENT_TYPE_P", user_agent)
+    content = content.replace("ABOUT_TITLE_P", about_title)
+    content = content.replace("ABOUT_MESSAGE_P", about_message)
+    content = content.replace("ABOUT_CONTACT_P", about_contact)
+    content = content.replace("ABOUT_GITHUB_P", about_github)
+
     with open(STRINGS_PATH, 'w', encoding='utf-8') as f:
         f.write(content)
     print(f"  [OK] strings.xml 已更新 (app_name={app_name})")
     print(f"       按钮名称: {live_name} | {vod_name} | {tools_name} | {qr_name} | {file_name} | {usb_name}")
     print(f"       UA类型: {user_agent}")
+    print(f"       关于信息: {about_contact} / " + about_github)
 
 
 def update_version(version_name, version_code):
@@ -252,6 +287,10 @@ if __name__ == "__main__":
     icon_path    = ICON_PATH
     subtitle_text = SUBTITLE_TEXT
     home_title   = HOME_TITLE
+    about_title   = ABOUT_TITLE
+    about_message = ABOUT_MESSAGE
+    about_contact = ABOUT_CONTACT
+    about_github  = ABOUT_GITHUB
 
     if os.path.exists(config_path):
         with open(config_path, encoding='utf-8') as f:
@@ -289,6 +328,14 @@ if __name__ == "__main__":
                     file_name = val
                 elif key == "USB_NAME":
                     usb_name = val
+                elif key == "ABOUT_TITLE":
+                    about_title = val
+                elif key == "ABOUT_MESSAGE":
+                    about_message = val
+                elif key == "ABOUT_CONTACT":
+                    about_contact = val
+                elif key == "ABOUT_GITHUB":
+                    about_github = val
                 elif key == "USER_AGENT":
                     user_agent = val.lower()
                 elif key == "CUSTOM_UA":
@@ -314,14 +361,15 @@ if __name__ == "__main__":
     print(f"  按钮1    : {live_name} -> {live_url}")
     print(f"  按钮2    : {vod_name} -> {vod_url}")
     print(f"  按钮3    : {tools_name} -> {tools_url}")
-    print(f"  按钮4-6  : {qr_name} / {file_name} / {usb_name} (固定功能)")
+    print(f"  按钮4-7  : {qr_name} / {file_name} / {usb_name} / {about_title} (固定功能)")
     print(f"  UA伪装   : {user_agent}")
     print(f"  提示文字 : {info_text}")
     print(f"  图标路径 : {icon_path or '(默认)'}")
+    print(f"  关于信息 : {about_contact} / " + about_github)
 
     update_strings(app_name, live_name, live_url, vod_name, vod_url, tools_name, tools_url,
                    qr_name, file_name, usb_name, info_text, subtitle_text, home_title,
-                   user_agent, custom_ua)
+                   user_agent, custom_ua, about_title, about_message, about_contact, about_github)
     update_version(version_name, version_code)
 
     print(f"\n[2/4] 处理应用图标...")

@@ -258,7 +258,18 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         btnUsbMgr.setOnClickListener(v -> startActivity(new Intent(this, UsbManagerActivity.class)));
-        btnAbout.setOnClickListener(v -> DialogHelper.showAbout(this));
+        btnAbout.setOnClickListener(v -> {
+            String aboutGithub = getString(R.string.about_github);
+            final String githubUrl;
+            if (aboutGithub != null && !aboutGithub.isEmpty()) {
+                githubUrl = aboutGithub.startsWith("http://") || aboutGithub.startsWith("https://")
+                    ? aboutGithub : "https://" + aboutGithub;
+                DialogHelper.showAbout(this, () -> openUrl(githubUrl));
+            } else {
+                githubUrl = null;
+                DialogHelper.showAbout(this, null);
+            }
+        });
 
         // 工具栏按钮
         btnBack.setOnClickListener(v -> {
