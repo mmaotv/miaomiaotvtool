@@ -4,7 +4,7 @@ Android TV WebView 应用，支持遥控器操作，专为大屏设备优化。
 
 ## 功能特性
 
-- **4 大功能入口**：直播 / 点播 / 工具 / 扫码输入
+- **8 大功能入口**：直播 / 点播 / 工具 / 历史记录 / 扫码输入 / 文件管理 / U盘 / 关于
 - **遥控器全支持**：D-pad 方向键导航 + 确认/返回键操作
 - **扫码推送**：手机扫码后可推送网址或上传文件到设备，无需遥控器打字
 - **局域网直接访问**：二维码下方显示 IP 地址和端口，浏览器直接输入也可推送网址和上传文件
@@ -77,6 +77,8 @@ TVapp/
 │   │   ├── DownloadsActivity.java    # 下载管理
 │   │   ├── FileManagerActivity.java  # 文件管理器
 │   │   ├── UsbManagerActivity.java   # U 盘管理
+│   │   ├── HistoryActivity.java      # 历史记录
+│   │   ├── AboutActivity.java        # 关于页面
 │   │   └── DownloadService.java      # 后台下载服务
 │   └── res/                          # 布局、图片等资源
 ├── build_helper.py                   # 构建脚本（读取 CONFIG.txt）
