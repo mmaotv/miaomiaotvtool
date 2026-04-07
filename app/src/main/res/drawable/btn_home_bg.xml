@@ -1,28 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 首页按钮（工具栏）：蓝灰色 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 焦点选中：白色边框 + 更亮 -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <solid android:color="#7B95EE"/>
+            <gradient
+                android:startColor="#4ECDC4"
+                android:endColor="#44A08D"
+                android:angle="45"/>
             <corners android:radius="8dp"/>
-            <stroke android:width="3dp" android:color="#FFFFFFFF"/>
+            <stroke android:width="3dp" android:color="#2C3E50"/>
         </shape>
     </item>
 
     <!-- 按下状态 -->
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
-            <solid android:color="#3B55AA"/>
+            <gradient
+                android:startColor="#3DBDB4"
+                android:endColor="#359078"
+                android:angle="45"/>
             <corners android:radius="8dp"/>
         </shape>
     </item>
 
-    <!-- 默认状态 -->
+    <!-- 默认状态：薄荷绿渐变 -->
     <item>
         <shape android:shape="rectangle">
-            <solid android:color="#3B4A6B"/>
+            <gradient
+                android:startColor="#4ECDC4"
+                android:endColor="#44A08D"
+                android:angle="45"/>
             <corners android:radius="8dp"/>
         </shape>
     </item>

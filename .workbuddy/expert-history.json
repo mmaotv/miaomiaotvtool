@@ -1,0 +1,17 @@
+{
+  "version": 2,
+  "sessions": {
+    "1104b84985164c5d8349b52e935064e9": [
+      {
+        "expertId": "UiDesigner",
+        "name": "Sam",
+        "profession": "UI设计师",
+        "avatarUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/avatars/01-Design/UiDesigner/UiDesigner.png",
+        "promptUrl": "https://acc-1258344699.cos.accelerate.myqcloud.com/workbuddy/experts/experts/01-Design/UiDesigner/UiDesigner_zh.md",
+        "usedAt": 1775096096069,
+        "industryId": "01-Design"
+      }
+    ]
+  },
+  "lastUpdated": 1775096236144
+}

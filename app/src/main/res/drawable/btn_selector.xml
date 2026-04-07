@@ -3,21 +3,22 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:state_focused="true">
         <shape>
-            <solid android:color="#44FFFFFF" />
+            <solid android:color="#4ECDC4" />
             <corners android:radius="6dp" />
-            <stroke android:width="2dp" android:color="#FF6B6B" />
+            <stroke android:width="2dp" android:color="#44A08D" />
         </shape>
     </item>
     <item android:state_pressed="true">
         <shape>
-            <solid android:color="#66FF6B6B" />
+            <solid android:color="#3DBDB4" />
             <corners android:radius="6dp" />
         </shape>
     </item>
     <item>
         <shape>
-            <solid android:color="#00000000" />
+            <solid android:color="#F8F9FA" />
             <corners android:radius="6dp" />
+            <stroke android:width="1dp" android:color="#ECF0F1" />
         </shape>
     </item>
 </selector>

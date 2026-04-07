@@ -77,8 +77,17 @@ public class FileManagerActivity extends AppCompatActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         initViews();
-        // 从内部存储根目录开始
+        // 优先使用外部存储根目录（需要 MANAGE_EXTERNAL_STORAGE 或传统存储权限）
+        // Android 14+ 未授权时会自动降级到应用私有目录
         File root = Environment.getExternalStorageDirectory();
+        if (Build.VERSION.SDK_INT >= 34 && !android.os.Environment.isExternalStorageManager()) {
+            // Android 14+ 未授权所有文件访问权限，使用应用私有目录
+            root = getExternalFilesDir(null);
+            if (root == null) {
+                root = getFilesDir();
+            }
+            Toast.makeText(this, "未授权外部存储权限，使用应用私有目录", Toast.LENGTH_LONG).show();
+        }
         navigateTo(root);
     }
 
@@ -214,7 +223,7 @@ public class FileManagerActivity extends AppCompatActivity {
         // 空目录提示
         if (sortedFiles.length == 0) {
             TextView emptyHint = new TextView(this);
-            String hint = currentDir.getParentFile() != null ? "\uD83D\uDCC1 \u5F53\u524D\u76EE\u5F55\u4E3A\u7A7A" : "\uD83D\uDCC1 \u5185\u90E8\u5B58\u50A8\u4E3A\u7A7A";
+            String hint = "\uD83D\uDCC1 \u5F53\u524D\u76EE\u5F55\u4E3A\u7A7A";
             emptyHint.setText(hint);
             emptyHint.setTextSize(16);
             emptyHint.setTextColor(0xFF556688);

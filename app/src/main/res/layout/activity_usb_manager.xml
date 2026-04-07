@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0A0A14">
+    android:background="#FFFFFF">
 
     <!-- 顶部工具栏 -->
     <LinearLayout
@@ -11,9 +11,9 @@
         android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="#14142A"
+        android:background="#FFFFFF"
         android:paddingHorizontal="12dp"
-        android:elevation="8dp">
+        android:elevation="4dp">
 
         <!-- 返回首页 -->
         <LinearLayout
@@ -22,14 +22,14 @@
             android:layout_height="38dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@drawable/btn_tool_bg_inset"
+            android:background="@drawable/btn_home_bg_inset"
             android:paddingHorizontal="14dp"
             android:focusable="true"
             android:clickable="true">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#127968;"
+                android:text="🏠"
                 android:textSize="15sp"
                 android:textColor="#FFFFFF"/>
             <TextView
@@ -55,15 +55,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#128281;"
+                android:text="📁"
                 android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  返回上级"
                 android:textSize="12sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
         </LinearLayout>
 
         <!-- U盘状态图标 -->
@@ -71,7 +71,7 @@
             android:id="@+id/tvUsbIcon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#128187;"
+            android:text="💻"
             android:textSize="20sp"
             android:layout_marginStart="14dp"/>
 
@@ -84,7 +84,7 @@
             android:layout_marginHorizontal="10dp"
             android:text="/"
             android:textSize="12sp"
-            android:textColor="#2ECC71"
+            android:textColor="#4ECDC4"
             android:singleLine="true"
             android:ellipsize="middle"
             android:gravity="center_vertical"/>
@@ -103,9 +103,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#8634;"
+                android:text="↻"
                 android:textSize="16sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -120,22 +120,22 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#128187;"
+            android:text="💻"
             android:textSize="72sp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="未检测到U盘"
             android:textSize="24sp"
-            android:textColor="#8899BB"
+            android:textColor="#7F8C8D"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="请插入U盘后，点击首页的&#x201C;U盘&#x201D;按钮"
+            android:text="请插入U盘后，点击首页的「U盘」按钮"
             android:textSize="14sp"
-            android:textColor="#556688"
+            android:textColor="#95A5A6"
             android:layout_marginTop="10dp"/>
     </LinearLayout>
 

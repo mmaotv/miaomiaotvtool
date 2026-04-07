@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0A0A14">
+    android:background="#FFFFFF">
 
     <!-- 顶部工具栏 -->
     <LinearLayout
@@ -11,9 +11,9 @@
         android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:background="#14142A"
+        android:background="#FFFFFF"
         android:paddingHorizontal="12dp"
-        android:elevation="8dp">
+        android:elevation="4dp">
 
         <!-- 返回首页 -->
         <LinearLayout
@@ -22,14 +22,14 @@
             android:layout_height="38dp"
             android:orientation="horizontal"
             android:gravity="center"
-            android:background="@drawable/btn_tool_bg_inset"
+            android:background="@drawable/btn_home_bg_inset"
             android:paddingHorizontal="14dp"
             android:focusable="true"
             android:clickable="true">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#127968;"
+                android:text="🏠"
                 android:textSize="15sp"
                 android:textColor="#FFFFFF"/>
             <TextView
@@ -55,15 +55,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#128281;"
+                android:text="📁"
                 android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  返回上级"
                 android:textSize="12sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
         </LinearLayout>
 
         <!-- 当前路径 -->
@@ -75,7 +75,7 @@
             android:layout_marginHorizontal="12dp"
             android:text="/"
             android:textSize="12sp"
-            android:textColor="#88AABBCC"
+            android:textColor="#7F8C8D"
             android:singleLine="true"
             android:ellipsize="middle"
             android:gravity="center_vertical"/>
@@ -94,15 +94,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#8634;"
+                android:text="↻"
                 android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  刷新"
                 android:textSize="12sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -112,14 +112,14 @@
         android:layout_height="32dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="#1A1A30"
+        android:background="#ECF0F1"
         android:paddingHorizontal="16dp">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="遥控器：方向键选择  |  OK键打开/进入  |  菜单键弹出操作菜单  |  返回上级"
             android:textSize="11sp"
-            android:textColor="#556688"/>
+            android:textColor="#7F8C8D"/>
     </LinearLayout>
 
     <!-- 文件列表 -->
@@ -143,9 +143,9 @@
         android:layout_height="52dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="#14142A"
+        android:background="#FFFFFF"
         android:paddingHorizontal="12dp"
-        android:elevation="8dp">
+        android:elevation="4dp">
 
         <!-- 新建文件夹 -->
         <LinearLayout
@@ -161,7 +161,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#128193;+"
+                android:text="📁+"
                 android:textSize="15sp"
                 android:textColor="#FFFFFF"/>
             <TextView
@@ -186,15 +186,15 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#9776;"
+                android:text="☰"
                 android:textSize="14sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="  菜单键：重命名/删除/移动/复制"
                 android:textSize="12sp"
-                android:textColor="#88AABBCC"/>
+                android:textColor="#7F8C8D"/>
         </LinearLayout>
     </LinearLayout>
 

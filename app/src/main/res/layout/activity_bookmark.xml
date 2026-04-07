@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#0A0A14">
+    android:background="#FFFFFF">
 
     <!-- 顶部标题栏 -->
     <LinearLayout
@@ -12,15 +12,14 @@
         android:orientation="horizontal"
         android:gravity="center_vertical"
         android:paddingHorizontal="20dp"
-        android:background="#12121F"
-        android:elevation="6dp">
+        android:background="#FFFFFF"
+        android:elevation="4dp">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#9733;"
-            android:textSize="22sp"
-            android:textColor="#FFD700"/>
+            android:text="⭐"
+            android:textSize="22sp"/>
 
         <TextView
             android:layout_width="0dp"
@@ -28,7 +27,7 @@
             android:layout_weight="1"
             android:text="收藏夹"
             android:textSize="20sp"
-            android:textColor="#FFFFFF"
+            android:textColor="#2C3E50"
             android:textStyle="bold"
             android:letterSpacing="0.1"
             android:layout_marginStart="10dp"/>
@@ -40,7 +39,7 @@
             android:layout_height="wrap_content"
             android:text="0 个收藏"
             android:textSize="13sp"
-            android:textColor="#88AABBCC"
+            android:textColor="#7F8C8D"
             android:layout_marginEnd="12dp"/>
 
         <!-- 新增书签按钮 -->
@@ -57,7 +56,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#10010; 手动添加"
+                android:text="➕ 手动添加"
                 android:textSize="13sp"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"/>
@@ -76,25 +75,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="&#9734;"
+            android:text="⭐"
             android:textSize="64sp"
-            android:textColor="#334455"/>
+            android:textColor="#BDC3C7"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="暂无收藏"
             android:textSize="20sp"
-            android:textColor="#556677"
+            android:textColor="#7F8C8D"
             android:textStyle="bold"
             android:layout_marginTop="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="浏览网页时点击工具栏的&#9733;按钮即可收藏"
+            android:text="浏览网页时点击工具栏的⭐按钮即可收藏"
             android:textSize="14sp"
-            android:textColor="#445566"
+            android:textColor="#95A5A6"
             android:layout_marginTop="8dp"/>
     </LinearLayout>
 

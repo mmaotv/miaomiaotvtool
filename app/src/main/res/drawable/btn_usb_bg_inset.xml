@@ -4,13 +4,5 @@
     android:insetLeft="4dp"
     android:insetTop="4dp"
     android:insetRight="4dp"
-    android:insetBottom="4dp">
-    <shape android:shape="rectangle">
-        <gradient
-            android:startColor="#1A5E20"
-            android:endColor="#2ECC71"
-            android:angle="135"/>
-        <corners android:radius="16dp"/>
-        <stroke android:width="4dp" android:color="#2ECC71"/>
-    </shape>
-</inset>
+    android:insetBottom="4dp"
+    android:drawable="@drawable/btn_usb_bg"/>

@@ -2,7 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0A0A14">
+    android:background="#FFFFFF">
 
     <!-- ==================== 首页面板 ==================== -->
     <LinearLayout
@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#128049;"
+                android:text="🐱"
                 android:textSize="32sp"
                 android:layout_marginEnd="10dp"/>
 
@@ -36,13 +36,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/home_title"
                 android:textSize="32sp"
-                android:textColor="#FFFFFF"
+                android:textColor="#2C3E50"
                 android:textStyle="bold"
-                android:letterSpacing="0.05"
-                android:shadowColor="#FF6EC7"
-                android:shadowDx="0"
-                android:shadowDy="0"
-                android:shadowRadius="20"/>
+                android:letterSpacing="0.05"/>
         </LinearLayout>
 
         <!-- 副标题 -->
@@ -51,7 +47,7 @@
             android:layout_height="wrap_content"
             android:text="@string/subtitle_text"
             android:textSize="12sp"
-            android:textColor="#99AABBDD"
+            android:textColor="#7F8C8D"
             android:letterSpacing="0.12"
             android:layout_marginBottom="28dp"/>
 
@@ -91,14 +87,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#128225;"
+                        android:text="📡"
                         android:textSize="28sp"
                         android:layout_marginBottom="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#30452;  &#25773;"
+                        android:text="直  播"
                         android:textSize="18sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
@@ -122,14 +118,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#127916;"
+                        android:text="🎬"
                         android:textSize="28sp"
                         android:layout_marginBottom="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#28857;  &#25773;"
+                        android:text="点  播"
                         android:textSize="18sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
@@ -152,14 +148,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#128295;"
+                        android:text="🔧"
                         android:textSize="28sp"
                         android:layout_marginBottom="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#24037;  &#20855;"
+                        android:text="工  具"
                         android:textSize="18sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
@@ -193,16 +189,16 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#128247;"
+                        android:text="📷"
                         android:textSize="28sp"
                         android:layout_marginBottom="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#25195;&#30721;&#36755;&#20837;"
+                        android:text="扫码输入"
                         android:textSize="16sp"
-                        android:textColor="#FFFFFF"
+                        android:textColor="#2C3E50"
                         android:textStyle="bold"
                         android:letterSpacing="0.08"/>
                 </LinearLayout>
@@ -224,14 +220,14 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#128193;"
+                        android:text="📁"
                         android:textSize="28sp"
                         android:layout_marginBottom="6dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#25991;&#20214;&#31649;&#29702;"
+                        android:text="文件管理"
                         android:textSize="16sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"
@@ -254,7 +250,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="&#128187;"
+                        android:text="💻"
                         android:textSize="28sp"
                         android:layout_marginBottom="6dp"/>
 
@@ -277,7 +273,7 @@
             android:layout_height="wrap_content"
             android:text="@string/info_text"
             android:textSize="14sp"
-            android:textColor="#FFDD88"
+            android:textColor="#E65100"
             android:paddingHorizontal="24dp"
             android:paddingVertical="8dp"
             android:background="@drawable/info_text_bg"
@@ -293,7 +289,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:visibility="gone"
-        android:background="#0A0A14">
+        android:background="#F8F9FA">
 
         <!-- 顶部工具栏 -->
         <LinearLayout
@@ -305,7 +301,7 @@
             android:gravity="center_vertical"
             android:paddingHorizontal="10dp"
             android:paddingVertical="6dp"
-            android:elevation="12dp">
+            android:elevation="4dp">
 
             <!-- 后退 -->
             <LinearLayout
@@ -320,9 +316,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#9664;"
+                    android:text="◀"
                     android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#2C3E50"/>
             </LinearLayout>
 
             <!-- 前进 -->
@@ -339,9 +335,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#9654;"
+                    android:text="▶"
                     android:textSize="15sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#2C3E50"/>
             </LinearLayout>
 
             <!-- 刷新 -->
@@ -358,9 +354,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#8634;"
+                    android:text="↻"
                     android:textSize="18sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#2C3E50"/>
             </LinearLayout>
 
             <!-- 可编辑地址栏 -->
@@ -371,14 +367,14 @@
                 android:layout_weight="1"
                 android:layout_marginHorizontal="7dp"
                 android:background="@drawable/url_bar_bg"
-                android:textColor="#FFFFFF"
+                android:textColor="#2C3E50"
                 android:textSize="13sp"
                 android:paddingHorizontal="14dp"
                 android:singleLine="true"
                 android:imeOptions="actionGo"
                 android:inputType="textUri"
-                android:textColorHint="#88AABBCC"
-                android:hint="&#36755;&#20837;&#32593;&#22336;..."
+                android:textColorHint="#95A5A6"
+                android:hint="输入网址..."
                 android:selectAllOnFocus="true"/>
 
             <!-- GO按钮 -->
@@ -415,7 +411,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#127968; &#39318;&#39029;"
+                    android:text="🏠 首页"
                     android:textSize="11sp"
                     android:textColor="#FFFFFF"/>
             </LinearLayout>
@@ -434,9 +430,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#128229; &#19979;&#36733;"
+                    android:text="📥 下载"
                     android:textSize="11sp"
-                    android:textColor="#FFFFFF"/>
+                    android:textColor="#2C3E50"/>
             </LinearLayout>
 
             <!-- 收藏夹 -->
@@ -452,9 +448,9 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="&#9733;"
+                    android:text="⭐"
                     android:textSize="18sp"
-                    android:textColor="#FFD700"/>
+                    android:textColor="#FFB300"/>
             </LinearLayout>
 
         </LinearLayout>
@@ -465,7 +461,7 @@
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:progressTint="#7B61FF"
+            android:progressTint="#00D9FF"
             android:max="100"
             android:visibility="gone"/>
 

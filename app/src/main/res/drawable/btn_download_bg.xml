@@ -5,11 +5,11 @@
     <item android:state_focused="true">
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#FF4EC888"
-                android:endColor="#FF3EAA68"
+                android:startColor="#FFD93D"
+                android:endColor="#FF9F1C"
                 android:angle="45"/>
             <corners android:radius="8dp"/>
-            <stroke android:width="3dp" android:color="#FFFFFFFF"/>
+            <stroke android:width="3dp" android:color="#2C3E50"/>
         </shape>
     </item>
 
@@ -17,19 +17,19 @@
     <item android:state_pressed="true">
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#CC259659"
-                android:endColor="#CC1A7A4E"
+                android:startColor="#E6C235"
+                android:endColor="#E68F17"
                 android:angle="45"/>
             <corners android:radius="8dp"/>
         </shape>
     </item>
 
-    <!-- 默认状态 -->
+    <!-- 默认状态：阳光黄渐变 -->
     <item>
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#FF259659"
-                android:endColor="#FF1A7A4E"
+                android:startColor="#FFD93D"
+                android:endColor="#FF9F1C"
                 android:angle="45"/>
             <corners android:radius="8dp"/>
         </shape>

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- inset 包裹：给按钮描边留出空间，防止 stroke 被父布局裁剪 + 缩放溢出 -->
 <inset xmlns:android="http://schemas.android.com/apk/res/android"
     android:insetLeft="4dp"
     android:insetTop="4dp"
@@ -7,10 +6,10 @@
     android:insetBottom="4dp">
     <shape android:shape="rectangle">
         <gradient
-            android:startColor="#0D3B66"
-            android:endColor="#1B6B93"
+            android:startColor="#74B9FF"
+            android:endColor="#0984E3"
             android:angle="135"/>
-        <corners android:radius="16dp"/>
-        <stroke android:width="4dp" android:color="#4FC3F7"/>
+        <corners android:radius="20dp"/>
+        <stroke android:width="0dp" android:color="#FFFFFF"/>
     </shape>
 </inset>

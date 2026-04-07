@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 扫码输入按钮：金黄渐变 -->
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 焦点选中状态：白色粗边框 + 更亮 -->
@@ -8,10 +7,10 @@
             <gradient
                 android:type="linear"
                 android:angle="135"
-                android:startColor="#FFE840"
-                android:endColor="#FFAA60"/>
+                android:startColor="#FFB347"
+                android:endColor="#FFCC33"/>
             <corners android:radius="20dp"/>
-            <stroke android:width="4dp" android:color="#FFFFFFFF"/>
+            <stroke android:width="4dp" android:color="#2C3E50"/>
         </shape>
     </item>
 
@@ -21,20 +20,20 @@
             <gradient
                 android:type="linear"
                 android:angle="135"
-                android:startColor="#CCAC00"
-                android:endColor="#CC6A2A"/>
+                android:startColor="#E69F3D"
+                android:endColor="#E6B82E"/>
             <corners android:radius="20dp"/>
         </shape>
     </item>
 
-    <!-- 默认状态 -->
+    <!-- 默认状态：阳光黄渐变 -->
     <item>
         <shape android:shape="rectangle">
             <gradient
                 android:type="linear"
                 android:angle="135"
-                android:startColor="#FFC800"
-                android:endColor="#FF7A38"/>
+                android:startColor="#FFD93D"
+                android:endColor="#FF9F1C"/>
             <corners android:radius="20dp"/>
         </shape>
     </item>

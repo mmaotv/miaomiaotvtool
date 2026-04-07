@@ -30,7 +30,7 @@
             android:id="@+id/tvFileName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#FFFFFF"
+            android:textColor="#2C3E50"
             android:textSize="14sp"
             android:textStyle="bold"
             android:maxLines="1"
@@ -40,7 +40,7 @@
             android:id="@+id/tvFileSize"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="#88FFFFFF"
+            android:textColor="#7F8C8D"
             android:textSize="12sp"
             android:layout_marginTop="2dp"/>
 
@@ -51,8 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="4dp"
             android:layout_marginTop="6dp"
-            android:progressTint="#7B61FF"
-            android:progressBackgroundTint="#33FFFFFF"
+            android:progressTint="#00D9FF"
+            android:progressBackgroundTint="#ECF0F1"
             android:max="100"
             android:visibility="gone"/>
 

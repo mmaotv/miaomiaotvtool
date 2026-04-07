@@ -3,7 +3,7 @@
     android:layout_width="420dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="#1A1A2E"
+    android:background="#FFFFFF"
     android:padding="24dp"
     android:gravity="center">
 
@@ -11,9 +11,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#25195;&#30721;&#36755;&#20837;/&#19978;&#20256;&#25991;&#20214;"
+        android:text="扫码输入/上传文件"
         android:textSize="20sp"
-        android:textColor="#FFFFFF"
+        android:textColor="#2C3E50"
         android:textStyle="bold"
         android:layout_marginBottom="6dp"/>
 
@@ -22,9 +22,9 @@
         android:id="@+id/tvQrHint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#29992;&#25163;&#26426;&#25195;&#25551;&#20108;&#32508;&#30721;&#36755;&#20837;&#32593;&#22336;&#25110;&#19978;&#20256;&#25991;&#20214;"
+        android:text="用手机扫码二维码输入网址或上传文件"
         android:textSize="13sp"
-        android:textColor="#AABBCC"
+        android:textColor="#7F8C8D"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -43,9 +43,9 @@
         android:id="@+id/tvIpAddress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#27491;&#22312;&#33719;&#21462;IP&#22320;&#22336;..."
+        android:text="正在获取IP地址..."
         android:textSize="15sp"
-        android:textColor="#7B61FF"
+        android:textColor="#4ECDC4"
         android:textStyle="bold"
         android:gravity="center"
         android:padding="8dp"
@@ -57,9 +57,9 @@
         android:id="@+id/tvWaitStatus"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#31561;&#24453;&#25163;&#26426;&#25171;&#24320;&#20108;&#32508;&#30721;..."
+        android:text="等待手机打开二维码..."
         android:textSize="14sp"
-        android:textColor="#FFC107"
+        android:textColor="#FF9F1C"
         android:gravity="center"
         android:layout_marginBottom="16dp"/>
 
@@ -83,9 +83,9 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#21462;&#28040;"
+                android:text="取消"
                 android:textSize="15sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
         </LinearLayout>
 
         <!-- 已上传文件目录按钮 -->
@@ -94,13 +94,13 @@
             android:layout_width="180dp"
             android:layout_height="40dp"
             android:gravity="center"
-            android:background="@drawable/btn_tool_bg"
+            android:background="@drawable/btn_tools_bg_inset"
             android:focusable="true"
             android:clickable="true">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#128193; &#26597;&#30475;&#19978;&#20256;&#25991;&#20214;"
+                android:text="📁 查看上传文件"
                 android:textSize="13sp"
                 android:textColor="#FFFFFF"/>
         </LinearLayout>

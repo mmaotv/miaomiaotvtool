@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- 深色渐变背景 -->
+    <!-- 现代简约浅灰白渐变背景 -->
     <item>
         <shape android:shape="rectangle">
             <gradient
-                android:startColor="#0D0D2A"
-                android:centerColor="#0E0E20"
-                android:endColor="#120C1E"
+                android:startColor="#FFFFFF"
+                android:centerColor="#F8F9FA"
+                android:endColor="#ECF0F1"
                 android:angle="135"
                 android:type="linear"/>
         </shape>

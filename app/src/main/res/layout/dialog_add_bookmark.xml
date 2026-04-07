@@ -3,16 +3,16 @@
     android:layout_width="500dp"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:background="@drawable/toolbar_bg"
+    android:background="#FFFFFF"
     android:padding="24dp">
 
     <!-- 标题 -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="&#9733; 添加收藏"
+        android:text="⭐ 添加收藏"
         android:textSize="18sp"
-        android:textColor="#FFD700"
+        android:textColor="#FFB300"
         android:textStyle="bold"
         android:layout_marginBottom="20dp"/>
 
@@ -22,19 +22,19 @@
         android:layout_height="wrap_content"
         android:text="名称"
         android:textSize="13sp"
-        android:textColor="#88AABBCC"
+        android:textColor="#7F8C8D"
         android:layout_marginBottom="6dp"/>
     <EditText
         android:id="@+id/etTitle"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@drawable/url_bar_bg"
-        android:textColor="#FFFFFF"
+        android:textColor="#2C3E50"
         android:textSize="14sp"
         android:paddingHorizontal="14dp"
         android:singleLine="true"
-        android:hint="&#35746;&#20080;&#32773;&#32593;&#22336;"
-        android:textColorHint="#556677"
+        android:hint="订阅者网址"
+        android:textColorHint="#95A5A6"
         android:selectAllOnFocus="true"
         android:layout_marginBottom="16dp"/>
 
@@ -44,20 +44,20 @@
         android:layout_height="wrap_content"
         android:text="网址"
         android:textSize="13sp"
-        android:textColor="#88AABBCC"
+        android:textColor="#7F8C8D"
         android:layout_marginBottom="6dp"/>
     <EditText
         android:id="@+id/etUrl"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:background="@drawable/url_bar_bg"
-        android:textColor="#FFFFFF"
+        android:textColor="#2C3E50"
         android:textSize="14sp"
         android:paddingHorizontal="14dp"
         android:singleLine="true"
         android:inputType="textUri"
         android:hint="https://..."
-        android:textColorHint="#556677"
+        android:textColorHint="#95A5A6"
         android:selectAllOnFocus="true"
         android:layout_marginBottom="24dp"/>
 
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:text="取消"
                 android:textSize="14sp"
-                android:textColor="#FFFFFF"/>
+                android:textColor="#2C3E50"/>
         </LinearLayout>
 
         <LinearLayout
@@ -100,7 +100,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="&#10003; 确认添加"
+                android:text="✓ 确认添加"
                 android:textSize="14sp"
                 android:textColor="#FFFFFF"
                 android:textStyle="bold"/>
