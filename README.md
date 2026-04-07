@@ -90,6 +90,11 @@ TVapp/
 - WebView + Java
 - ZXing（二维码生成）
 
+## GitHub 仓库
+
+- 仓库地址：https://github.com/mmaotv/miaomiaotvtool
+- 最新 APK 下载：https://github.com/mmaotv/miaomiaotvtool/releases
+
 ## 注意事项
 
 - `local.properties` 包含本机 SDK 路径（不随仓库同步，首次克隆后需手动配置）
