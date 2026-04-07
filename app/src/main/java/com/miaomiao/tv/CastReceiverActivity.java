@@ -154,54 +154,23 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
         webView.addJavascriptInterface(new CastJSInterface(), "castReceiver");
     }
 
-    /** 显示引导页面 - 白色主题 */
+    /** 显示引导页面 - 极简版：只展示接收器名字和IP */
     private void showGuidePage() {
         String castUrl = CastReceiverService.getCastUrl();
-        // 生成二维码URL（使用在线二维码生成服务）
-        String qrCodeUrl = "https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=" + java.net.URLEncoder.encode(castUrl);
+        String deviceName = "喵喵嗷投屏接收器";
+        String ip = castUrl.replace("http://", "").replace(":" + CastReceiverService.PORT, "");
+
         String html = "<!DOCTYPE html><html><head>" +
             "<meta charset='UTF-8'>" +
             "<meta name='viewport' content='width=device-width, initial-scale=1.0'>" +
             "<style>" +
             "*{margin:0;padding:0;box-sizing:border-box}" +
-            "body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#FFFFFF;color:#2C3E50;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}" +
-            ".logo{font-size:80px;margin-bottom:16px}" +
-            "h1{font-size:32px;margin-bottom:8px;color:#2C3E50}" +
-            ".subtitle{color:#7F8C8D;font-size:14px;margin-bottom:24px}" +
-            ".main-box{display:flex;gap:40px;align-items:flex-start;flex-wrap:wrap;justify-content:center;margin-bottom:24px}" +
-            ".url-section{background:#F8F9FA;border:2px dashed #00D9FF;border-radius:16px;padding:20px 30px;text-align:left}" +
-            ".url-section .label{color:#7F8C8D;font-size:14px;margin-bottom:8px}" +
-            ".url-section .url{color:#00D9FF;font-size:20px;font-weight:bold;word-break:break-all}" +
-            ".qr-section{background:#F8F9FA;border-radius:16px;padding:16px;text-align:center}" +
-            ".qr-section .label{color:#7F8C8D;font-size:14px;margin-bottom:12px}" +
-            ".qr-section img{width:160px;height:160px;border-radius:8px}" +
-            ".step{display:flex;gap:16px;margin-top:20px;flex-wrap:wrap;justify-content:center}" +
-            ".step-item{background:#F8F9FA;padding:16px;border-radius:12px;width:160px}" +
-            ".step-item .num{background:#00D9FF;color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;margin:0 auto 10px;font-size:14px}" +
-            ".step-item .text{color:#2C3E50;font-size:13px}" +
-            ".tip{color:#E65100;font-size:13px;margin-top:24px;line-height:1.8}" +
-            ".status{background:#E8F8F5;border:1px solid #00D9FF;color:#00D9FF;padding:10px 24px;border-radius:20px;font-size:14px;margin-top:20px}" +
+            "body{font-family:'PingFang SC','Microsoft YaHei',sans-serif;background:#FFFFFF;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}" +
+            ".name{font-size:48px;color:#2C3E50;margin-bottom:24px}" +
+            ".ip{font-size:36px;color:#00D9FF;font-weight:bold}" +
             "</style></head><body>" +
-            "<div class='logo'>📺</div>" +
-            "<h1>喵喵嗷投屏接收</h1>" +
-            "<p class='subtitle'>让您的设备成为投屏接收器</p>" +
-            "<div class='main-box'>" +
-            "<div class='url-section'>" +
-            "<div class='label'>📱 手机访问以下地址即可投屏</div>" +
-            "<div class='url'>" + castUrl + "</div>" +
-            "</div>" +
-            "<div class='qr-section'>" +
-            "<div class='label'>📷 扫码访问</div>" +
-            "<img src='" + qrCodeUrl + "' alt='二维码'>" +
-            "</div>" +
-            "</div>" +
-            "<div class='step'>" +
-            "<div class='step-item'><div class='num'>1</div><div class='text'>确保在同一WiFi</div></div>" +
-            "<div class='step-item'><div class='num'>2</div><div class='text'>扫码或输入地址</div></div>" +
-            "<div class='step-item'><div class='num'>3</div><div class='text'>输入视频URL投屏</div></div>" +
-            "</div>" +
-            "<p class='tip'>💡 提示：支持DLNA/AirPlay协议的手机可直接发现本设备</p>" +
-            "<div class='status'>🟢 服务运行中 · IP: " + castUrl.replace("http://", "").replace(":" + CastReceiverService.PORT, "") + "</div>" +
+            "<div class='name'>📺 " + deviceName + "</div>" +
+            "<div class='ip'>" + ip + "</div>" +
             "</body></html>";
 
         webView.loadDataWithBaseURL(null, html, "text/html", "UTF-8", null);
