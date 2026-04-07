@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int PERMISSION_REQUEST_CODE = 100;
     private static final String PREF_NAME = "miaomiao_prefs";
     private static final String KEY_FIRST_LAUNCH = "first_launch";
+    private static final String KEY_MOUSE_HINT_SHOWN = "mouse_hint_shown";
 
     // 视图
     private View homePage;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnQrInput;
     private LinearLayout btnFileMgr;
     private LinearLayout btnUsbMgr;
+    private LinearLayout btnAbout;
     private LinearLayout toolbar;
     private LinearLayout btnBack;
     private LinearLayout btnForward;
@@ -192,6 +194,7 @@ public class MainActivity extends AppCompatActivity {
         btnQrInput   = findViewById(R.id.btnQrInput);
         btnFileMgr   = findViewById(R.id.btnFileMgr);
         btnUsbMgr    = findViewById(R.id.btnUsbMgr);
+        btnAbout     = findViewById(R.id.btnAbout);
         toolbar      = findViewById(R.id.toolbar);
         btnBack      = findViewById(R.id.btnBack);
         btnForward   = findViewById(R.id.btnForward);
@@ -229,6 +232,7 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnQrInput,   1.08f);
         attachFocusScale(btnFileMgr,   1.08f);
         attachFocusScale(btnUsbMgr,    1.08f);
+        attachFocusScale(btnAbout,     1.08f);
 
         // 工具栏小按钮：轻微放大
         attachFocusScale(btnBack,      1.15f);
@@ -254,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         });
         btnUsbMgr.setOnClickListener(v -> startActivity(new Intent(this, UsbManagerActivity.class)));
+        btnAbout.setOnClickListener(v -> DialogHelper.showAbout(this));
 
         // 工具栏按钮
         btnBack.setOnClickListener(v -> {
@@ -425,58 +430,25 @@ public class MainActivity extends AppCompatActivity {
         showMouseModeHint();
     }
 
-    /** 显示鼠标模式操作提示（仅首次进入网页时显示，白色主题） */
+    /** 显示鼠标模式操作提示（仅首次进入网页时显示） */
     private void showMouseModeHint() {
         SharedPreferences prefs = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
-        boolean hasShownHint = prefs.getBoolean("mouse_hint_shown", false);
+        boolean hasShownHint = prefs.getBoolean(KEY_MOUSE_HINT_SHOWN, false);
         if (hasShownHint) return;
-        prefs.edit().putBoolean("mouse_hint_shown", true).apply();
+        prefs.edit().putBoolean(KEY_MOUSE_HINT_SHOWN, true).apply();
 
-        TextView tv = new TextView(this);
-        tv.setText("📍 长按菜单键切换鼠标模式\n用方向键控制光标点击");
-        tv.setTextSize(13);
-        tv.setTextColor(0xFF2C3E50);
-        tv.setBackgroundResource(android.R.drawable.dialog_holo_light_frame);
-        tv.setGravity(Gravity.CENTER);
-        tv.setPadding(32, 16, 32, 16);
-
-        AlertDialog d = new AlertDialog.Builder(this, android.app.AlertDialog.THEME_HOLO_LIGHT)
-            .setView(tv)
-            .setPositiveButton("知道了", null)
-            .setCancelable(true)
-            .create();
-        d.getWindow().setGravity(Gravity.CENTER);
-        d.show();
-
-        // 4秒后自动关闭
-        tv.postDelayed(() -> {
-            try {
-                if (d.isShowing()) d.dismiss();
-            } catch (Exception ignored) {}
-        }, 4000);
+        DialogHelper.show(this, "📍", "鼠标模式",
+            "长按菜单键切换鼠标模式\n用方向键控制光标点击",
+            "知道了", null);
     }
 
     /** U 盘插入时弹出提示 */
     private void showUsbMountedToast() {
-        TextView tv = new TextView(this);
-        tv.setText("\uD83D\uDCBB U \u76D8\u5DF2\u63D2\u5165\uFF01");
-        tv.setTextSize(18);
-        tv.setTextColor(0xFFFFFFFF);
-        tv.setGravity(Gravity.CENTER);
-        tv.setPadding(40, 20, 40, 20);
-
-        AlertDialog d = new AlertDialog.Builder(this)
-            .setTitle("")
-            .setView(tv)
-            .setPositiveButton("\u6253\u5F00 U \u76D8", (dialog, which) -> {
-                startActivity(new Intent(this, UsbManagerActivity.class));
-            })
-            .setNegativeButton("\u5FFD\u7565", null)
-            .create();
-        if (d.getWindow() != null) {
-            d.getWindow().setGravity(Gravity.CENTER);
-        }
-        d.show();
+        DialogHelper.show(this, "💾", "U盘已插入",
+            "是否打开U盘管理？",
+            "打开", "忽略",
+            () -> startActivity(new Intent(this, UsbManagerActivity.class)),
+            null);
     }
 
     private void setupWebView() {
@@ -739,10 +711,10 @@ public class MainActivity extends AppCompatActivity {
 
             if (isFirstLaunch && !android.os.Environment.isExternalStorageManager()) {
                 prefs.edit().putBoolean(KEY_FIRST_LAUNCH, false).apply();
-                new AlertDialog.Builder(this)
-                    .setTitle("需要文件访问权限")
-                    .setMessage("为了能够管理外部存储文件（如 U 盘、下载目录），需要授予「所有文件访问」权限。\n\n请在设置页面中开启此权限。")
-                    .setPositiveButton("去授权", (d, w) -> {
+                DialogHelper.show(this, "📁", "需要文件访问权限",
+                    "为了能够管理外部存储文件（如 U 盘、下载目录），需要授予「所有文件访问」权限。\n\n请在设置页面中开启此权限。",
+                    "去授权", "暂不授权",
+                    () -> {
                         try {
                             Intent intent = new Intent(
                                 android.provider.Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION,
@@ -750,17 +722,14 @@ public class MainActivity extends AppCompatActivity {
                             );
                             startActivity(intent);
                         } catch (Exception e) {
-                            // 部分设备不支持精确跳转，跳到通用设置
                             try {
                                 startActivity(new Intent(
                                     android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
                             } catch (Exception ignored) {}
                         }
-                    })
-                    .setNegativeButton("暂不授权", (d, w) -> {
-                        Toast.makeText(this, "未授权将只能访问应用私有目录", Toast.LENGTH_LONG).show();
-                    })
-                    .show();
+                    },
+                    () -> Toast.makeText(this, "未授权将只能访问应用私有目录", Toast.LENGTH_LONG).show()
+                );
             }
         }
         // Android 10-13：MediaStore API 无需额外权限

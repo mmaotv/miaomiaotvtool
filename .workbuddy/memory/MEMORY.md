@@ -36,10 +36,13 @@
 - 代码配置：app/src/main/res/values/strings.xml
 - strings.xml 包含 app_name / home_title / subtitle_text / live_url / vod_url / tools_url / info_text 等 key
 - build.gradle 版本号由 build_helper.py 动态写入（versionCode / versionName）
-- 投屏界面（CastReceiverActivity）：极简设计，只显示接收器名称和IP地址
-  - 接收器名称："喵喵嗷投屏接收器"
-  - IP地址：显示局域网IP（如192.168.x.x）
-  - 白色背景，无二维码，无使用说明
+- 主页布局：7个按钮（2行4列，第一行4个，第二行3个），已移除投屏功能
+  - 第一行：直播、点播、工具、历史记录
+  - 第二行：扫码输入、文件管理、U盘
+  - 按钮统一尺寸 145dp×100dp，圆角16dp
+- 授权弹窗：Android 14+ 仅首次启动时提示文件访问权限
+- 鼠标模式提示：白色主题，小巧简洁，仅首次进入网页时显示一次
+- 投屏功能已移除（因无法正常使用）
 
 ## 依赖
 - build.gradle 新增：com.google.zxing:core:3.5.2（用于二维码生成）

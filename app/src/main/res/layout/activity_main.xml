@@ -194,7 +194,7 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <!-- 第二行：扫码输入 | 文件管理 | U盘 -->
+            <!-- 第二行：扫码输入 | 文件管理 | U盘 | 关于 -->
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -273,6 +273,7 @@
                     android:orientation="vertical"
                     android:gravity="center"
                     android:background="@drawable/btn_usb_bg_inset"
+                    android:layout_marginEnd="12dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:clickable="true"
@@ -290,6 +291,35 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="U盘"
+                        android:textSize="18sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 关于按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnAbout"
+                    android:layout_width="145dp"
+                    android:layout_height="100dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_qr_bg_inset"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true"
+                    android:elevation="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ℹ️"
+                        android:textSize="28sp"
+                        android:layout_marginBottom="6dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关于"
                         android:textSize="18sp"
                         android:textColor="#FFFFFF"
                         android:textStyle="bold"/>
