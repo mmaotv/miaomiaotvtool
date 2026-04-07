@@ -1,7 +1,10 @@
 package com.miaomiao.tv;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.net.nsd.NsdManager;
+import android.net.nsd.NsdServiceInfo;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Looper;
@@ -18,6 +21,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
@@ -31,11 +35,21 @@ public class CastReceiverService extends Service {
 
     private static final String TAG = "CastReceiverService";
     private static final int PORT = 18766; // 投屏服务端口
+    private static final String SERVICE_NAME = "MiaoMiaoTV"; // NSD 服务名称
+    private static final String SERVICE_TYPE_HTTP = "_http._tcp.";  // HTTP 服务类型
+    private static final String SERVICE_TYPE_AIRPLAY = "_airplay._tcp."; // AirPlay 服务类型
 
     private ServerSocket serverSocket;
     private ExecutorService executor;
     private Handler mainHandler;
     private boolean isRunning = false;
+
+    // NSD 相关
+    private NsdManager nsdManager;
+    private NsdManager.RegistrationListener nsdListenerHttp;
+    private NsdManager.RegistrationListener nsdListenerAirplay;
+    private NsdServiceInfo serviceInfoHttp;
+    private NsdServiceInfo serviceInfoAirplay;
 
     // 投屏状态监听器
     public interface CastListener {
@@ -70,6 +84,7 @@ public class CastReceiverService extends Service {
     public void onCreate() {
         super.onCreate();
         mainHandler = new Handler(Looper.getMainLooper());
+        nsdManager = (NsdManager) getSystemService(Context.NSD_SERVICE);
         Log.d(TAG, "投屏服务已创建");
     }
 
@@ -90,7 +105,11 @@ public class CastReceiverService extends Service {
                 Log.d(TAG, "投屏服务已启动，端口：" + PORT);
 
                 // 通知UI服务已启动
-                mainHandler.post(() -> notifyServiceStarted());
+                mainHandler.post(() -> {
+                    notifyServiceStarted();
+                    // 注册 NSD 服务让手机可以发现
+                    registerNsdService();
+                });
 
                 while (isRunning) {
                     try {
@@ -107,6 +126,147 @@ public class CastReceiverService extends Service {
                 Log.e(TAG, "服务启动失败: " + e.getMessage());
             }
         });
+    }
+
+    /**
+     * 注册 NSD 服务让同一局域网内的设备可以发现投屏服务
+     */
+    private void registerNsdService() {
+        if (nsdManager == null) {
+            Log.w(TAG, "NSD Manager 不可用");
+            return;
+        }
+
+        // 创建 HTTP 服务的 NSD 注册监听器
+        nsdListenerHttp = new NsdManager.RegistrationListener() {
+            @Override
+            public void onServiceRegistered(NsdServiceInfo info) {
+                serviceInfoHttp = info;
+                String name = info.getServiceName();
+                Log.d(TAG, "HTTP 服务已注册: " + name);
+            }
+
+            @Override
+            public void onRegistrationFailed(NsdServiceInfo info, int errorCode) {
+                Log.e(TAG, "HTTP 服务注册失败: " + errorCode);
+            }
+
+            @Override
+            public void onServiceUnregistered(NsdServiceInfo info) {
+                Log.d(TAG, "HTTP 服务已注销");
+            }
+
+            @Override
+            public void onUnregistrationFailed(NsdServiceInfo info, int errorCode) {
+                Log.e(TAG, "HTTP 服务注销失败: " + errorCode);
+            }
+        };
+
+        // 创建 AirPlay 服务的 NSD 注册监听器
+        nsdListenerAirplay = new NsdManager.RegistrationListener() {
+            @Override
+            public void onServiceRegistered(NsdServiceInfo info) {
+                serviceInfoAirplay = info;
+                String name = info.getServiceName();
+                Log.d(TAG, "AirPlay 服务已注册: " + name);
+            }
+
+            @Override
+            public void onRegistrationFailed(NsdServiceInfo info, int errorCode) {
+                Log.e(TAG, "AirPlay 服务注册失败: " + errorCode);
+            }
+
+            @Override
+            public void onServiceUnregistered(NsdServiceInfo info) {
+                Log.d(TAG, "AirPlay 服务已注销");
+            }
+
+            @Override
+            public void onUnregistrationFailed(NsdServiceInfo info, int errorCode) {
+                Log.e(TAG, "AirPlay 服务注销失败: " + errorCode);
+            }
+        };
+
+        // 获取本机 IP
+        String localIp = getLocalIP();
+        if (localIp.equals("127.0.0.1")) {
+            // 尝试获取真实 IP
+            localIp = getRealLocalIP();
+        }
+
+        // 注册 HTTP 服务
+        NsdServiceInfo httpServiceInfo = new NsdServiceInfo();
+        httpServiceInfo.setServiceName(SERVICE_NAME + "_http");
+        httpServiceInfo.setServiceType(SERVICE_TYPE_HTTP);
+        httpServiceInfo.setPort(PORT);
+        // 添加 TXT 记录，包含设备信息
+        httpServiceInfo.setAttribute("deviceId", android.os.Build.MODEL);
+        httpServiceInfo.setAttribute("features", "airplay");
+
+        try {
+            nsdManager.registerService(httpServiceInfo, NsdManager.PROTOCOL_DNS_SD, nsdListenerHttp);
+            Log.d(TAG, "正在注册 HTTP NSD 服务...");
+        } catch (Exception e) {
+            Log.e(TAG, "注册 HTTP NSD 服务失败: " + e.getMessage());
+        }
+
+        // 注册 AirPlay 服务（让 iPhone 的 AirPlay 可以发现）
+        NsdServiceInfo airplayServiceInfo = new NsdServiceInfo();
+        airplayServiceInfo.setServiceName(SERVICE_NAME);
+        airplayServiceInfo.setServiceType(SERVICE_TYPE_AIRPLAY);
+        airplayServiceInfo.setPort(PORT);
+        // AirPlay 协议需要的属性
+        airplayServiceInfo.setAttribute("deviceid", SERVICE_NAME + "_" + android.os.Build.MODEL);
+        airplayServiceInfo.setAttribute("features", "0x5A7FFFF7"); // AirPlay 特性标志
+        airplayServiceInfo.setAttribute("model", "AppleTV");
+        airplayServiceInfo.setAttribute("pk", ""); // pairing buffer (empty if not paired)
+        airplayServiceInfo.setAttribute("srcvers", "220.68"); // AirPlay 版本
+
+        try {
+            nsdManager.registerService(airplayServiceInfo, NsdManager.PROTOCOL_DNS_SD, nsdListenerAirplay);
+            Log.d(TAG, "正在注册 AirPlay NSD 服务...");
+        } catch (Exception e) {
+            Log.e(TAG, "注册 AirPlay NSD 服务失败: " + e.getMessage());
+        }
+    }
+
+    /**
+     * 获取真实的本机 IP 地址
+     */
+    private String getRealLocalIP() {
+        try {
+            java.net.NetworkInterface networkInterface = java.net.NetworkInterface.getNetworkInterfaces().nextElement();
+            if (networkInterface != null) {
+                Enumeration<java.net.InetAddress> addresses = networkInterface.getInetAddresses();
+                while (addresses.hasMoreElements()) {
+                    java.net.InetAddress addr = addresses.nextElement();
+                    if (!addr.isLoopbackAddress() && addr instanceof java.net.Inet4Address) {
+                        return addr.getHostAddress();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "获取真实 IP 失败: " + e.getMessage());
+        }
+        return "127.0.0.1";
+    }
+
+    /**
+     * 注销 NSD 服务
+     */
+    private void unregisterNsdService() {
+        if (nsdManager != null) {
+            try {
+                if (nsdListenerHttp != null) {
+                    nsdManager.unregisterService(nsdListenerHttp);
+                }
+                if (nsdListenerAirplay != null) {
+                    nsdManager.unregisterService(nsdListenerAirplay);
+                }
+            } catch (Exception e) {
+                Log.e(TAG, "注销 NSD 服务失败: " + e.getMessage());
+            }
+        }
     }
 
     private void handleClient(Socket client) {
@@ -389,6 +549,8 @@ public class CastReceiverService extends Service {
     public void onDestroy() {
         super.onDestroy();
         isRunning = false;
+        // 注销 NSD 服务
+        unregisterNsdService();
         try {
             if (serverSocket != null) {
                 serverSocket.close();

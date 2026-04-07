@@ -331,10 +331,9 @@ public class CastReceiverActivity extends Activity implements CastReceiverServic
         startActivityForResult(intent, REQUEST_HISTORY);
     }
 
-    /** 显示应用管理 */
+    /** 显示应用管理 - 已移除，提示用户 */
     private void showAppManager() {
-        Intent intent = new Intent(this, AppManagerActivity.class);
-        startActivityForResult(intent, REQUEST_APPS);
+        Toast.makeText(this, "应用管理功能已移除", Toast.LENGTH_SHORT).show();
     }
 
     /** 刷新内容 */

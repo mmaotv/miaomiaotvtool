@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <!-- NSD (Network Service Discovery) 权限 - 用于 mDNS 广播让设备被发现 -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- 存储权限：Android 9 及以下才需要 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
@@ -93,6 +95,13 @@
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>
 
+        <!-- 浏览历史界面 -->
+        <activity
+            android:name=".HistoryActivity"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:configChanges="orientation|keyboardHidden|screenSize"/>
+
         <!-- 投屏接收Activity -->
         <activity
             android:name=".CastReceiverActivity"
@@ -104,13 +113,6 @@
         <!-- 投屏历史记录 -->
         <activity
             android:name=".CastHistoryActivity"
-            android:exported="false"
-            android:screenOrientation="landscape"
-            android:configChanges="orientation|keyboardHidden|screenSize"/>
-
-        <!-- 应用管理器 -->
-        <activity
-            android:name=".AppManagerActivity"
             android:exported="false"
             android:screenOrientation="landscape"
             android:configChanges="orientation|keyboardHidden|screenSize"/>

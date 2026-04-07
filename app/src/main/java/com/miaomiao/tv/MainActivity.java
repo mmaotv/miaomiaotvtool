@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private LinearLayout btnHome;
     private LinearLayout btnDownloads;
     private LinearLayout btnBookmark;
+    private LinearLayout btnHistory;
     private LinearLayout btnCast;
     private EditText etUrl;
     private ProgressBar progressBar;
@@ -90,10 +91,12 @@ public class MainActivity extends AppCompatActivity {
 
     private QrInputHelper qrInputHelper;
     private BookmarkManager bookmarkManager;
+    private WebHistoryManager historyManager;
     private boolean mouseModeEnabled = true; // 默认开启鼠标模式
     private long menuKeyDownTime = 0;
 
     private static final int REQUEST_BOOKMARK = 2001;
+    private static final int REQUEST_HISTORY = 2002;
 
     // ---- USB 广播 ----
     private final BroadcastReceiver usbReceiver = new BroadcastReceiver() {
@@ -136,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
         BTN_USB   = getString(R.string.btn_usb);
 
         bookmarkManager = new BookmarkManager(this);
+        historyManager = new WebHistoryManager(this);
 
         initViews();
         setupWebView();
@@ -189,6 +193,7 @@ public class MainActivity extends AppCompatActivity {
         btnHome      = findViewById(R.id.btnHome);
         btnDownloads = findViewById(R.id.btnDownloads);
         btnBookmark  = findViewById(R.id.btnBookmark);
+        btnHistory   = findViewById(R.id.btnHistory);
         btnCast      = findViewById(R.id.btnCast);
         etUrl        = findViewById(R.id.etUrl);
         progressBar  = findViewById(R.id.progressBar);
@@ -225,6 +230,7 @@ public class MainActivity extends AppCompatActivity {
         attachFocusScale(btnHome,      1.15f);
         attachFocusScale(btnDownloads, 1.15f);
         attachFocusScale(btnBookmark,   1.15f);
+        attachFocusScale(btnHistory,    1.15f);
         attachFocusScale(btnCast,       1.15f);
 
         // 首页按钮点击事件
@@ -257,6 +263,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(this, DownloadsActivity.class))
         );
         btnBookmark.setOnClickListener(v -> onBookmarkClick());
+        btnHistory.setOnClickListener(v -> startActivityForResult(
+            new Intent(this, HistoryActivity.class), REQUEST_HISTORY));
         btnCast.setOnClickListener(v -> startActivity(new Intent(this, CastReceiverActivity.class)));
     }
 
@@ -355,11 +363,16 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "\u6253\u5f00\u6536\u85cf\uff1a" + title, Toast.LENGTH_SHORT).show();
             }
         }
+        if (requestCode == REQUEST_HISTORY && resultCode == RESULT_OK && data != null) {
+            String url = data.getStringExtra("url");
+            if (url != null && !url.isEmpty()) {
+                openUrl(url);
+            }
+        }
     }
 
     private void openUrl(String url) {
         if (url == null || url.trim().isEmpty()) {
-            Toast.makeText(this, "\u7f51\u5740\u672a\u914d\u7f6e", Toast.LENGTH_SHORT).show();
             return;
         }
         showWebPage();
@@ -494,7 +507,13 @@ public class MainActivity extends AppCompatActivity {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
                 progressBar.setVisibility(View.GONE);
-                if (url != null) etUrl.setText(url);
+                if (url != null) {
+                    etUrl.setText(url);
+                    // 添加到浏览历史
+                    String title = "";
+                    try { title = view.getTitle(); } catch (Exception ignored) {}
+                    historyManager.addHistory(url, title);
+                }
                 updateNavButtons();
             }
 
