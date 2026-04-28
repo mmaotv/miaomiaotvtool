@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Apple TV Light Dialogs -->
+    <style name="DialogRoundedStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
+
+    <style name="DialogStandardStyle" parent="android:Theme.Material.Light.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.4</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:windowAnimationStyle">@style/DialogStandardAnim</item>
+    </style>
+
+    <style name="DialogStandardAnim" parent="android:Animation">
+        <item name="android:windowEnterAnimation">@anim/dialog_enter</item>
+        <item name="android:windowExitAnimation">@anim/dialog_exit</item>
+    </style>
+
+    <style name="PhoneDialogStyle" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.5</item>
+    </style>
+
+    <!-- ATV Light Text Styles - Apple Typography -->
+    <style name="ATVTextLargeTitle">
+        <item name="android:textSize">40sp</item>
+        <item name="android:textColor">@color/atv_text_primary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ATVTextTitle">
+        <item name="android:textSize">28sp</item>
+        <item name="android:textColor">@color/atv_text_primary</item>
+        <item name="android:fontFamily">sans-serif</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ATVTextHeadline">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/atv_text_primary</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+    <style name="ATVTextBody">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/atv_text_primary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    <style name="ATVTextCaption">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/atv_text_secondary</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+</resources>

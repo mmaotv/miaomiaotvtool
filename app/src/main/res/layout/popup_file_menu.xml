@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/popup_menu_bg">
+
+    <!-- 文件名标题 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/popup_header_bg">
+
+        <TextView
+            android:id="@+id/tvFileName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="filename.txt"
+            android:textSize="16sp"
+            android:textColor="#2C3E50"
+            android:textStyle="bold"
+            android:maxWidth="280dp"
+            android:ellipsize="middle"
+            android:singleLine="true"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 两列按钮容器 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 左列 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginEnd="6dp">
+
+            <!-- 打开 -->
+            <LinearLayout
+                android:id="@+id/menuOpen"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="打开"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 复制 -->
+            <LinearLayout
+                android:id="@+id/menuCopy"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="复制"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 压缩 -->
+            <LinearLayout
+                android:id="@+id/menuCompress"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="压缩"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 权限(ADB) -->
+            <LinearLayout
+                android:id="@+id/menuChmod"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="权限"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- 右列 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="6dp">
+
+            <!-- 删除 -->
+            <LinearLayout
+                android:id="@+id/menuDelete"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="删除"
+                    android:textSize="14sp"
+                    android:textColor="#E74C3C"/>
+            </LinearLayout>
+
+            <!-- 剪切 -->
+            <LinearLayout
+                android:id="@+id/menuCut"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="剪切"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 改名 -->
+            <LinearLayout
+                android:id="@+id/menuRename"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginBottom="6dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="改名"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 路径 -->
+            <LinearLayout
+                android:id="@+id/menuPath"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="路径"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginTop="12dp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- 取消按钮（横跨两列） -->
+    <LinearLayout
+        android:id="@+id/menuCancel"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/btn_popup_item_bg"
+        android:focusable="true"
+        android:clickable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textSize="14sp"
+            android:textColor="#95A5A6"/>
+    </LinearLayout>
+
+</LinearLayout>

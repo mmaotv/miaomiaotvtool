@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 顶部工具栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="12dp"
+        android:elevation="4dp">
+
+        <!-- 返回首页 -->
+        <LinearLayout
+            android:id="@+id/btnBackHome"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_home_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="首页"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- 返回上级 -->
+        <LinearLayout
+            android:id="@+id/btnParentDir"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:layout_marginStart="8dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回上级"
+                android:textSize="13sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- U盘状态图标 -->
+        <TextView
+            android:id="@+id/tvUsbIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="USB"
+            android:textSize="14sp"
+            android:textColor="#4ECDC4"
+            android:layout_marginStart="14dp"/>
+
+        <!-- 当前路径 -->
+        <TextView
+            android:id="@+id/tvCurrentPath"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginHorizontal="10dp"
+            android:text="/"
+            android:textSize="12sp"
+            android:textColor="#4ECDC4"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            android:gravity="center_vertical"/>
+
+        <!-- 存储空间信息 -->
+        <TextView
+            android:id="@+id/tvStorageInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="总空间: — | 可用: —"
+            android:textSize="10sp"
+            android:textColor="#7F8C8D"
+            android:paddingHorizontal="8dp"
+            android:visibility="gone"
+            android:background="@drawable/info_text_bg"/>
+
+        <!-- 刷新 -->
+        <LinearLayout
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="↻"
+                android:textSize="16sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- U盘未插入提示 -->
+    <LinearLayout
+        android:id="@+id/usbEmptyView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="未检测到U盘"
+            android:textSize="28sp"
+            android:textColor="#7F8C8D"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="请插入U盘后，点击首页的「U盘」按钮"
+            android:textSize="14sp"
+            android:textColor="#95A5A6"
+            android:layout_marginTop="10dp"/>
+    </LinearLayout>
+
+    <!-- 文件列表 -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        <LinearLayout
+            android:id="@+id/fileListContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="12dp"/>
+    </ScrollView>
+
+</LinearLayout>

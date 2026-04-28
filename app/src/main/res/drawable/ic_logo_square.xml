@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 正方形Logo：电视桌面应用图标、系统应用信息页图标 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <!-- 正方形红色背景 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M4,4 L44,4 L44,44 L4,44 Z" />
+    <!-- 猫脸 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M24,12 C18,12 13,17 13,22 C13,27 16,31 20,33 L20,38 C20,39 21,40 22,40 L26,40 C27,40 28,39 28,38 L28,33 C32,31 35,27 35,22 C35,17 30,12 24,12 Z" />
+    <!-- 左耳 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M16,14 L18,10 L22,16 Z" />
+    <!-- 右耳 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M32,14 L30,10 L26,16 Z" />
+    <!-- 左眼 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M20,21 C20,19.5 20.8,18.5 22,18.5 C23.2,18.5 24,19.5 24,21 C24,22.5 23.2,23.5 22,23.5 C20.8,23.5 20,22.5 20,21 Z" />
+    <!-- 右眼 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M24,21 C24,19.5 24.8,18.5 26,18.5 C27.2,18.5 28,19.5 28,21 C28,22.5 27.2,23.5 26,23.5 C24.8,23.5 24,22.5 24,21 Z" />
+    <!-- 鼻子 -->
+    <path
+        android:fillColor="#FFAAAA"
+        android:pathData="M24,26 L22,29 L26,29 Z" />
+</vector>

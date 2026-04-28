@@ -1,0 +1,598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/atv_background">
+
+    <!-- ==================== 首页面板 ==================== -->
+    <LinearLayout
+        android:id="@+id/homePage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="visible"
+        android:background="@drawable/home_bg"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <!-- Logo 区域 + ADB状态 -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:paddingHorizontal="40dp">
+
+            <!-- 居中的 Logo + 标题 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_gravity="center">
+
+                <!-- Logo 圆角正方形 -->
+                <View
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ic_logo_home"
+                    android:layout_marginEnd="12dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/home_title"
+                    android:textSize="36sp"
+                    android:textColor="@color/atv_text_primary"
+                    android:textStyle="bold"
+                    android:letterSpacing="0.05"/>
+            </LinearLayout>
+
+            <!-- ADB状态指示 - 右上角 -->
+            <TextView
+                android:id="@+id/tvAdbStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="🔌 adb：未连接"
+                android:textSize="12sp"
+                android:textColor="@color/atv_text_secondary"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="4dp"
+                android:background="@drawable/info_text_bg"
+                android:layout_gravity="end|center_vertical"/>
+        </FrameLayout>
+
+        <!-- 副标题 -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/subtitle_text"
+            android:textSize="13sp"
+            android:textColor="@color/atv_text_tertiary"
+            android:letterSpacing="0.12"
+            android:layout_marginBottom="20dp"/>
+
+        <!-- ====== 4×2行按钮网格====== -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <!-- 第一行：直播 | 点播 | 工具 | 历史记录 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginBottom="18dp"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <!-- 直播按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnLive"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_live_bg_inset"
+                    android:layout_marginEnd="14dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnLive"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="直播"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 点播按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnVod"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_vod_bg_inset"
+                    android:layout_marginEnd="14dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnVod"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="点播"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 工具按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnTools"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_tools_bg_inset"
+                    android:layout_marginEnd="14dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnTools"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="工具"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 书签按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnHistoryHome"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_qr_bg_inset"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnHistoryHome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="我的书签"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 第二行：扫码推送| 文件管理 | 应用管理 | 关于 -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:clipChildren="false"
+                android:clipToPadding="false">
+
+                <!-- 扫码推送按钮-->
+                <LinearLayout
+                    android:id="@+id/btnQrInput"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_file_bg_inset"
+                    android:layout_marginEnd="14dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnQr"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="扫码推送"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 文件管理按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnFileMgr"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_tools_bg_inset"
+                    android:layout_marginEnd="14dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnFile"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="文件管理"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 应用管理按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnUsbMgr"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_usb_bg_inset"
+                    android:layout_marginEnd="14dp"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:id="@+id/tvBtnUsb"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="应用管理"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 关于按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnAbout"
+                    android:layout_width="160dp"
+                    android:layout_height="110dp"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:background="@drawable/btn_qr_bg_inset"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="关于"
+                        android:textSize="22sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 底部状态栏 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp"
+            android:paddingHorizontal="40dp">
+
+            <TextView
+                android:id="@+id/infoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/info_text"
+                android:textSize="14sp"
+                android:textColor="#E65100"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="8dp"
+                android:background="@drawable/info_text_bg"
+                android:gravity="center"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- ==================== WebView页面 ==================== -->
+    <LinearLayout
+        android:id="@+id/webPage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:background="@color/atv_page_bg">
+
+        <!-- 顶部工具栏-->
+        <LinearLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal"
+            android:background="@drawable/toolbar_bg"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="6dp"
+            android:elevation="2dp">
+
+            <!-- 后退 -->
+            <LinearLayout
+                android:id="@+id/btnBack"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_bg_inset"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="后退"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/atv_text_primary"/>
+            </LinearLayout>
+
+            <!-- 前进 -->
+            <LinearLayout
+                android:id="@+id/btnForward"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_bg_inset"
+                android:layout_marginStart="5dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="前进"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/atv_text_primary"/>
+            </LinearLayout>
+
+            <!-- 刷新 -->
+            <LinearLayout
+                android:id="@+id/btnRefresh"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_bg_inset"
+                android:layout_marginStart="5dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="刷新"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/atv_text_primary"/>
+            </LinearLayout>
+
+            <!-- 可编辑地址栏 -->
+            <EditText
+                android:id="@+id/etUrl"
+                android:layout_width="0dp"
+                android:layout_height="38dp"
+                android:layout_weight="1"
+                android:layout_marginHorizontal="7dp"
+                android:background="@drawable/url_bar_bg"
+                android:textColor="@color/atv_text_primary"
+                android:textSize="13sp"
+                android:paddingHorizontal="14dp"
+                android:singleLine="true"
+                android:imeOptions="actionGo"
+                android:inputType="textUri"
+                android:textColorHint="@color/atv_text_tertiary"
+                android:hint="输入网址..."
+                android:selectAllOnFocus="true"/>
+
+            <!-- GO按钮 -->
+            <LinearLayout
+                android:id="@+id/btnGo"
+                android:layout_width="50dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_blue_bg_inset"
+                android:layout_marginEnd="5dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="GO"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"/>
+            </LinearLayout>
+
+            <!-- 首页按钮 -->
+            <LinearLayout
+                android:id="@+id/btnHome"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_blue_bg_inset"
+                android:layout_marginEnd="5dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="首页"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"/>
+            </LinearLayout>
+
+            <!-- 下载管理 -->
+            <LinearLayout
+                android:id="@+id/btnDownloads"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_bg_inset"
+                android:layout_marginEnd="5dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="下载"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/atv_text_primary"/>
+            </LinearLayout>
+
+            <!-- 收藏（添加当前页）-->
+            <LinearLayout
+                android:id="@+id/btnBookmark"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_bg_inset"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:id="@+id/tvBookmarkIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="☆"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFB300"/>
+            </LinearLayout>
+
+            <!-- 书签列表 -->
+            <LinearLayout
+                android:id="@+id/btnHistory"
+                android:layout_width="60dp"
+                android:layout_height="38dp"
+                android:layout_marginStart="6dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_unified_bg_inset"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="历史"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/atv_text_primary"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- 加载进度条-->
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:progressTint="@color/atv_blue"
+            android:max="100"
+            android:visibility="gone"/>
+
+        <!-- WebView 容器（包含翻页按钮） -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1">
+
+            <!-- WebView -->
+            <WebView
+                android:id="@+id/webView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"/>
+
+            <!-- 右侧翻页按钮 -->
+            <LinearLayout
+                android:id="@+id/scrollButtonsContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:paddingEnd="12dp"
+                android:visibility="gone">
+
+                <!-- 上翻按钮 -->
+                <ImageButton
+                    android:id="@+id/btnPageUp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/btn_scroll_circle"
+                    android:src="@drawable/ic_scroll_up"
+                    android:scaleType="centerInside"
+                    android:padding="10dp"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="上翻"/>
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="24dp"/>
+
+                <!-- 下翻按钮 -->
+                <ImageButton
+                    android:id="@+id/btnPageDown"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:background="@drawable/btn_scroll_circle"
+                    android:src="@drawable/ic_scroll_down"
+                    android:scaleType="centerInside"
+                    android:padding="10dp"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:contentDescription="下翻"/>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <!-- 光标层-->
+    <com.miaomiao.tv.CursorView
+        android:id="@+id/cursorView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:clickable="false"/>
+
+    <!-- 焦点接收器：用于清除按钮焦点后转移焦点 -->
+    <View
+        android:id="@+id/focusStealer"
+        android:layout_width="1dp"
+        android:layout_height="1dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:visibility="invisible"/>
+
+</FrameLayout>

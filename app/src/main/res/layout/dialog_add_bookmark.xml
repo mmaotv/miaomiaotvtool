@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="700dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#FFFFFF"
+    android:padding="24dp">
+
+    <!-- 标题 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="⭐ 添加收藏"
+        android:textSize="18sp"
+        android:textColor="#FFB300"
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- 名称 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="名称"
+        android:textSize="13sp"
+        android:textColor="#7F8C8D"
+        android:layout_marginBottom="6dp"/>
+    <EditText
+        android:id="@+id/etTitle"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/url_bar_bg"
+        android:textColor="#2C3E50"
+        android:textSize="14sp"
+        android:paddingHorizontal="14dp"
+        android:singleLine="true"
+        android:hint="订阅者网址"
+        android:textColorHint="#95A5A6"
+        android:selectAllOnFocus="true"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 网址 -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="网址"
+        android:textSize="13sp"
+        android:textColor="#7F8C8D"
+        android:layout_marginBottom="6dp"/>
+    <EditText
+        android:id="@+id/etUrl"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:background="@drawable/url_bar_bg"
+        android:textColor="#2C3E50"
+        android:textSize="14sp"
+        android:paddingHorizontal="14dp"
+        android:singleLine="true"
+        android:inputType="textUri"
+        android:hint="https://..."
+        android:textColorHint="#95A5A6"
+        android:selectAllOnFocus="true"
+        android:layout_marginBottom="24dp"/>
+
+    <!-- 按钮行 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="right">
+
+        <LinearLayout
+            android:id="@+id/btnCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="24dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:layout_marginEnd="12dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="取消"
+                android:textSize="14sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_go_bg_inset"
+            android:paddingHorizontal="24dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✓ 确认添加"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

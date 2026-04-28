@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Apple TV Light 蓝色光晕 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/atv_blue_bg"/>
+    <stroke android:width="2dp" android:color="@color/atv_blue"/>
+    <corners android:radius="12dp"/>
+</shape>

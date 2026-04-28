@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Apple TV Light 文件管理按钮 inset 包装 -->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetLeft="3dp" android:insetTop="3dp"
+    android:insetRight="3dp" android:insetBottom="3dp"
+    android:drawable="@drawable/btn_file_bg"/>

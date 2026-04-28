@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 1. 顶部标题栏：返回 + 标题 + 当前路径 + ADB状态 + 刷新 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:paddingStart="0dp"
+        android:paddingEnd="0dp"
+        android:elevation="4dp">
+
+        <!-- 左侧：返回按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBackHome"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_home_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◀"
+                android:textSize="15sp"
+                android:textColor="#FFFFFF"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 返回"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- 中间：页面标题 + 当前路径 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文件管理"
+                android:textSize="17sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"/>
+
+            <!-- 分隔符 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  ›  "
+                android:textSize="14sp"
+                android:textColor="#BDC3C7"/>
+
+            <!-- 当前路径（动态变化） -->
+            <TextView
+                android:id="@+id/tvCurrentPath"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="内部存储"
+                android:textSize="13sp"
+                android:textColor="#7F8C8D"
+                android:singleLine="true"
+                android:ellipsize="middle"/>
+        </LinearLayout>
+
+        <!-- 右侧：ADB状态 + 刷新按钮 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/tvAdbStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ADB: 未连接"
+                android:textSize="11sp"
+                android:textColor="#95A5A6"
+                android:layout_marginEnd="12dp"/>
+
+            <LinearLayout
+                android:id="@+id/btnRefresh"
+                android:layout_width="wrap_content"
+                android:layout_height="38dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_tool_bg_inset"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="↻"
+                    android:textSize="16sp"
+                    android:textColor="#2C3E50"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 刷新"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 间隔 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- 批量操作工具栏 -->
+    <include layout="@layout/layout_batch_action_bar"/>
+
+    <!-- 2. 顶部功能标签栏（横向滚动，无裁切，返回按钮在最左侧首位） -->
+    <HorizontalScrollView
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:scrollbars="none"
+        android:background="#FFFFFF"
+        android:fillViewport="false"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:paddingStart="2dp"
+            android:paddingEnd="2dp">
+
+            <!-- 返回上级（首位） -->
+            <LinearLayout
+                android:id="@+id/btnParentDir"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="⬆"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 返回"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 文件互传 -->
+            <LinearLayout
+                android:id="@+id/tabFileTransfer"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📤"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 文件互传"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 内部存储 -->
+            <LinearLayout
+                android:id="@+id/tabInternalStorage"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/tab_selected_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💾"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 内部存储"
+                    android:textSize="12sp"
+                    android:textColor="#00D9FF"/>
+            </LinearLayout>
+
+            <!-- Download -->
+            <LinearLayout
+                android:id="@+id/tabDownload"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Download"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- U盘动态按钮容器：有U盘时才显示，插几个显示几个 -->
+            <LinearLayout
+                android:id="@+id/usbTabContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:visibility="gone"/>
+
+            <!-- 分隔 -->
+            <View
+                android:layout_width="1dp"
+                android:layout_height="20dp"
+                android:background="#E0E6ED"
+                android:layout_marginHorizontal="4dp"/>
+
+            <!-- 文件搜索 -->
+            <LinearLayout
+                android:id="@+id/btnFileSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="文件搜索"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 空目录 -->
+            <LinearLayout
+                android:id="@+id/btnEmptyDirs"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="空目录"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 根目录 -->
+            <LinearLayout
+                android:id="@+id/btnRootDir"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="根目录"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 统计 -->
+            <LinearLayout
+                android:id="@+id/btnStorageStat"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="📊"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 统计"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 新建（可选文件/文件夹） -->
+            <LinearLayout
+                android:id="@+id/btnNewFolder"
+                android:layout_width="wrap_content"
+                android:layout_height="34dp"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_toolbar_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="➕"
+                    android:textSize="12sp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" 新建"
+                    android:textSize="12sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- 间隔 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"
+        android:layout_marginTop="2dp"
+        android:layout_marginBottom="2dp"/>
+
+    <!-- 3. 中间文件列表区域（最大化纵向空间） -->
+    <LinearLayout
+        android:id="@+id/contentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="#FFFFFF">
+
+        <!-- 内部存储内容区 -->
+        <LinearLayout
+            android:id="@+id/internalStorageContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <!-- 文件列表（去掉独立操作栏，直接放列表） -->
+            <ScrollView
+                android:id="@+id/scrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:overScrollMode="never">
+                <LinearLayout
+                    android:id="@+id/fileListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"/>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- U盘管理内容区 -->
+        <LinearLayout
+            android:id="@+id/usbStorageContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <!-- U盘未连接提示 -->
+            <LinearLayout
+                android:id="@+id/usbEmptyHint"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="💿"
+                    android:textSize="64sp"
+                    android:gravity="center"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="未检测到U盘"
+                    android:textSize="18sp"
+                    android:textColor="#2C3E50"
+                    android:textStyle="bold"
+                    android:layout_marginTop="16dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="请插入USB存储设备"
+                    android:textSize="14sp"
+                    android:textColor="#95A5A6"
+                    android:layout_marginTop="8dp"/>
+            </LinearLayout>
+
+            <!-- U盘列表 -->
+            <ScrollView
+                android:id="@+id/usbScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:overScrollMode="never"
+                android:visibility="gone">
+                <LinearLayout
+                    android:id="@+id/usbListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="4dp"/>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- Download内容区（共用文件列表） -->
+        <LinearLayout
+            android:id="@+id/downloadContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ScrollView
+                android:id="@+id/downloadScrollView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fillViewport="true"
+                android:overScrollMode="never">
+                <LinearLayout
+                    android:id="@+id/downloadListContainer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingTop="4dp"
+                    android:paddingBottom="4dp"/>
+            </ScrollView>
+        </LinearLayout>
+
+        <!-- 文件互传内容区 -->
+        <LinearLayout
+            android:id="@+id/fileTransferContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="📤"
+                android:textSize="64sp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="文件互传"
+                android:textSize="18sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="扫码推送 / DLNA / Samba"
+                android:textSize="14sp"
+                android:textColor="#95A5A6"
+                android:layout_marginTop="8dp"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

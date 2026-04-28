@@ -1,0 +1,64 @@
+# ==========================================
+# Android / Gradle 构建产物（不要上传）
+# ==========================================
+*.apk
+*.aab
+app/build/
+build/
+.gradle/                   # Gradle 缓存（每次构建自动生成）
+gradle/app/
+gradle/build/
+gradle/wrapper/
+!gradle/wrapper/gradle-wrapper.properties
+
+# Gradle wrapper（重新 clone 后运行 gradlew.bat 会自动下载）
+gradlew
+gradlew.bat
+
+# ==========================================
+# 本地环境配置（绝对路径，仅本机有效）
+# ==========================================
+local.properties
+local.properties.template
+
+# ==========================================
+# IDE
+# ==========================================
+.idea/
+*.iml
+.vscode/
+*.swp
+.DS_Store
+
+# ==========================================
+# 其他不需要纳入版本控制的文件
+# ==========================================
+*.log
+*.tmp
+*.bak
+*.zip
+
+# APK 反编译资源（apk_extract）
+apk_extract/
+
+# 构建日志
+build_error.txt
+build_output.txt
+
+# 密钥文件（绝对保密，不要上传）
+keystore.jks
+
+# ==========================================
+# 本地工具链（JDK/SDK/Gradle，体积过大不上传）
+# ==========================================
+tools/jdk/
+tools/android-sdk/
+tools/gradle-8.4/
+tools/gradle/
+
+# AI 工作记忆（本地会话数据）
+.workbuddy/
+
+
+# 本地配置文件（含绝对路径）
+CONFIG.txt

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 圆形翻页按钮背景 -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 焦点状态：蓝色渐变背景 -->
+    <item android:state_focused="true">
+        <shape android:shape="oval">
+            <gradient android:startColor="#2196F3" android:endColor="#1976D2" android:angle="135"/>
+            <size android:width="48dp" android:height="48dp"/>
+        </shape>
+    </item>
+    <!-- 按下状态：深蓝色背景 -->
+    <item android:state_pressed="true">
+        <shape android:shape="oval">
+            <solid android:color="#1565C0"/>
+            <size android:width="48dp" android:height="48dp"/>
+        </shape>
+    </item>
+    <!-- 未选中状态：半透明黑色背景 -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#80000000"/>
+            <size android:width="48dp" android:height="48dp"/>
+        </shape>
+    </item>
+</selector>

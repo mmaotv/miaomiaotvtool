@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 顶部标题栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="24dp"
+        android:paddingEnd="20dp"
+        android:background="#FFFFFF"
+        android:elevation="4dp">
+
+        <!-- Logo + 标题 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/ivTitleLogo"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:src="@drawable/ic_logo_titlebar"
+                android:scaleType="fitCenter"/>
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:text="@string/app_name"
+                android:textSize="20sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 返回按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:paddingHorizontal="20dp"
+            android:background="@drawable/btn_home_bg_inset"
+            android:focusable="true"
+            android:clickable="true">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◀ 返回"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 内容区域 - 垂直滚动 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            android:paddingHorizontal="48dp"
+            android:paddingVertical="32dp">
+
+            <!-- App 名称 -->
+            <TextView
+                android:id="@+id/tvAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/app_name"
+                android:textSize="28sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"/>
+
+            <!-- 版本号 -->
+            <TextView
+                android:id="@+id/tvVersion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="版本 1.0.0"
+                android:textSize="14sp"
+                android:textColor="#7F8C8D"/>
+
+            <!-- 版本描述 -->
+            <TextView
+                android:id="@+id/tvVersionDesc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="本次升级新增扫码推送与U盘管理功能"
+                android:textSize="13sp"
+                android:textColor="#00D9FF"/>
+
+            <!-- 分隔线 -->
+            <View
+                android:layout_width="200dp"
+                android:layout_height="1dp"
+                android:layout_marginVertical="24dp"
+                android:background="#E0E0E0"/>
+
+            <!-- 简介 -->
+            <TextView
+                android:id="@+id/tvAboutMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/about_message"
+                android:textSize="16sp"
+                android:textColor="#5D6D7E"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"/>
+
+            <!-- 联系信息 -->
+            <TextView
+                android:id="@+id/tvContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:textColor="#5D6D7E"
+                android:textSize="14sp"
+                android:gravity="center"/>
+
+            <!-- GitHub 链接 -->
+            <TextView
+                android:id="@+id/tvGithub"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="#00D9FF"
+                android:textSize="14sp"
+                android:gravity="center"/>
+
+            <!-- 版权信息 -->
+            <TextView
+                android:id="@+id/tvCopyright"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="© 2024 喵喵嗷影视"
+                android:textSize="13sp"
+                android:textColor="#95A5A6"
+                android:gravity="center"/>
+
+            <!-- 按钮组 - 改为垂直排列，更大尺寸 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:layout_marginTop="36dp">
+
+                <!-- 打开 GitHub 按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnOpenGithub"
+                    android:layout_width="240dp"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/btn_dialog_confirm_bg"
+                    android:layout_marginBottom="16dp"
+                    android:focusable="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="🌐 打开 GitHub"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 日志按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnViewLogs"
+                    android:layout_width="240dp"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/btn_go_bg_inset"
+                    android:layout_marginBottom="16dp"
+                    android:focusable="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📋 日志"
+                        android:textSize="16sp"
+                        android:textColor="#FFFFFF"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+
+                <!-- 知道了按钮 -->
+                <LinearLayout
+                    android:id="@+id/btnClose"
+                    android:layout_width="240dp"
+                    android:layout_height="56dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:background="@drawable/btn_dialog_cancel_bg"
+                    android:focusable="true"
+                    android:clickable="true">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="知道了"
+                        android:textSize="16sp"
+                        android:textColor="#7F8C8D"
+                        android:textStyle="bold"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- TV Banner（320x180dp，横幅显示在TV启动器）-->
+<!-- 深色背景+猫咪emoji+应用名 -->
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- 渐变背景 -->
+    <item>
+        <shape>
+            <gradient
+                android:angle="135"
+                android:endColor="#CC2233"
+                android:startColor="#1A1A2E"
+                android:type="linear" />
+        </shape>
+    </item>
+    <!-- 标题文字（实际TV Banner建议用PNG图片，这里用颜色层代替） -->
+    <item android:gravity="center">
+        <color android:color="#00000000" />
+    </item>
+</layer-list>

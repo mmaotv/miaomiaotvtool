@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 应用列表项：焦点发光与选中状态严格分离，勾选标记在图标内右上角，不外溢不被遮挡 -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:clickable="true"
+    android:padding="4dp">
+
+    <!-- 隐藏的兼容占位（保留id，不显示任何背景/边框） -->
+    <View
+        android:id="@+id/viewSelectedBg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <!-- 主内容（item背景由Java控制：item_app_normal / item_app_selected / focus_glow_effect） -->
+    <LinearLayout
+        android:id="@+id/mainContent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:padding="8dp"
+        android:background="@drawable/item_app_normal">
+
+        <!-- 图标区容器（无背景框，无边框） -->
+        <FrameLayout
+            android:layout_width="56dp"
+            android:layout_height="56dp">
+
+            <!-- 应用图标 -->
+            <ImageView
+                android:id="@+id/ivAppIcon"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_gravity="center"
+                android:scaleType="fitCenter"/>
+
+            <!-- 系统应用标记（右下角小徽标，不遮挡图标） -->
+            <ImageView
+                android:id="@+id/ivSystemBadge"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_gravity="bottom|end"
+                android:layout_marginEnd="0dp"
+                android:layout_marginBottom="0dp"
+                android:src="@drawable/ic_system_badge"
+                android:visibility="gone"/>
+
+            <!-- 勾选标记：位于图标内右上角，放大清晰，最高 elevation，不外溢 -->
+            <TextView
+                android:id="@+id/tvCheckmark"
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="0dp"
+                android:layout_marginEnd="0dp"
+                android:text="✓"
+                android:textSize="13sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/check_circle_bg"
+                android:elevation="10dp"
+                android:translationZ="10dp"
+                android:visibility="gone"/>
+        </FrameLayout>
+
+        <!-- 应用名称 -->
+        <TextView
+            android:id="@+id/tvAppLabel"
+            android:layout_width="72dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="应用名称"
+            android:textSize="11sp"
+            android:textColor="#2C3E50"
+            android:textAlignment="center"
+            android:maxLines="2"
+            android:ellipsize="end"
+            android:gravity="center"/>
+    </LinearLayout>
+
+</FrameLayout>

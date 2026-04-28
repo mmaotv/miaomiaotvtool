@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:paddingHorizontal="18dp"
+    android:paddingVertical="14dp"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bookmark_item_bg"
+    android:focusable="true"
+    android:clickable="true">
+
+    <!-- 书签图标 -->
+    <TextView
+        android:id="@+id/tvIcon"
+        android:layout_width="44dp"
+        android:layout_height="44dp"
+        android:text="⭐"
+        android:textSize="24sp"
+        android:textColor="#FFB300"
+        android:gravity="center"
+        android:background="@drawable/bookmark_icon_bg"/>
+
+    <!-- 标题和网址 -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="14dp">
+
+        <TextView
+            android:id="@+id/tvTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="页面标题"
+            android:textSize="16sp"
+            android:textColor="#2C3E50"
+            android:textStyle="bold"
+            android:maxLines="1"
+            android:ellipsize="end"/>
+
+        <TextView
+            android:id="@+id/tvUrl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="https://..."
+            android:textSize="12sp"
+            android:textColor="#7F8C8D"
+            android:maxLines="1"
+            android:ellipsize="end"
+            android:layout_marginTop="3dp"/>
+    </LinearLayout>
+
+    <!-- 删除按钮 -->
+    <LinearLayout
+        android:id="@+id/btnDelete"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/btn_tool_bg_inset"
+        android:focusable="false"
+        android:clickable="true">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="✖"
+            android:textSize="16sp"
+            android:textColor="#E74C3C"/>
+    </LinearLayout>
+
+</LinearLayout>

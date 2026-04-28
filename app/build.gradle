@@ -1,0 +1,71 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.miaomiao.tv'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId "com.miaomiao.tv"
+        minSdk 21
+        targetSdk 36
+        versionCode 7
+        versionName "1.17"
+        resConfigs "zh", "en"
+    }
+
+    signingConfigs {
+        release {
+            storeFile file("$rootDir/keystore.jks")
+            storePassword "miaomiao123"
+            keyAlias "miaomiao"
+            keyPassword "miaomiao123"
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+        // 启用 desugaring 以支持 Java 8 API（如 removeIf、forEach 等）在 Android 6 上运行
+        coreLibraryDesugaringEnabled true
+    }
+
+    lint {
+        abortOnError false
+        checkReleaseBuilds false
+    }
+}
+
+dependencies {
+    // Desugaring library - 必须放在首位
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.leanback:leanback:1.0.0'
+    implementation 'androidx.core:core:1.12.0'
+    implementation 'androidx.recyclerview:recyclerview:1.3.2'
+    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'dev.rikka.shizuku:api:13.1.5'
+    implementation 'dev.rikka.shizuku:provider:13.1.5'
+
+    // libadb-android - 本地源码 (libadb-android-master/libadb)
+    // 内部已包含 spake2-android 依赖，无需额外配置
+    implementation project(':libadb')
+    // Conscrypt for TLS support (Android 11+ wireless debugging)
+    implementation 'org.conscrypt:conscrypt-android:2.5.3'
+    // 移除 sun-security-android：我们使用标准 Java KeyPairGenerator，不再依赖内部 API
+}

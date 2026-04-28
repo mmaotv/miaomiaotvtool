@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_rounded_bg"
+    android:paddingHorizontal="28dp"
+    android:paddingTop="24dp"
+    android:paddingBottom="20dp"
+    android:gravity="center">
+
+    <!-- 图标 -->
+    <TextView
+        android:id="@+id/dialogIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="📋"
+        android:textSize="36sp"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- 标题 -->
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设备信息"
+        android:textSize="20sp"
+        android:textColor="#2C3E50"
+        android:textStyle="bold"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 分隔线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 可滚动内容 -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="500dp"
+        android:scrollbars="vertical">
+
+        <TextView
+            android:id="@+id/dialogMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="内容"
+            android:textSize="15sp"
+            android:textColor="#34495E"
+            android:gravity="start"
+            android:lineSpacingExtra="8dp"
+            android:letterSpacing="0.01"/>
+    </ScrollView>
+
+    <!-- 分隔线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 按钮 -->
+    <LinearLayout
+        android:id="@+id/dialogButtons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <LinearLayout
+            android:id="@+id/btnNegative"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_dialog_cancel_bg"
+            android:paddingHorizontal="32dp"
+            android:layout_marginEnd="12dp"
+            android:visibility="gone"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:id="@+id/tvNegative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="取消"
+                android:textSize="15sp"
+                android:textColor="#7F8C8D"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnPositive"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_dialog_confirm_bg"
+            android:paddingHorizontal="40dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:id="@+id/tvPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确定"
+                android:textSize="15sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
+

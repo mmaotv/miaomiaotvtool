@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Apple TV Light Theme -->
+    <style name="Theme.MiaoMiaoTV" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowBackground">@color/atv_background</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:statusBarColor">@color/atv_background</item>
+        <item name="android:navigationBarColor">@color/atv_background</item>
+        <item name="colorPrimary">@color/atv_blue</item>
+        <item name="colorPrimaryDark">@color/atv_blue_pressed</item>
+        <item name="colorAccent">@color/atv_blue</item>
+        <item name="android:colorControlHighlight">@color/atv_blue</item>
+        <item name="android:textColorPrimary">@color/atv_text_primary</item>
+        <item name="android:textColorSecondary">@color/atv_text_secondary</item>
+    </style>
+</resources>

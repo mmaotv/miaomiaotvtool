@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 顶部标题栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:paddingHorizontal="16dp"
+        android:elevation="4dp">
+
+        <!-- 返回按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBackHome"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_home_bg_inset"
+            android:paddingHorizontal="12dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="◀"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 返回"
+                android:textSize="11sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- 标题 - 居中 -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="扫码推送"
+            android:textSize="18sp"
+            android:textColor="#2C3E50"
+            android:textStyle="bold"
+            android:gravity="center"/>
+
+        <!-- 刷新按钮 -->
+        <LinearLayout
+            android:id="@+id/btnRefreshQr"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="10dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="↻"
+                android:textSize="14sp"
+                android:textColor="#2C3E50"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 刷新"
+                android:textSize="11sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 主内容区 - 左右布局 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:paddingHorizontal="24dp"
+        android:paddingVertical="16dp">
+
+        <!-- 左侧：二维码 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+
+            <!-- 二维码图片 - 缩小到200dp -->
+            <ImageView
+                android:id="@+id/ivQrCode"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:scaleType="fitCenter"
+                android:background="@drawable/qr_code_bg"
+                android:padding="8dp"/>
+
+            <!-- 加载提示 -->
+            <TextView
+                android:id="@+id/tvLoading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="正在生成..."
+                android:textSize="12sp"
+                android:textColor="#7F8C8D"
+                android:visibility="visible"/>
+
+            <!-- 功能提示 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="手机扫码推送网址或文件"
+                android:textSize="13sp"
+                android:textColor="#00B8D9"
+                android:gravity="center"/>
+        </LinearLayout>
+
+        <!-- 右侧：信息面板 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_marginStart="24dp"
+            android:background="@drawable/info_text_bg"
+            android:padding="20dp">
+
+            <!-- 第一行：IP地址 -->
+            <LinearLayout
+                android:id="@+id/layoutIpAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="访问地址"
+                    android:textSize="12sp"
+                    android:textColor="#7F8C8D"
+                    android:layout_marginBottom="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvIpAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="正在获取..."
+                    android:textSize="16sp"
+                    android:textColor="#00D9FF"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <!-- 分隔线 -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginVertical="16dp"/>
+
+            <!-- 第二行：已推送软件按钮 -->
+            <LinearLayout
+                android:id="@+id/btnOpenReceived"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:background="@drawable/btn_tool_bg_inset"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已推送软件"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 等待状态 -->
+            <TextView
+                android:id="@+id/tvWaitStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="等待扫码..."
+                android:textSize="14sp"
+                android:textColor="#FF9F1C"
+                android:textStyle="bold"/>
+
+            <!-- 提示 -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="手机与电视需在同一WiFi"
+                android:textSize="11sp"
+                android:textColor="#95A5A6"
+                android:gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 底部提示 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="#ECF0F1"
+        android:paddingHorizontal="16dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="方向键移动 | OK确认 | 长按刷新二维码"
+            android:textSize="11sp"
+            android:textColor="#7F8C8D"/>
+    </LinearLayout>
+
+</LinearLayout>

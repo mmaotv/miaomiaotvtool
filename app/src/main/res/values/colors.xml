@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ============================================================
+         Apple TV Style Color System - Light Theme
+         White Background + System Blue Accent
+         ============================================================ -->
+
+    <!-- Apple TV White / Light Gray Backgrounds -->
+    <color name="atv_background">#FFFFFF</color>
+    <color name="atv_card">#F5F5F7</color>
+    <color name="atv_card_elevated">#FFFFFF</color>
+    <color name="atv_card_highlight">#E8E8ED</color>
+    <color name="atv_overlay">#0000000F</color>
+    <color name="atv_page_bg">#F8F9FA</color>
+
+    <!-- Apple TV Text - Dark on White -->
+    <color name="atv_text_primary">#1D1D1F</color>
+    <color name="atv_text_secondary">#86868B</color>
+    <color name="atv_text_tertiary">#AEAEB2</color>
+    <color name="atv_text_quaternary">#C7C7CC</color>
+    <color name="atv_text_on_accent">#FFFFFF</color>
+
+    <!-- Apple TV Accent - System Blue (电视版加深) -->
+    <color name="atv_blue">#0066CC</color>
+    <color name="atv_blue_pressed">#004C99</color>
+    <color name="atv_blue_light">#3388DD</color>
+    <color name="atv_blue_bg">#CCE0F5</color>
+
+    <!-- Apple TV System Colors (语义化) -->
+    <color name="atv_green">#34C759</color>
+    <color name="atv_orange">#FF9500</color>
+    <color name="atv_red">#FF3B30</color>
+    <color name="atv_purple">#AF52DE</color>
+    <color name="atv_teal">#5AC8FA</color>
+    <color name="atv_indigo">#5856D6</color>
+    <color name="atv_yellow">#FFCC00</color>
+
+    <!-- Apple TV UI Chrome (浅色边框/分隔线) -->
+    <color name="atv_separator">#D1D1D6</color>
+    <color name="atv_separator_light">#E5E5EA</color>
+    <color name="atv_nav_bar">#F5F5F7</color>
+    <color name="atv_focus_ring">#007AFF</color>
+    <color name="atv_focus_glow">#007AFF33</color>
+
+    <!-- Legacy compatibility - 统一映射到 ATV Light -->
+    <color name="primary">@color/atv_blue</color>
+    <color name="primary_dark">@color/atv_blue_pressed</color>
+    <color name="primary_light">@color/atv_blue_bg</color>
+    <color name="background">@color/atv_background</color>
+    <color name="background_grouped">@color/atv_page_bg</color>
+    <color name="background_secondary">@color/atv_card</color>
+    <color name="background_elevated">@color/atv_card_elevated</color>
+    <color name="text_primary">@color/atv_text_primary</color>
+    <color name="text_secondary">@color/atv_text_secondary</color>
+    <color name="text_tertiary">@color/atv_text_tertiary</color>
+    <color name="separator">@color/atv_separator</color>
+    <color name="separator_opaque">@color/atv_separator_light</color>
+    <color name="fill_primary">#0000000F</color>
+    <color name="fill_secondary">#00000007</color>
+    <color name="system_blue">@color/atv_blue</color>
+    <color name="system_green">@color/atv_green</color>
+    <color name="system_orange">@color/atv_orange</color>
+    <color name="system_red">@color/atv_red</color>
+    <color name="system_purple">@color/atv_purple</color>
+    <color name="system_teal">@color/atv_teal</color>
+    <color name="system_indigo">@color/atv_indigo</color>
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="danger_gradient_start">@color/atv_red</color>
+    <color name="danger_gradient_end">#CC2F2F</color>
+    <color name="divider">@color/atv_separator</color>
+    <color name="overlay">#33000000</color>
+    <color name="status_green">@color/atv_green</color>
+    <color name="status_gray">@color/atv_text_tertiary</color>
+    <color name="card_shadow">#1A000000</color>
+</resources>

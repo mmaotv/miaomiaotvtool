@@ -1,0 +1,15 @@
+# 喵喵嗷影视 - 一键构建脚本
+# 使用方法：在项目根目录运行 gradlew assembleDebug 或 assembleRelease
+
+# 注意：首次构建前，请确保：
+# 1. 已安装 Android SDK（推荐通过 Android Studio 安装）
+# 2. 创建 local.properties 文件，内容示例：
+#    sdk.dir=C\:\\Users\\你的用户名\\AppData\\Local\\Android\\Sdk
+# 3. 确保 JAVA_HOME 已设置（JDK 11 或以上）
+
+# 调试版（直接安装到设备）
+# gradlew.bat assembleDebug
+# gradlew.bat installDebug
+
+# 正式版（需签名）
+# gradlew.bat assembleRelease

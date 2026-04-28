@@ -1,0 +1,653 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
+    <!-- 顶部工具栏 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#FFFFFF"
+        android:elevation="4dp">
+
+        <!-- 返回首页 -->
+        <LinearLayout
+            android:id="@+id/btnBackHome"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_home_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="返回"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- 标题 + ADB状态 -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginStart="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="应用管理"
+                android:textSize="17sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvAdbStatus"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="adb：检测中..."
+                android:textSize="11sp"
+                android:textColor="#95A5A6"/>
+        </LinearLayout>
+
+        <!-- 批量选择 -->
+        <LinearLayout
+            android:id="@+id/btnEnterBatch"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="12dp"
+            android:layout_marginEnd="8dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="批量"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- 刷新ADB -->
+        <LinearLayout
+            android:id="@+id/btnRefreshAdb"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="12dp"
+            android:layout_marginEnd="8dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="刷新"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- 断开ADB - 仅连接时显示 -->
+        <LinearLayout
+            android:id="@+id/btnAdbDisconnect"
+            android:layout_width="wrap_content"
+            android:layout_height="38dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_danger_bg"
+            android:paddingHorizontal="12dp"
+            android:visibility="gone"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✂"
+                android:textSize="16sp"
+                android:textColor="#FFFFFF"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 断开"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 间隔 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"/>
+
+    <!-- 主内容区 -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <!-- 左侧导航面板（批量模式时自动隐藏） -->
+        <LinearLayout
+            android:id="@+id/leftNavPanel"
+            android:layout_width="160dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="#F0F4F8"
+            android:padding="12dp">
+
+            <!-- 个人应用 -->
+            <LinearLayout
+                android:id="@+id/btnPersonalApps"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="个人应用"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 系统应用 -->
+            <LinearLayout
+                android:id="@+id/btnSystemApps"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="系统应用"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 全部应用 -->
+            <LinearLayout
+                android:id="@+id/btnAllApps"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="全部应用"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 已禁用 -->
+            <LinearLayout
+                android:id="@+id/btnDisabledApps"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已禁用"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#E0E0E0"
+                android:layout_marginVertical="8dp"/>
+
+            <!-- 设备信息 -->
+            <LinearLayout
+                android:id="@+id/btnAppSettings"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="设备信息"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- 无线配对 -->
+            <LinearLayout
+                android:id="@+id/btnAdbWirelessPair"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="无线配对"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <!-- adb终端 -->
+            <LinearLayout
+                android:id="@+id/btnAdbCommand"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_nav_item_bg"
+                android:paddingHorizontal="14dp"
+                android:layout_marginBottom="8dp"
+                android:focusable="true"
+                android:clickable="true"
+                android:elevation="2dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="adb终端"
+                    android:textSize="14sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"/>
+
+        </LinearLayout>
+
+        <!-- 右侧内容面板 -->
+        <FrameLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="#FFFFFF">
+
+            <!-- 应用列表 (网格布局) -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/appGridView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="8dp"
+                android:paddingBottom="72dp"
+                android:clipToPadding="false"
+                android:visibility="visible"/>
+
+            <!-- 已禁用软件列表 -->
+            <LinearLayout
+                android:id="@+id/disabledAppsPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="已禁用应用"
+                    android:textSize="16sp"
+                    android:textColor="#2C3E50"
+                    android:textStyle="bold"
+                    android:padding="16dp"
+                    android:paddingBottom="4dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/disabledAppsGridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:paddingBottom="72dp"
+                    android:clipToPadding="false"/>
+            </LinearLayout>
+
+            <!-- 系统应用列表 -->
+            <LinearLayout
+                android:id="@+id/systemAppsPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="系统应用"
+                    android:textSize="16sp"
+                    android:textColor="#2C3E50"
+                    android:textStyle="bold"
+                    android:padding="16dp"
+                    android:paddingBottom="4dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/systemAppsGridView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="8dp"
+                    android:paddingBottom="72dp"
+                    android:clipToPadding="false"/>
+            </LinearLayout>
+
+            <!-- ADB面板 -->
+            <LinearLayout
+                android:id="@+id/adbPanel"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="24dp"
+                android:visibility="gone">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ADB工具"
+                    android:textSize="20sp"
+                    android:textColor="#2C3E50"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="24dp"/>
+
+                <!-- ADB连接卡片 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/info_text_bg"
+                    android:padding="20dp"
+                    android:layout_marginBottom="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="ADB网络连接"
+                        android:textSize="16sp"
+                        android:textColor="#2C3E50"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
+
+                </LinearLayout>
+
+                <!-- 无线配对卡片 -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@drawable/info_text_bg"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="无线ADB配对"
+                        android:textSize="16sp"
+                        android:textColor="#2C3E50"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="12dp"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="配对码选填（无配对码则直接连接已配对设备）"
+                        android:textSize="13sp"
+                        android:textColor="#7F8C8D"
+                        android:layout_marginBottom="16dp"/>
+
+                    <LinearLayout
+                        android:id="@+id/btnAdbPairCard"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:background="@drawable/btn_go_bg_inset"
+                        android:paddingHorizontal="20dp"
+                        android:paddingVertical="10dp"
+                        android:focusable="true"
+                        android:clickable="true">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="🔑 开始配对"
+                            android:textSize="14sp"
+                            android:textColor="#FFFFFF"/>
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- 批量操作栏：固定在页面底部，与列表保留间距，不遮挡图标 -->
+    <LinearLayout
+        android:id="@+id/batchActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="@drawable/batch_bar_bg"
+        android:paddingHorizontal="24dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/tvBatchCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已选 0 个应用"
+            android:textSize="14sp"
+            android:textColor="#2C3E50"
+            android:textStyle="bold"
+            android:layout_marginEnd="16dp"/>
+
+        <!-- 全选按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBatchSelectAll"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_toolbar_bg"
+            android:paddingHorizontal="14dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="☑"
+                android:textSize="13sp"
+                android:textColor="#2C3E50"/>
+            <TextView
+                android:id="@+id/tvSelectAllText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 全选"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- 反选按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBatchInvert"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_toolbar_bg"
+            android:paddingHorizontal="14dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="⟲"
+                android:textSize="13sp"
+                android:textColor="#2C3E50"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 反选"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- 卸载按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBatchUninstall"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_danger_bg"
+            android:paddingHorizontal="16dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="卸载"
+                android:textSize="12sp"
+                android:textColor="#FFFFFF"/>
+        </LinearLayout>
+
+        <!-- 提取 -->
+        <LinearLayout
+            android:id="@+id/btnBatchExtract"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提取"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- 禁用 - 仅在ADB连接时显示 -->
+        <LinearLayout
+            android:id="@+id/btnBatchDisable"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_toolbar_bg"
+            android:paddingHorizontal="14dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="禁用"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <!-- 重置 - 仅在ADB连接时显示 -->
+        <LinearLayout
+            android:id="@+id/btnBatchReset"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_toolbar_bg"
+            android:paddingHorizontal="14dp"
+            android:layout_marginEnd="10dp"
+            android:focusable="true"
+            android:clickable="true"
+            android:visibility="gone">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="重置"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <!-- 取消按钮 -->
+        <LinearLayout
+            android:id="@+id/btnBatchCancel"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/btn_tool_bg_inset"
+            android:paddingHorizontal="14dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="✕"
+                android:textSize="13sp"
+                android:textColor="#2C3E50"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" 取消"
+                android:textSize="12sp"
+                android:textColor="#2C3E50"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

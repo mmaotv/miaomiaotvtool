@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:orientation="horizontal"
+    android:gravity="center_vertical"
+    android:background="@drawable/info_text_bg"
+    android:paddingStart="25dp"
+    android:paddingEnd="25dp"
+    android:layout_marginBottom="6dp"
+    android:focusable="true"
+    android:clickable="true">
+
+    <!-- 文件图标（emoji或缩略图） -->
+    <FrameLayout
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tvFileIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📄"
+            android:textSize="20sp"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/ivThumb"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:scaleType="centerCrop"
+            android:visibility="gone"/>
+    </FrameLayout>
+
+    <!-- 文件名称 -->
+    <TextView
+        android:id="@+id/tvFileName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="10dp"
+        android:text="filename.txt"
+        android:textSize="13sp"
+        android:textColor="#2C3E50"
+        android:maxLines="1"
+        android:ellipsize="middle"/>
+
+    <!-- 文件信息 -->
+    <TextView
+        android:id="@+id/tvFileInfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.2 MB"
+        android:textSize="11sp"
+        android:textColor="#95A5A6"
+        android:layout_marginStart="8dp"/>
+
+    <!-- 选中指示器 -->
+    <TextView
+        android:id="@+id/tvSelected"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="✓"
+        android:textSize="14sp"
+        android:textColor="#00D9FF"
+        android:visibility="gone"
+        android:layout_marginStart="4dp"/>
+
+</LinearLayout>

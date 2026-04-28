@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@drawable/dialog_standard_bg"
+    android:padding="24dp">
+
+    <!-- 标题区域 -->
+    <LinearLayout
+        android:id="@+id/titleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:paddingBottom="16dp"
+        android:background="@drawable/popup_header_bg">
+
+        <TextView
+            android:id="@+id/dialogIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📍"
+            android:textSize="28sp"
+            android:layout_marginEnd="12dp"/>
+
+        <TextView
+            android:id="@+id/dialogTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提示"
+            android:textSize="20sp"
+            android:textColor="@color/atv_text_primary"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/atv_separator_light"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- 内容容器（纯文本消息，与输入框容器平级） -->
+    <LinearLayout
+        android:id="@+id/dialogContentContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 文本消息 -->
+        <TextView
+            android:id="@+id/dialogMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="内容"
+            android:textSize="16sp"
+            android:textColor="@color/atv_text_secondary"
+            android:gravity="center"
+            android:lineSpacingExtra="6dp"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <!-- 输入框容器（与 dialogContentContainer 平级，避免父容器 GONE 时输入框无法显示）-->
+    <LinearLayout
+        android:id="@+id/dialogInputContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="4dp"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="IP地址："
+            android:textSize="13sp"
+            android:textColor="#7F8C8D"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/dialogInput1"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:textSize="16sp"
+            android:textColor="#1D1D1F"
+            android:textColorHint="#95A5A6"
+            android:background="@drawable/dialog_standard_edit_bg"
+            android:paddingHorizontal="14dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:layout_marginBottom="12dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="端口："
+            android:textSize="13sp"
+            android:textColor="#7F8C8D"
+            android:layout_marginBottom="4dp"/>
+
+        <EditText
+            android:id="@+id/dialogInput2"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:textSize="16sp"
+            android:textColor="#1D1D1F"
+            android:textColorHint="#95A5A6"
+            android:background="@drawable/dialog_standard_edit_bg"
+            android:paddingHorizontal="14dp"
+            android:singleLine="true"
+            android:inputType="text"
+            android:visibility="gone"/>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/buttonDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/atv_separator_light"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 两列按钮 -->
+    <LinearLayout
+        android:id="@+id/dialogButtons"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- 取消按钮 -->
+        <LinearLayout
+            android:id="@+id/btnNegative"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/dialog_standard_cancel_bg"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:id="@+id/tvNegative"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="取消"
+                android:textSize="16sp"
+                android:textColor="@color/atv_text_secondary"
+                android:textStyle="bold"/>
+        </LinearLayout>
+
+        <!-- 确认按钮 -->
+        <LinearLayout
+            android:id="@+id/btnPositive"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+            android:background="@drawable/dialog_standard_confirm_bg"
+            android:layout_marginStart="8dp"
+            android:focusable="true"
+            android:clickable="true">
+            <TextView
+                android:id="@+id/tvPositive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="确定"
+                android:textSize="16sp"
+                android:textColor="@color/atv_text_on_accent"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

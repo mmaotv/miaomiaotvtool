@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/dialog_standard_bg">
+
+    <!-- 标题：应用图标 + 名称 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/popup_header_bg">
+
+        <ImageView
+            android:id="@+id/ivPopupIcon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:scaleType="fitCenter"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="20dp">
+
+            <TextView
+                android:id="@+id/tvPopupAppName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="应用名称"
+                android:textSize="16sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvPopupPackage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="com.example.package"
+                android:textSize="11sp"
+                android:textColor="#95A5A6"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 两列按钮网格 -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 第一行：启动 + 提取 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/btnPopupOpen"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"
+                    android:textColor="#3498DB"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="启动"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnPopupExtract"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="提取安装包"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第二行：卸载 + 批量 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/btnPopupUninstall"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="卸载"
+                    android:textSize="13sp"
+                    android:textColor="#E74C3C"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnBatchMode"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="批量选择"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- ADB功能分隔线 -->
+        <View
+            android:id="@+id/adbDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E0E0E0"
+            android:layout_marginVertical="10dp"
+            android:visibility="gone"/>
+
+        <!-- 第三行：禁用 + 重置 (ADB) -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            android:id="@+id/adbButtonsRow">
+
+            <LinearLayout
+                android:id="@+id/btnPopupDisable"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvDisableText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="禁用"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btnPopupReset"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="重置数据"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

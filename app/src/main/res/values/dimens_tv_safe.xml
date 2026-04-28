@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 电视安全边距工具类 -->
+<!-- 用于解决电视16:9屏幕的边缘裁切问题 -->
+<resources>
+    <!-- 全局安全边距尺寸 -->
+    <dimen name="safe_margin_horizontal">48dp</dimen>
+    <dimen name="safe_margin_vertical">32dp</dimen>
+    <dimen name="safe_padding_screen">24dp</dimen>
+    
+    <!-- 工具栏高度 -->
+    <dimen name="toolbar_height">52dp</dimen>
+    <dimen name="toolbar_btn_height">38dp</dimen>
+    
+    <!-- 按钮尺寸 -->
+    <dimen name="home_btn_width">145dp</dimen>
+    <dimen name="home_btn_height">100dp</dimen>
+    <dimen name="toolbar_btn_min_width">54dp</dimen>
+    
+    <!-- 圆角 -->
+    <dimen name="corner_radius_small">8dp</dimen>
+    <dimen name="corner_radius_medium">12dp</dimen>
+    <dimen name="corner_radius_large">16dp</dimen>
+</resources>

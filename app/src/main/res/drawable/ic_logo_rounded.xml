@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 大圆角方形Logo：首页8宫格功能入口图标、二级页面标题左侧装饰 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="72"
+    android:viewportHeight="72">
+    <!-- 大圆角方形红色背景 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M8,8 L64,8 C66,8 68,10 68,12 L68,60 C68,62 66,64 64,64 L8,64 C6,64 4,62 4,60 L4,12 C4,10 6,8 8,8 Z" />
+    <!-- 猫脸 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M36,18 C27,18 20,25 20,33 C20,41 25,48 32,51 L32,58 C32,59 33,60 34,60 L38,60 C39,60 40,59 40,58 L40,51 C47,48 52,41 52,33 C52,25 45,18 36,18 Z" />
+    <!-- 左耳 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M26,20 L29,14 L34,23 Z" />
+    <!-- 右耳 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,20 L43,14 L38,23 Z" />
+    <!-- 左眼 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M30,30 C30,28 31,27 32,27 C33,27 34,28 34,30 C34,32 33,33 32,33 C31,33 30,32 30,30 Z" />
+    <!-- 右眼 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M38,30 C38,28 39,27 40,27 C41,27 42,28 42,30 C42,32 41,33 40,33 C39,33 38,32 38,30 Z" />
+    <!-- 鼻子 -->
+    <path
+        android:fillColor="#FFAAAA"
+        android:pathData="M36,38 L33,42 L39,42 Z" />
+</vector>

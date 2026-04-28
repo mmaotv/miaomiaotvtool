@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:background="@drawable/dialog_standard_bg">
+
+    <!-- 标题区域 -->
+    <LinearLayout
+        android:id="@+id/headerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="16dp"
+        android:paddingBottom="12dp"
+        android:background="@drawable/popup_header_bg">
+
+        <!-- 图标 -->
+        <TextView
+            android:id="@+id/tvIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="📋"
+            android:textSize="28sp"/>
+
+        <!-- 标题和副标题 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="标题"
+                android:textSize="16sp"
+                android:textColor="#2C3E50"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvSubtitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="11sp"
+                android:textColor="#95A5A6"
+                android:visibility="gone"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 分隔线 -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="12dp"/>
+
+    <!-- 两列按钮网格 -->
+    <LinearLayout
+        android:id="@+id/buttonsContainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- 第一行 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/btn0"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText0"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项1"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn1"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项2"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第二行 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/btn2"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项3"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn3"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项4"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第三行 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="6dp">
+
+            <LinearLayout
+                android:id="@+id/btn4"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项5"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn5"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项6"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- 第四行 -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/btn6"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:layout_marginEnd="6dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项7"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn7"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:background="@drawable/btn_popup_item_bg"
+                android:paddingHorizontal="12dp"
+                android:focusable="true"
+                android:clickable="true">
+
+                <TextView
+                    android:id="@+id/tvIcon7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="▶"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/tvText7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="选项8"
+                    android:textSize="13sp"
+                    android:textColor="#2C3E50"
+                    android:layout_marginStart="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- 取消按钮 -->
+    <LinearLayout
+        android:id="@+id/btnCancel"
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:background="@drawable/dialog_standard_cancel_bg"
+        android:layout_marginTop="12dp"
+        android:focusable="true"
+        android:clickable="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="取消"
+            android:textSize="14sp"
+            android:textColor="#7F8C8D"/>
+    </LinearLayout>
+</LinearLayout>

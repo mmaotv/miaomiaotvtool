@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 圆形Logo：小图标、弹窗角标、加载占位图标 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- 圆形红底白猫 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M12,12m-12,0a12,12 0,1 1,24 0a12,12 0,1 1,-24 0" />
+    <!-- 猫脸 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M12,5 C8,5 5,8 5,11 C5,14 7,16 9,17 L9,19 C9,19.5 9.5,20 10,20 L14,20 C14.5,20 15,19.5 15,19 L15,17 C17,16 19,14 19,11 C19,8 16,5 12,5 Z" />
+    <!-- 左耳 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M7,6 L8.5,4.5 L10,7 Z" />
+    <!-- 右耳 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M17,6 L15.5,4.5 L14,7 Z" />
+    <!-- 左眼 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M10,10 C10,9 10.5,8.5 11,8.5 C11.5,8.5 12,9 12,10 C12,11 11.5,11.5 11,11.5 C10.5,11.5 10,11 10,10 Z" />
+    <!-- 右眼 -->
+    <path
+        android:fillColor="#CC2233"
+        android:pathData="M12,10 C12,9 12.5,8.5 13,8.5 C13.5,8.5 14,9 14,10 C14,11 13.5,11.5 13,11.5 C12.5,11.5 12,11 12,10 Z" />
+</vector>

@@ -1,0 +1,43 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">喵喵嗷工具箱</string>
+
+    
+    <string name="live_url">https://mengma.lanzoum.com/b01fphpgf</string>
+    <string name="vod_url">https://mengma.lanzoum.com/b01fhuuih</string>
+    <string name="tools_url">https://mengma.lanzoum.com/b0mcflmwf</string>
+    <string name="info_text">密码：miao</string>
+    
+
+    
+    <string name="home_title">喵喵嗷影视</string>
+    
+    <string name="subtitle_text">高清影视 · 随时随地</string>
+
+    
+    <string name="btn_live">直播</string>
+    <string name="btn_vod">点播</string>
+    <string name="btn_tools">工具</string>
+    <string name="btn_qr">扫码推送</string>
+    <string name="btn_file">文件管理</string>
+    <string name="btn_app">应用管理</string>
+
+    
+    <string name="user_agent">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36</string>
+    <string name="user_agent_type">chrome</string>
+
+    <string name="download_notification_channel">下载</string>
+    <string name="downloading">正在下载...</string>
+    <string name="download_complete">下载完成</string>
+    <string name="download_failed">下载失败</string>
+    <string name="download_confirm_title">下载文件</string>
+    <string name="download_confirm_msg">是否下载此文件？</string>
+    <string name="download_yes">下载</string>
+    <string name="download_no">取消</string>
+
+    
+    <string name="about_title">关于</string>
+    <string name="about_message">一款简洁好用的电视直播点播应用</string>
+    <string name="about_contact">mma0215@qq.com</string>
+    <string name="about_github">github.com/mmaotv/miaomiaotvtool</string>
+</resources>

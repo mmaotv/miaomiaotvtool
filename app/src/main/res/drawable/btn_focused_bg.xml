@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Apple TV Light 焦点态（选中/聚焦） -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#FFFFFF"/>
+    <stroke android:width="2.5dp" android:color="@color/atv_blue"/>
+    <corners android:radius="12dp"/>
+</shape>
