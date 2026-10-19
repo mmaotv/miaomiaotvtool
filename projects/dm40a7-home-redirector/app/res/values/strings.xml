@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">HomeRedirector</string>
+    <string name="service_label">HomeRedirector</string>
+    <string name="service_desc">当原厂桌面出现时自动切回第三方桌面</string>
+</resources>
