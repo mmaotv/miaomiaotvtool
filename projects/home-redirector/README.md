@@ -1,10 +1,13 @@
-# DM40A7 第三方桌面接管（HomeRedirector）
+# HomeRedirector —— 免 root 给电视盒子换第三方桌面
 
-免 root 解决「海看 Hiveview 定制 ROM 硬绑原厂桌面、无法更换默认桌面」的问题。
+一句话：**系统死活只认原厂桌面？这个工具帮你换成任意第三方桌面，不需要 root。**
 
-- **适用**：大麦盒子 DM40A7（Amlogic p212 / Android 6.0.1 / ROM `T-REX.FF.70.0808`）
-- **同样适用**：其它「系统只认原厂桌面、不允许禁用/替换」的定制 TV 盒子
+适用场景：定制 TV 盒子把桌面写死在系统框架里，`pm disable` / `pm uninstall` 都换不掉，第三方桌面装上去也永远当不了"主屏幕"。
+
+- **首个验证机型**：大麦盒子 DM40A7（Amlogic p212 / Android 6.0.1 / ROM `T-REX.FF.70.0808`）
+- **同样适用**：其它「系统只认原厂桌面、不允许禁用/替换」的定制电视盒子
 - **成品**：[`apk/HomeRedirector-v1.5.apk`](apk/HomeRedirector-v1.5.apk)
+- **配套目标桌面**：[`apk/emotnui_1.0.9.0.apk`](apk/emotnui_1.0.9.0.apk)（Emotn UI，已在 DM40A7 上实测可用）
 
 ---
 
@@ -57,12 +60,13 @@ startActivity(目标桌面)
 ## 目录结构
 
 ```
-projects/dm40a7-home-redirector/
+projects/home-redirector/
 ├── README.md                     本文件
 ├── docs/
 │   └── HomeRedirector-方案与部署手册.md    完整技术文档（含全部踩坑记录）
 ├── apk/
-│   └── HomeRedirector-v1.5.apk   成品
+│   ├── HomeRedirector-v1.5.apk   本工具（成品）
+│   └── emotnui_1.0.9.0.apk       配套目标桌面 Emotn UI（可直接装）
 └── app/                          源码（非 Gradle 工程，用 build.ps1 直接构建）
     ├── AndroidManifest.xml
     ├── build.ps1                 一键构建：aapt → javac → d8 → zipalign → apksigner
@@ -80,9 +84,9 @@ projects/dm40a7-home-redirector/
 ## 快速部署
 
 ```bash
-# 1. 装目标桌面 + 本工具
-adb install -r -d emotnui.apk
-adb install -r -d HomeRedirector-v1.5.apk
+# 1. 装目标桌面 + 本工具（两个 APK 都在 apk/ 目录下）
+adb install -r -d apk/emotnui_1.0.9.0.apk
+adb install -r -d apk/HomeRedirector-v1.5.apk
 
 # 2. 启用无障碍（无需进设置页手工点）
 adb shell "settings put secure accessibility_enabled 1"

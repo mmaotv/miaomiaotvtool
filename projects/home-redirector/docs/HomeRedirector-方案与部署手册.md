@@ -3,7 +3,8 @@
 > 归档日期：2026-10-17
 > 目标设备：大麦盒子 DM40A7（海看 Hiveview 定制 ROM）
 > 场景：原厂桌面是云端门户且服务器已停运，界面空白、连启动应用都做不到，需要换成第三方桌面
-> 最终形态：`dist/HomeRedirector-v1.5.apk`（无障碍 HOME 重定向 + 开机救援 + 可开关遮罩）
+> 最终形态：`apk/HomeRedirector-v1.5.apk`（无障碍 HOME 重定向 + 开机救援 + 可开关遮罩）
+> 配套目标桌面：`apk/emotnui_1.0.9.0.apk`（Emotn UI 1.0.9.0，DM40A7 实测可用）
 
 ---
 
@@ -114,7 +115,7 @@ pm list features
 
 **为什么必须用无障碍**：本 ROM 下按 HOME 时前台**完全不变**（goHome 静默失败），没有任何可观测的窗口变化信号 —— 唯一的可靠信号就是 HOME 按键事件本身。
 
-源码位置：`tools/HomeRedirector/src/com/miaomiaotv/homeredirector/`
+源码位置：`app/src/com/miaomiaotv/homeredirector/`
 
 | 文件 | 作用 |
 |---|---|
@@ -311,7 +312,7 @@ adb install -r -d --user 0 DomyUI4.2_Launcher_4.0.98_201903131910.apk
 # 注意 --user 0 不能省
 ```
 
-本地备份：`backups/hiveview_launcher.apk`
+> 原厂 APK 始终在设备 `/system/app/DomyUI4.2_Launcher_.../` 下，随时可重新拉取，不会丢。
 
 ### 8.3 完全卸载 HomeRedirector
 
@@ -345,28 +346,27 @@ adb uninstall com.miaomiaotv.homeredirector
 ## 十、交付物清单
 
 ```
-dist/
-  HomeRedirector-v1.5.apk          最终成品（当前设备在跑的就是它）
-  HomeRedirector-v1.2.apk          历史版本（遮罩方案早期版）
-
-tools/HomeRedirector/              正式方案源码
-  AndroidManifest.xml
-  src/com/miaomiaotv/homeredirector/
-    HomeWatcher.java               核心：按键拦截 + 看门狗 + 开机救援 + 遮罩
-    BootReceiver.java              开机广播双保险
-    MainActivity.java              设置页（遮罩开关）
-  res/values/strings.xml
-  res/xml/accessibility_service_config.xml
-  build.ps1                        一键构建（PowerShell）
-
-tools/HomeSetter/                  Device Owner 方案（本机因缺 device_admin 特性未成功，其它机型可用）
-  src/.../AdminReceiver.java
-  src/.../MainActivity.java
-  build.ps1
-
-backups/hiveview_launcher.apk      原厂桌面备份（救砖用）
-docs/HomeRedirector-方案与部署手册.md   本文档
+projects/home-redirector/
+├── README.md                              项目总览（快速上手）
+├── docs/
+│   └── HomeRedirector-方案与部署手册.md    本文档
+├── apk/
+│   ├── HomeRedirector-v1.5.apk            本工具成品（当前设备在跑的就是它）
+│   └── emotnui_1.0.9.0.apk                配套目标桌面 Emotn UI（可直接装）
+└── app/                                   源码（非 Gradle 工程，build.ps1 直接构建）
+    ├── AndroidManifest.xml
+    ├── build.ps1                          一键构建（PowerShell）
+    ├── res/values/strings.xml
+    ├── res/xml/accessibility_service_config.xml
+    └── src/com/miaomiaotv/homeredirector/
+        ├── HomeWatcher.java               核心：按键拦截 + 看门狗 + 开机救援 + 遮罩
+        ├── BootReceiver.java              开机广播双保险
+        └── MainActivity.java              设置页（遮罩开关）
 ```
+
+> Device Owner 方案（`HomeSetter`）源码只保留在本地工作区 `tools/HomeSetter/`，未纳入本仓库——本机因缺少 `android.software.device_admin` 特性未成功，仅在具有该特性的机型上适用。
+>
+> 原厂桌面备份（`hiveview_launcher.apk`）体积 7MB 且属厂商二进制，同样未纳入仓库；需要时从设备 `/system/app/` 直接拉取（见 8.2）。
 
 ### 构建说明
 
