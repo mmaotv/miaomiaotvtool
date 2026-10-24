@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 桌面图标下会被按固定宽度截断，名称控制在 7 个字以内 -->
+    <string name="app_name">小米盒子工具箱</string>
+
+    <string name="action_spro">小米盒子4SPro</string>
+    <string name="desc_spro">仅适用于安卓9系列的小米盒子4S Pro、4S Pro Max</string>
+
+    <string name="action_four">小米盒子4</string>
+    <string name="desc_four">仅适用于安卓6系列的小米盒子4、4 SE、4C、4S</string>
+
+    <string name="retry">重新连接</string>
+    <string name="connecting">正在连接…</string>
+    <string name="connected">已连接，请选择盒子型号</string>
+    <string name="prepare_file">正在准备处理所需文件…</string>
+    <string name="not_connected">尚未连接到设备，请先连接</string>
+    <string name="not_found">未检测到调试通道</string>
+    <string name="waiting_authorization">请在设备屏幕上确认授权弹窗…</string>
+
+    <string name="press_to_start">按确认键开始</string>
+    <string name="tip_remote">使用遥控器方向键选择型号，确认键执行</string>
+
+    <string name="working_title">正在进行处理</string>
+    <string name="preparing">正在准备运行环境…</string>
+    <string name="percent_zero">0%</string>
+    <string name="percent_full">100%</string>
+    <string name="stepping">正在：%1$s</string>
+
+    <string name="done_title">处理完成</string>
+    <string name="done_partial_title">处理未完全成功</string>
+    <string name="done_all">全部步骤已完成。</string>
+    <string name="done_reboot">操作已完成，即将进入重启。</string>
+    <string name="done_reboot_warning">请勿在系统设置中执行系统更新或恢复出厂，否则设备将恢复原厂状态。</string>
+    <string name="done_partial">以下环节未成功：</string>
+    <string name="btn_ok">知道了</string>
+
+    <!-- 主页信息展示 -->
+    <string name="brand_shop">淘宝店铺：喵喵智能硬件定制</string>
+    <string name="brand_site">官网：https://link3.cc/mmaotv</string>
+    <string name="guard_service_label">喵喵TV助手自守护</string>
+    <string name="guard_service_description">用于在系统不支持更换默认桌面时接管主页键，并在设备启动后自动恢复调试通道、保持 ADB 可用。</string>
+
+    <string name="guard_state_on">自守护已启用：HOME 接管 + ADB 保持</string>
+    <string name="guard_state_off">自守护未启用</string>
+    <string name="adb_state_on">调试开关已常开（重启后依然有效）</string>
+    <string name="adb_state_off">调试开关未常开</string>
+
+
+    <string name="action_generic">其他盒子</string>
+    <string name="desc_generic">通用档：极光盒子 / 海看等非小米机型。只做自守护、调试保持与桌面接管，不清理预装</string>
+</resources>

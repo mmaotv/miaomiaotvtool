@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- 与本机调试通道通信需要网络权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 开机自启：ADB 保持与自守护服务需要在设备启动后自动恢复 -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- 把随工具一起分发的桌面安装包释放到设备存储，供安装命令直接读取。
+         仅 Android 9 及以下需要申请，更高版本由系统自动放行和管理。 -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!-- 电视/盒子没有触摸屏，必须声明为不需要，否则部分设备不允许安装 -->
+    <uses-feature android:name="android.hardware.touchscreen" android:required="false" />
+    <uses-feature android:name="android.software.leanback" android:required="false" />
+
+    <application
+        android:allowBackup="false"
+        android:banner="@drawable/ic_banner"
+        android:icon="@drawable/ic_launcher"
+        android:roundIcon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:screenOrientation="landscape">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <!-- LEANBACK_LAUNCHER：让工具出现在电视/盒子的应用列表中 -->
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!--
+            自守护无障碍服务：
+            1) HOME 键重定向 —— 应对把桌面写死在框架里的定制 ROM；
+            2) 开机救援 —— 原厂桌面被卸后系统起不来界面时把桌面拉起来；
+            3) ADB 保持 —— 定期确认调试开关与端口仍然有效。
+            该服务由本工具用 adb shell 自行开启（settings put secure
+            enabled_accessibility_services），用户无需再去系统设置里手动点一次允许。
+        -->
+        <service
+            android:name=".accessibility.AgentAccessibilityService"
+            android:exported="true"
+            android:label="@string/guard_service_label"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+        <!-- 开机自启：确认调试通道与调试开关仍然有效 -->
+        <receiver
+            android:name=".receiver.AdbBootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

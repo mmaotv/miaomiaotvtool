@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  TV 横幅图（安卓电视桌面用，建议 320x180）。
+  同一套图形放大居中，避免方形图标被拉伸变形。
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+
+    <path
+        android:fillColor="#FF121A20"
+        android:pathData="M0,0 H320 V180 H0 Z" />
+
+    <group
+        android:scaleX="2"
+        android:scaleY="2"
+        android:translateX="112"
+        android:translateY="42">
+        <path
+            android:fillColor="#FF00E0B0"
+            android:pathData="M8,3 H40 A5,5 0 0 1 45,8 V40 A5,5 0 0 1 40,45 H8 A5,5 0 0 1 3,40 V8 A5,5 0 0 1 8,3 Z" />
+        <path
+            android:fillColor="#FF0F1519"
+            android:pathData="M13,12 H35 A2,2 0 0 1 37,14 V30 A2,2 0 0 1 35,32 H13 A2,2 0 0 1 11,30 V14 A2,2 0 0 1 13,12 Z" />
+        <path
+            android:fillColor="#FF0F1519"
+            android:pathData="M21,34 H27 V36 H21 Z M16,37 H32 A1,1 0 0 1 33,38 V39 A1,1 0 0 1 32,40 H16 A1,1 0 0 1 15,39 V38 A1,1 0 0 1 16,37 Z" />
+        <path
+            android:fillColor="#00000000"
+            android:pathData="M17,22 L22,27 L31,17.5"
+            android:strokeWidth="3.4"
+            android:strokeColor="#FF00E0B0"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>
